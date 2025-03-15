@@ -30,7 +30,7 @@ This is a responsive e-commerce website developed using **React.js**, **TypeScri
 4. **Start the development server:**
 
     ```bash
-   npm start
+   npm run dev
 
 5. **Access the application:**
 
