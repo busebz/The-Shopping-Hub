@@ -1,0 +1,39 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 14vh; 
+  background-color: #f8f8f8;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: absolute; 
+  top: 0; 
+  left: 0;
+}
+
+.logo{
+  cursor:pointer;
+  text-decoration: none;
+  color:rgb(49, 29, 62);
+  font-size:1.8rem;
+  font-weight: bold;
+}
+
+.logo:hover{
+  color:rgb(140, 109, 164);
+  transition: 0.5s ease color;
+}
+
+.header_titlebar {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+  padding: 0 17px;
+}
+
+.header_titlebar h1 {
+  font-size: 1.8rem;
+  color: #333;
+}
+

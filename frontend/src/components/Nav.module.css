@@ -1,0 +1,38 @@
+.navButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 10px;
+  font-size: 0.8rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.navButton i {
+  font-size: 1.1rem;
+}
+
+.navButton:hover {
+  background-color: #f0f0f0;
+}
+
+.itemCount {
+  background-color: #f59140;
+  color: white;
+  font-size: 0.8rem;
+  font-weight: bold;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.1; 
+}
+
+.navButton:focus {
+  outline: none;
+}

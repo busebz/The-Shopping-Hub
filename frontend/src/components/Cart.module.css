@@ -1,0 +1,30 @@
+.cart{
+  width:94%;
+  min-height: 76vh;
+  margin: 100px auto 40px auto;
+}
+
+.cart h2{
+  margin-top:150px
+}
+
+.cart_list{
+  list-style-type: none;
+  padding:0px;
+}
+
+.cart_totals{
+  text-align: left;
+}
+
+.cart_totals button{
+  background-color: #f59140;
+  width:10%;
+  height:30px;
+  border: none;
+}
+
+.cart_totals button:hover{
+  background-color: #fe8624;
+  transition: 0.5s ease-out background-color;
+}

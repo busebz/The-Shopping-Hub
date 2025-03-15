@@ -1,0 +1,10 @@
+.mainProducts {
+  width: 93%;
+  min-height: 100vh; 
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin:120px auto 40px auto;
+  gap:20px;
+  justify-items: center; 
+  align-items: center; 
+}
