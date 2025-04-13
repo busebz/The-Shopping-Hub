@@ -20,7 +20,7 @@ export const ProductsProvider = ({ children }: ChildrenType): ReactElement => {
   useEffect(() => {
     const fetchProducts = async (): Promise<void> => {
       try {
-        const response = await fetch("https://the-shopping-hub-backend.onrender.com/api/products");
+        const response = await fetch("https://the-shopping-hub-backend-production.up.railway.app/api/products");
         
         if (response.ok) {
           const data = await response.json();
