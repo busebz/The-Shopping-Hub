@@ -34,6 +34,9 @@ app.get('/api/products', async (req, res) => {
   }
 });
 
+app.get('/health', (req, res) => {
+  res.send('OK');
+});
 
 const startServer = async () => {
   await connectDB();
