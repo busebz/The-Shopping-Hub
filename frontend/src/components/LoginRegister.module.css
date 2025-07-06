@@ -1,58 +1,80 @@
 .authContainer {
   width: 320px;
-  margin: 120px auto 40px auto;
-  height:57vh;
-  padding: 20px 30px;
+  margin: 100px auto;
+  padding: 30px;
   background-color: #fff;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-  border-radius: 10px;
+  border-radius: 12px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .authTitle {
   font-size: 1.5rem;
-  font-weight: 700;
+  font-weight: bold;
   color: #333;
-  margin-bottom: 20px;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 12px; 
 }
 
 .authInput {
-  box-sizing: border-box;
-  width: 100%;
-  padding: 10px 12px;
-  margin-bottom: 15px;
-  border: 1.5px solid #ddd;
+  padding: 10px;
+  border: 1.5px solid #ccc;
   border-radius: 6px;
   font-size: 1rem;
-  transition: border-color 0.3s ease;
+  transition: border-color 0.2s;
 }
 
 .authInput:focus {
   outline: none;
   border-color: #f59140;
-  box-shadow: 0 0 6px #f59140aa;
+  box-shadow: 0 0 5px #f5914090;
+}
+
+.inputError {
+  border-color: #e03a3a;
+  background-color: #fff5f5;
+}
+
+.errorText {
+  color: #e03a3a;
+  font-size: 0.78rem;
+  margin: 4px 0 0 4px;
+  line-height: 1.1;
+  font-weight: 600;
 }
 
 .authButton {
-  width: 100%;
-  padding: 10px 0;
+  padding: 10px 30px;
   background-color: #f59140;
   border: none;
   border-radius: 6px;
   color: white;
   font-size: 1.1rem;
-  cursor: pointer;
   font-weight: 600;
-  transition: background-color 0.2s ease;
+  cursor: pointer;
+  transition: background-color 0.2s;
 }
 
 .authButton:hover {
   background-color: #e0842f;
 }
 
+.buttonWrapper {
+  display: flex;
+  justify-content: center;
+}
+
 .toggleText {
-  margin-top: 15px;
+  text-align: center;
   font-size: 0.9rem;
   color: #555;
 }
@@ -61,8 +83,4 @@
   color: #f59140;
   cursor: pointer;
   font-weight: 600;
-}
-
-.toggleText span:hover {
-  text-decoration: underline;
 }
