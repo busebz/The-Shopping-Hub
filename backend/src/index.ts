@@ -6,10 +6,11 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 
 import Product from "./models/Product"
+import authRoutes from './routes/Auth';
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+app.use(cors({ origin: true, credentials: true }));
 
 const CONNECT_URL = process.env.CONNECT_URL || '';
 const PORT = process.env.PORT || 3500;
@@ -23,6 +24,8 @@ const connectDB = async () => {
     process.exit(1);
   }
 };
+
+app.use('/api/auth', authRoutes);
 
 app.get('/api/products', async (req, res) => {
   try {
