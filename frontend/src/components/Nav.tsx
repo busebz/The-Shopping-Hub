@@ -1,18 +1,21 @@
+import { useNavigate, useLocation } from "react-router-dom";
 import classes from "./Nav.module.css";
 
 type PropsType = {
-  viewCart: boolean;
-  setViewCart: React.Dispatch<React.SetStateAction<boolean>>;
   totalItems: number;
 };
 
-const Nav = ({ viewCart, setViewCart, totalItems }: PropsType) => {
-  const button = viewCart ? (
-    <button onClick={() => setViewCart(false)} className={classes.navButton}>
+const Nav = ({totalItems} : PropsType) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const isCartPage = location.pathname === "/cart";
+
+  const button = isCartPage ? (
+    <button onClick={() => navigate("/")} className={classes.navButton}>
       View Products
     </button>
   ) : (
-    <button onClick={() => setViewCart(true)} className={classes.navButton}>
+    <button onClick={() => navigate("/cart")} className={classes.navButton}>
       <i className="fa-solid fa-cart-shopping"></i> Confirm Cart
       {totalItems > 0 && (
         <span className={classes.itemCount}>{totalItems}</span>

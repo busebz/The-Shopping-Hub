@@ -1,0 +1,68 @@
+.authContainer {
+  width: 320px;
+  margin: 120px auto 40px auto;
+  height:57vh;
+  padding: 20px 30px;
+  background-color: #fff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  border-radius: 10px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  text-align: center;
+}
+
+.authTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.authInput {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 10px 12px;
+  margin-bottom: 15px;
+  border: 1.5px solid #ddd;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.authInput:focus {
+  outline: none;
+  border-color: #f59140;
+  box-shadow: 0 0 6px #f59140aa;
+}
+
+.authButton {
+  width: 100%;
+  padding: 10px 0;
+  background-color: #f59140;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-size: 1.1rem;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.2s ease;
+}
+
+.authButton:hover {
+  background-color: #e0842f;
+}
+
+.toggleText {
+  margin-top: 15px;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.toggleText span {
+  color: #f59140;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.toggleText span:hover {
+  text-decoration: underline;
+}

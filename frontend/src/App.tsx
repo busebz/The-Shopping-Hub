@@ -1,23 +1,22 @@
-import "./App.css";
-
-import { useState } from "react";
-
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import Cart from "./components/Cart";
-import ProductList from "./components/ProductList";
+import CartPage from "./pages/CartPage";
+import ProductListPage from "./pages/ProductListPage";
+import AuthPage from "./pages/AuthPage";
 
 function App() {
-  const [viewCart, setViewCart] = useState<boolean>(false);
-
-  const pageContent = viewCart ? <Cart /> : <ProductList />;
 
   return (
-    <>
-      <Header viewCart={viewCart} setViewCart={setViewCart}></Header>
-      {pageContent}
-      <Footer/>
-    </>
+    <Router>
+      <Header />
+      <Routes>
+        <Route path="/" element={<ProductListPage />} />
+        <Route path="/cart" element={<CartPage />} />
+        <Route path="/login" element={<AuthPage />} />
+      </Routes>
+      <Footer />
+    </Router>
   );
 }
 
