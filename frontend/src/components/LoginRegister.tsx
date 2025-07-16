@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import classes from "./LoginRegister.module.css";
-import { useAuth } from "../context/AuthProvider";
+import { useAuth } from "../hooks/useAuth";
 
 const LoginRegister = () => {
   const [isLogin, setIsLogin] = useState(true);
