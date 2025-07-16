@@ -1,4 +1,10 @@
+.nav{
+  display: flex;
+  align-items: center;
+}
+
 .navButton {
+  background-color: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -7,7 +13,7 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  gap: 6px;
+  gap: 5px;
   white-space: nowrap;
 }
 
@@ -36,3 +42,57 @@
 .navButton:focus {
   outline: none;
 }
+
+.logoutButton {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 4px;
+}
+
+.logoutButton:hover {
+  background-color: #f0f0f0;
+}
+
+.profileMenuWrapper {
+  position: relative;
+}
+
+.profileDropdown {
+  display: none;
+  position: absolute;
+  top: 110%;
+  right: 0;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  min-width: 120px;
+  z-index: 100;
+  padding: 8px 8px;
+}
+
+.profileMenuWrapper:hover .profileDropdown {
+  display: block;
+}
+
+.profileItem {
+  background-color: white;
+  padding: 7px 5px;
+  margin: 3px 0px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  border-radius: 6px;
+  border: none;
+  color:#7c7c7c;
+}
+
+.profileItem:hover{
+  background-color:#faf1ef;
+}
+
+
+
