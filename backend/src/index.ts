@@ -7,6 +7,7 @@ import cors from 'cors';
 
 import Product from "./models/Product"
 import authRoutes from './routes/Auth';
+import userRoutes from './routes/User';
 
 const app = express();
 app.use(express.json());
@@ -26,6 +27,7 @@ const connectDB = async () => {
 };
 
 app.use('/api/auth', authRoutes);
+app.use('/api/user', userRoutes);
 
 app.get('/api/products', async (req, res) => {
   try {
