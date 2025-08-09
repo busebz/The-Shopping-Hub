@@ -29,7 +29,7 @@ const Orders = () => {
           return;
         }
 
-        const response = await fetch("http://localhost:5000/api/user/orders", {
+        const response = await fetch("https://the-shopping-hub-backend-production.up.railway.app/api/user/orders", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
