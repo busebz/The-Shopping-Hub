@@ -42,7 +42,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
     if (!token) return;
     setIsLoading(true);
     try {
-      const res = await fetch("http://localhost:5000/api/user/cart", {
+      const res = await fetch("https://the-shopping-hub-backend-production.up.railway.app/api/user/cart", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -80,7 +80,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
     } else {
       updatedCart.push(item);
     }
-    const res = await fetch("http://localhost:5000/api/user/cart", {
+    const res = await fetch("https://the-shopping-hub-backend-production.up.railway.app/api/user/cart", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -98,7 +98,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
   const removeFromCart = async (sku: string) => {
     if (!token) return;
     try {
-      const res = await fetch(`http://localhost:5000/api/user/cart/${sku}`, {
+      const res = await fetch(`https://the-shopping-hub-backend-production.up.railway.app/api/user/cart/${sku}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -114,7 +114,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
   const updateQuantity = async (sku: string, quantity: number) => {
     if (!token) return;
     try {
-      const res = await fetch(`http://localhost:5000/api/user/cart/${sku}`, {
+      const res = await fetch(`https://the-shopping-hub-backend-production.up.railway.app/api/user/cart/${sku}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -131,7 +131,7 @@ export const CartProvider = ({ children }: CartProviderProps) => {
   const submitOrder = async () => {
     if (!token) return;
     try {
-      const res = await fetch("http://localhost:5000/api/user/orders", {
+      const res = await fetch("https://the-shopping-hub-backend-production.up.railway.app/api/user/orders", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
