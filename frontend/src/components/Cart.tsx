@@ -1,45 +1,28 @@
 import classes from "./Cart.module.css";
 import { useState } from "react";
-import useCart from "../hooks/useCart";
+import useCart from "../hooks/useCart"; 
 import CartLineItem from "./CartLineItem";
 
 const Cart = () => {
   const [confirm, setConfirm] = useState(false);
   const [error, setError] = useState("");
-  const { dispatch, REDUCER_ACTIONS, totalItems, totalPrice, cart } = useCart();
+  const {
+    cart,
+    totalItems,
+    totalPrice,
+    submitOrder,
+    isLoading,
+    fetchCart,
+  } = useCart();
 
-  const onSubmitOrder = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     try {
-      const token = localStorage.getItem("token");
-
-      const response = await fetch("http://localhost:5000/api/user/orders", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          items: cart.map((item) => ({
-            sku: item.sku,
-            name: item.name,
-            price: item.price,
-            quantity: item.qty, // ✅ Mongoose şemasındaki 'quantity' alanı bu
-          })),
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error("İstek başarısız");
-      }
-
-      const data = await response.json();
-      console.log("Server response data:", data);
-
-      dispatch({ type: REDUCER_ACTIONS.SUBMIT });
+      await submitOrder();
       setConfirm(true);
-    } catch (error) {
-      console.error("Sunucu hatası:", error);
+      await fetchCart();  
+    } catch (err) {
+      console.error("Order submission failed:", err);
+      setError("Order submission failed.");
     }
   };
 
@@ -49,14 +32,10 @@ const Cart = () => {
     <>
       <ul className={classes.cart_list}>
         {cart.map((item) => (
-          <CartLineItem
-            key={item.sku}
-            item={item}
-            dispatch={dispatch}
-            REDUCER_ACTIONS={REDUCER_ACTIONS}
-          />
+          <CartLineItem key={item.sku} item={item} />
         ))}
       </ul>
+
       <div className={classes.cart_totals}>
         <p>Total Items: {totalItems}</p>
         <p>Total Price: {totalPrice}</p>
@@ -64,10 +43,10 @@ const Cart = () => {
         <button
           type="button"
           className={classes.cart_submit}
-          disabled={!totalItems}
-          onClick={onSubmitOrder}
+          disabled={!totalItems || isLoading}
+          onClick={handleSubmit}
         >
-          Place Order
+          {isLoading ? "Placing..." : "Place Order"}
         </button>
       </div>
     </>
