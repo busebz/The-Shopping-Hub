@@ -1,4 +1,7 @@
 import { useEffect, useState } from "react";
+import classes from "./Orders.module.css";
+
+import useCart from "../hooks/useCart";
 
 type OrderItem = {
   sku: string;
@@ -18,6 +21,8 @@ const Orders = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const { calculateOrderTotal } = useCart();
+
   useEffect(() => {
     const fetchOrders = async () => {
       try {
@@ -29,11 +34,14 @@ const Orders = () => {
           return;
         }
 
-        const response = await fetch("https://the-shopping-hub-backend-production.up.railway.app/api/user/orders", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await fetch(
+          "https://the-shopping-hub-backend-production.up.railway.app/api/user/orders",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         console.log("Response status:", response.status);
         if (!response.ok) {
@@ -60,18 +68,49 @@ const Orders = () => {
   if (orders.length === 0) return <p>Henüz sipariş bulunmamaktadır.</p>;
 
   return (
-    <div>
-      <h2>Siparişlerim</h2>
+    <div className={classes.ordersContainer}>
+      <h2 className={classes.pageTitle}>My Orders</h2>
+
       {orders.map((order) => (
-        <div key={order._id} style={{ border: "1px solid #ccc", marginBottom: "1rem", padding: "1rem" }}>
-          <p><strong>Tarih:</strong> {new Date(order.date).toLocaleString()}</p>
-          <ul>
-            {order.items.map((item) => (
-              <li key={item.sku}>
-                {item.name} - Adet: {item.quantity} - Fiyat: ${item.price.toFixed(2)}
-              </li>
-            ))}
-          </ul>
+        <div key={order._id} className={classes.orderRow}>
+          <div className={classes.productImagesContainer}>
+            {order.items.map((item) => {
+              const imgUrl = new URL(
+                `../images/${item.sku}.jpg`,
+                import.meta.url
+              ).href;
+              return (
+                <img
+                  key={item.sku}
+                  src={imgUrl}
+                  alt={item.name}
+                  className={classes.productImage}
+                  title={`${item.name} x${item.quantity}`}
+                />
+              );
+            })}
+          </div>
+
+          <div className={classes.orderInfoContainer}>
+            <div className={classes.datePriceContainer}>
+              <div className={classes.orderDate}>
+                {new Date(order.date).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                })}
+              </div>
+              <div className={classes.orderTotal}>
+                Total: ${calculateOrderTotal(order.items).toFixed(2)}
+              </div>
+            </div>
+            <button
+              className={classes.detailsButton}
+              onClick={() => alert(`Details for order ${order._id}`)}
+            >
+              Details
+            </button>
+          </div>
         </div>
       ))}
     </div>
