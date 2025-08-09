@@ -1,33 +1,32 @@
-import classes from "./ProductList.module.css"
-
+import classes from "./ProductList.module.css";
 import useCart from "../hooks/useCart";
 import useProducts from "../hooks/useProducts";
 import Product from "./Product";
 
 const ProductList = () => {
-  const { dispatch, REDUCER_ACTIONS, cart } = useCart();
+  const { cart, addToCart } = useCart();
   const { products } = useProducts();
-  let pageContent;
 
-  if (products?.length) {
-    pageContent = products.map((product) => {
-      const inCart: boolean = cart.some((item) => item.sku === product.sku);
-
-      return (
-        <Product
-          key={product.sku}
-          product={product}
-          dispatch={dispatch}
-          REDUCER_ACTIONS={REDUCER_ACTIONS}
-          inCart={inCart}
-        />
-      );
-    });
+  if (!products?.length) {
+    return <p>No products found</p>;
   }
 
-  const content = <div className={classes.mainProducts}>{pageContent}</div>;
+  return (
+    <div className={classes.mainProducts}>
+      {products.map((product) => {
+        const inCart = cart.some((item) => item.sku === product.sku);
 
-  return content;
+        return (
+          <Product
+            key={product.sku}
+            product={product}
+            inCart={inCart}
+            addToCart={addToCart}
+          />
+        );
+      })}
+    </div>
+  );
 };
 
 export default ProductList;

@@ -1,139 +1,179 @@
-import {useReducer, useMemo, createContext, ReactElement} from 'react'
+import {
+  createContext,
+  useState,
+  useEffect,
+  useCallback,
+  useContext,
+  ReactNode,
+} from "react";
+import { useAuth } from "../hooks/useAuth";
 
-export type CartItemType = {
-    sku: string,
-    name: string,
-    price: number,
-    qty: number
+export interface CartItem {
+  sku: string;
+  name: string;
+  price: number;
+  quantity: number;
 }
 
-type CartStateType = {cart: CartItemType[]}
-
-const initCartState: CartStateType = {cart : []}
-
-const REDUCER_ACTION_TYPE = {
-    ADD : "ADD",
-    REMOVE : "REMOVE",
-    QUANTITY : "QUANTITY",
-    SUBMIT : "SUBMIT"
+export interface CartContextType {
+  cart: CartItem[];
+  totalItems: number;
+  totalPrice: string;
+  isLoading: boolean;
+  fetchCart: () => Promise<void>;
+  addToCart: (item: CartItem) => Promise<void>;
+  removeFromCart: (sku: string) => Promise<void>;
+  updateQuantity: (sku: string, quantity: number) => Promise<void>;
+  submitOrder: () => Promise<void>;
 }
 
-export type ReducerActionType = typeof REDUCER_ACTION_TYPE
+const CartContext = createContext<CartContextType | undefined>(undefined);
 
-export type ReducerAction = {
-    type : string,
-    payload?: CartItemType
+interface CartProviderProps {
+  children: ReactNode;
 }
 
-const reducer = (state: CartStateType,action: ReducerAction) : CartStateType => {
+export const CartProvider = ({ children }: CartProviderProps) => {
+  const { token } = useAuth();
+  const [cart, setCart] = useState<CartItem[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-    switch(action.type){
-
-        case REDUCER_ACTION_TYPE.ADD :{
-
-            if(!action.payload){
-                throw new Error('action.payload missing in ADD action')
-            }
-
-            const {sku, name, price} = action.payload
-
-            const filteredCart : CartItemType[] =state.cart.filter(item => item.sku !== sku)
-
-            const itemExists : CartItemType | undefined = state.cart.find(item => item.sku === sku)
-
-            const qty : number = itemExists ? itemExists.qty + 1 : 1
-
-            return {...state, cart: [...filteredCart, {sku,name,price,qty}]}
-        }
-        case REDUCER_ACTION_TYPE.REMOVE :{
-
-            if(!action.payload){
-                throw new Error('action.payload missing in REMOVE action')
-            }
-
-            const {sku} = action.payload
-
-            const filteredCart : CartItemType[] =state.cart.filter(item => item.sku !== sku)
-
-            return {...state, cart: [...filteredCart]}
-        }
-        case REDUCER_ACTION_TYPE.QUANTITY :{
-
-            if(!action.payload){
-                throw new Error('action.payload missing in QUANTTY action')
-            }
-
-            const {sku, qty} = action.payload
-
-            const itemExists : CartItemType | undefined = state.cart.find(item => item.sku === sku)
-
-            if(!itemExists){
-                throw new Error('Item must exist in order to update quantity')
-            }
-
-            const updatedItem : CartItemType = {...itemExists, qty}
-
-            const filteredCart: CartItemType[] = state.cart.filter(item => item.sku !== sku)
-
-            return { ...state, cart: [...filteredCart, updatedItem] }           
-        }
-
-        case REDUCER_ACTION_TYPE.SUBMIT: {
-            return { ...state, cart: [] }
-        }
-
-        default:
-            throw new Error('Unidentified reducer action type')
-
+  const fetchCart = useCallback(async () => {
+    if (!token) return;
+    setIsLoading(true);
+    try {
+      const res = await fetch("http://localhost:5000/api/user/cart", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (!res.ok) throw new Error("Failed to fetch cart");
+      const data = await res.json();
+      setCart(Array.isArray(data) ? data : data.cart ?? []);
+    } catch (error) {
+    } finally {
+      setIsLoading(false);
     }
-}
+  }, [token]);
 
-const useCartContext = (initCartState : CartStateType) => {
-    const [state, dispatch] = useReducer(reducer, initCartState)
+  useEffect(() => {
+    fetchCart();
+  }, [fetchCart]);
 
-    const REDUCER_ACTIONS = useMemo(()=>{
-        return REDUCER_ACTION_TYPE
-    },[])
+  const safeCart = Array.isArray(cart) ? cart : [];
 
-    const totalItems = state.cart.reduce((previousValue, cartItem) => {
-        return previousValue + cartItem.qty
-    },0)
+  const totalItems = safeCart.reduce((sum, item) => sum + item.quantity, 0);
+  const totalPrice = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  }).format(safeCart.reduce((sum, item) => sum + item.price * item.quantity, 0));
 
-    const totalPrice = new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'}).format(
-        state.cart.reduce((previousValue, cartItem) => {
-            return previousValue + (cartItem.qty * cartItem.price)
-        }, 0)
-    )
+  const addToCart = async (item: CartItem) => {
+  if (!token) return;
+  try {
+    let updatedCart = [...cart];
+    const index = updatedCart.findIndex(i => i.sku === item.sku);
+    if (index !== -1) {
+      updatedCart[index].quantity += item.quantity;
+    } else {
+      updatedCart.push(item);
+    }
+    const res = await fetch("http://localhost:5000/api/user/cart", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ items: updatedCart }),
+    });
+    if (!res.ok) throw new Error("Failed to add item");
+    await fetchCart();
+  } catch (error) {
+    console.error(error);
+  }
+};
 
-    const cart = state.cart.sort((a,b) =>{
-        const itemA = Number(a.sku.slice(-4))
-        const itemB = Number(b.sku.slice(-4))
-        return itemA - itemB
-    })
+  const removeFromCart = async (sku: string) => {
+    if (!token) return;
+    try {
+      const res = await fetch(`http://localhost:5000/api/user/cart/${sku}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (!res.ok) throw new Error("Failed to remove item");
+      await fetchCart();
+    } catch (error) {
+    }
+  };
 
-    return { dispatch, REDUCER_ACTIONS, totalItems, totalPrice, cart }
+  const updateQuantity = async (sku: string, quantity: number) => {
+    if (!token) return;
+    try {
+      const res = await fetch(`http://localhost:5000/api/user/cart/${sku}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ quantity }),
+      });
+      if (!res.ok) throw new Error("Failed to update quantity");
+      await fetchCart();
+    } catch (error) {
+    }
+  };
 
-}
+  const submitOrder = async () => {
+    if (!token) return;
+    try {
+      const res = await fetch("http://localhost:5000/api/user/orders", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ items: safeCart }),
+      });
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.message || "Failed to submit order");
+      }
+      await fetchCart();
+    } catch (error) {
+      throw error;
+    }
+  };
 
-export type UseCartContextType = ReturnType<typeof useCartContext>
-
-const initCartContextState : UseCartContextType = {
-    dispatch : () => {},
-    REDUCER_ACTIONS : REDUCER_ACTION_TYPE,
-    totalItems : 0,
-    totalPrice: '',
-    cart: []
-}
-
-const CartContext = createContext<UseCartContextType>(initCartContextState)
-
-type ChildrenType = {children? : ReactElement | ReactElement[]}
-
-export const CartProvider = ({children} : ChildrenType): ReactElement => {
-    return <CartContext.Provider value={useCartContext(initCartState)}>
-        {children}
+  return (
+    <CartContext.Provider
+      value={{
+        cart: safeCart,
+        totalItems,
+        totalPrice,
+        isLoading,
+        fetchCart,
+        addToCart,
+        removeFromCart,
+        updateQuantity,
+        submitOrder,
+      }}
+    >
+      {children}
     </CartContext.Provider>
-}
+  );
+};
 
-export default CartContext
+export const useCart = (): CartContextType => {
+  const context = useContext(CartContext);
+  if (!context) {
+    throw new Error("useCart must be used within a CartProvider");
+  }
+  return context;
+};
 
+export default CartContext;
