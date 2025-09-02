@@ -47,7 +47,7 @@ const Nav = ({ totalItems }: PropsType) => {
             </button>
             <button
               className={classes.profileItem}
-              onClick={() => navigate("/orders")}
+              onClick={() => navigate("/userinfo")}
             >
               User Info Settings
             </button>

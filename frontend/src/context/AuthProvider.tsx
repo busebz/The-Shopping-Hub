@@ -12,6 +12,7 @@ type AuthContextType = {
   login: (user: User, token: string) => void;
   logout: () => void;
   isLoading: boolean | null;
+  updateUser: (user: User) => void;
 };
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -26,8 +27,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const storedUser = localStorage.getItem("user");
 
     if (storedToken && storedUser) {
-      setToken(storedToken);
-      setUser(JSON.parse(storedUser));
+      try {
+        const parsedUser = JSON.parse(storedUser);
+        setUser(parsedUser);
+        setToken(storedToken);
+      } catch (error) {
+        console.error("Invalid user in localStorage", error);
+        localStorage.removeItem("user");
+        localStorage.removeItem("token");
+      }
     }
 
     setIsLoading(false);
@@ -47,8 +55,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     localStorage.removeItem("user");
   };
 
+  const updateUser = (updatedUser: User) => {
+  setUser(updatedUser);
+  localStorage.setItem("user", JSON.stringify(updatedUser));
+};
+
   return (
-    <AuthContext.Provider value={{ user, token, login, logout, isLoading}}>
+    <AuthContext.Provider value={{ user, token, login, logout, isLoading, updateUser}}>
       {children}
     </AuthContext.Provider>
   );

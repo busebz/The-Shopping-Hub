@@ -1,4 +1,6 @@
+import Orders from "../components/Orders"
+
 function OrdersPage(){
-    return <h1>Orders</h1>
+    return <Orders />
 }
 export default OrdersPage;

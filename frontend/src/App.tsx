@@ -5,7 +5,8 @@ import Footer from "./components/Footer";
 import CartPage from "./pages/CartPage";
 import ProductListPage from "./pages/ProductListPage";
 import AuthPage from "./pages/AuthPage";
-import OrdersPage from "./components/Orders";
+import OrdersPage from "./pages/OrdersPage";
+import UserInfoSettingsPage from "./pages/UserInfoSettingsPage";
 
 import { useAuth } from "../src/hooks/useAuth";
 
@@ -33,6 +34,10 @@ function AppContent() {
         <Route
           path="/orders"
           element={isAuthenticated ? <OrdersPage /> : <Navigate to="/login" replace />}
+        />
+        <Route
+          path="/userinfo"
+          element={isAuthenticated ? <UserInfoSettingsPage /> : <Navigate to="/login" replace />}
         />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

@@ -46,9 +46,8 @@ const login: RequestHandler = async (req, res, next) => {
       res.status(401).json({ message: 'Invalid credentials' });
       return;
     }
-
     res.json({
-      user: { id: user._id.toString(), username: user.username, email: user.email },
+      user: { id: user!._id.toString(), username: user!.username, email: user!.email },
       token: signToken(user._id.toString()),
     });
   } catch (err) {

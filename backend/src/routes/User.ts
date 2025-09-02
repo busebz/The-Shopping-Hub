@@ -1,4 +1,5 @@
 import { Router, Request, Response, NextFunction } from "express";
+import bcrypt from "bcrypt";
 import User from "../models/User";
 import authenticateMiddleware from "../middleware/Authenticate";
 
@@ -182,6 +183,101 @@ router.put(
     } catch (error) {
       console.error("Error updating quantity:", error);
       res.status(500).json({ message: "Server error" });
+    }
+  }
+);
+
+router.put(
+  "/update-user",
+  authenticateMiddleware,
+  async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const { email } = req.body;
+      const userId = req.userId;
+
+      if (!userId) {
+        res.status(401).json({ message: "Unauthorized" });
+        return;
+      }
+
+      if (!email) {
+        res.status(400).json({ message: "Email gerekli" });
+        return;
+      }
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        res.status(400).json({ message: "Geçersiz email formatı" });
+        return;
+      }
+
+      const user = await User.findById(userId);
+      if (!user) {
+        res.status(404).json({ message: "Kullanıcı bulunamadı" });
+        return;
+      }
+
+      user.email = email;
+      user.username = email.split("@")[0];
+      await user.save();
+
+      // Direkt kullanıcı objesini döndür
+      res.status(200).json({
+        message: "Email ve username güncellendi", user: {
+          email: user.email,
+          username: user.username
+        },
+      });;
+    } catch (error) {
+      console.error("Update user error:", error);
+      res.status(500).json({ message: "Update failed" });
+    }
+  }
+);
+
+
+router.post(
+  "/change-password",
+  authenticateMiddleware,
+  async (
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+      const { oldPassword, newPassword } = req.body;
+      const userId = req.userId;
+
+      if (!userId) {
+        res.status(401).json({ message: "Unauthorized" });
+        return;
+      }
+
+      if (!oldPassword || !newPassword) {
+        res.status(400).json({ message: "Eski ve yeni şifre gerekli" });
+        return;
+      }
+
+      const user = await User.findById(userId);
+      if (!user) {
+        res.status(404).json({ message: "Kullanici bulunamadi" });
+        return;
+      }
+
+      const isMatch = await bcrypt.compare(oldPassword, user.password);
+      if (!isMatch) {
+        res.status(400).json({ message: "Eski şifre yanlis" });
+        return;
+      }
+      user.password = newPassword;
+      await user.save();
+
+      res.status(200).json({ message: "Şifre başariyla güncellendi" });
+      return;
+    } catch (error) {
+      console.error("Change password error:", error);
+      res.status(500).json({ message: "Sunucu hatasi" });
+      return;
     }
   }
 );
