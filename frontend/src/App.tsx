@@ -1,4 +1,10 @@
-import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+} from "react-router-dom";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 
@@ -10,10 +16,18 @@ import UserInfoSettingsPage from "./pages/UserInfoSettingsPage";
 
 import { useAuth } from "../src/hooks/useAuth";
 
+/** Protects routes that require authentication */
+const ProtectedRoute = ({ element }: { element: JSX.Element }) => {
+  const { isAuthenticated, isLoading } = useAuth();
+
+  if (isLoading) return null;
+  return isAuthenticated ? element : <Navigate to="/login" replace />;
+};
+
 function AppContent() {
-  const { isLoading, isAuthenticated } = useAuth();
-  const location = useLocation();
-  const hideLayout = location.pathname === "/login";
+  const { isAuthenticated, isLoading } = useAuth();
+  const { pathname } = useLocation();
+  const hideLayout = pathname === "/login";
 
   if (isLoading) return null;
 
@@ -22,22 +36,22 @@ function AppContent() {
       {!hideLayout && <Header />}
 
       <Routes>
-        <Route path="/" element={<ProductListPage />} />
         <Route
           path="/login"
           element={isAuthenticated ? <Navigate to="/" replace /> : <AuthPage />}
         />
+        <Route path="/" element={<ProductListPage />} />
         <Route
           path="/cart"
-          element={isAuthenticated ? <CartPage /> : <Navigate to="/login" replace />}
+          element={<ProtectedRoute element={<CartPage />} />}
         />
         <Route
           path="/orders"
-          element={isAuthenticated ? <OrdersPage /> : <Navigate to="/login" replace />}
+          element={<ProtectedRoute element={<OrdersPage />} />}
         />
         <Route
           path="/userinfo"
-          element={isAuthenticated ? <UserInfoSettingsPage /> : <Navigate to="/login" replace />}
+          element={<ProtectedRoute element={<UserInfoSettingsPage />} />}
         />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
@@ -47,12 +61,10 @@ function AppContent() {
   );
 }
 
-function App() {
+export default function App() {
   return (
     <Router>
       <AppContent />
     </Router>
   );
 }
-
-export default App;

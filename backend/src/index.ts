@@ -5,9 +5,11 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 
-import Product from "./models/Product"
 import authRoutes from './routes/Auth';
+import productsRoutes from "./routes/Products";
 import userRoutes from './routes/User';
+import cartRoutes from "./routes/Cart";
+import orderRoutes from "./routes/Order";
 
 const app = express();
 app.use(express.json());
@@ -27,21 +29,12 @@ const connectDB = async () => {
 };
 
 app.use('/api/auth', authRoutes);
+app.use('/api/products', productsRoutes);
 app.use('/api/user', userRoutes);
+app.use('/api/user/cart', cartRoutes);
+app.use('/api/user/orders', orderRoutes);
 
-app.get('/api/products', async (req, res) => {
-  try {
-    const products = await Product.find(); 
-    res.json(products); 
-  } catch (error) {
-    console.error("Error fetching products", error);
-    res.status(500).send('Server error');
-  }
-});
-
-app.get('/health', (req, res) => {
-  res.send('OK');
-});
+app.get('/health', (req, res) => {res.send('OK')});
 
 const startServer = async () => {
   await connectDB();

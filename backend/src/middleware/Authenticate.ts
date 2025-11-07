@@ -1,36 +1,30 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
+import { AuthRequest } from '../types';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'secret';
+if (!process.env.JWT_SECRET) throw new Error('JWT_SECRET is not defined!');
+const JWT_SECRET = process.env.JWT_SECRET;
 
-interface JwtPayload {
-  id: string;
-}
+interface JwtPayload { id: string }
 
 const authenticateMiddleware = (
-  req: Request,
+  req: AuthRequest,
   res: Response,
   next: NextFunction
-): void => {
+) => {
   const authHeader = req.headers.authorization;
-  if (!authHeader) {
-    res.status(401).json({ message: 'Token eksik' });
-    return;  // burada sadece return; dönüyoruz, response döndürmüyoruz
+  if (!authHeader?.startsWith('Bearer ')) {
+    res.status(401).json({ message: 'Token missing or invalid' });
+    return;
   }
 
   const token = authHeader.split(' ')[1];
-  if (!token) {
-    res.status(401).json({ message: 'Token eksik' });
-    return;
-  }
-
   try {
     const decoded = jwt.verify(token, JWT_SECRET) as JwtPayload;
-    (req as any).userId = decoded.id;
+    req.userId = decoded.id;
     next();
   } catch (error) {
-    res.status(401).json({ message: 'Token geçersiz' });
-    return;
+    res.status(401).json({ message: 'Token invalid' });
   }
 };
 

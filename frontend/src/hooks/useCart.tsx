@@ -5,7 +5,7 @@ import type { CartContextType } from "../context/CartProvider";
 const useCart = (): CartContextType => {
   const context = useContext(CartContext);
   if (!context) {
-    throw new Error("useCart must be used within a CartProvider");
+    throw new Error("CartContext not found");
   }
   return context;
 };

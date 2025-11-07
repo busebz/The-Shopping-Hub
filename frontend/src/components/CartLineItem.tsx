@@ -1,34 +1,48 @@
 import classes from "./CartLineItem.module.css";
-
-import { ChangeEvent, ReactElement, memo } from "react";
+import { ChangeEvent, memo, useMemo, useCallback } from "react";
 import { CartItem } from "../context/CartProvider";
 import useCart from "../hooks/useCart";
 
-type PropsType = {
-  item: CartItem;
-};
+type PropsType = { item: CartItem };
 
 const CartLineItem = ({ item }: PropsType) => {
   const { updateQuantity, removeFromCart } = useCart();
 
-  const img: string = new URL(`../images/${item.sku}.jpg`, import.meta.url).href;
-  const lineTotal: number = item.price * item.quantity;
-  const highestQty: number = Math.max(20, item.quantity);
+  const img = useMemo(
+    () => new URL(`../images/${item.sku}.jpg`, import.meta.url).href,
+    [item.sku]
+  );
 
-  const optionValues: number[] = [...Array(highestQty).keys()].map(i => i + 1);
-  const options: ReactElement[] = optionValues.map(val => (
-    <option key={`opt_${val}`} value={val}>
-      {val}
-    </option>
-  ));
+  const lineTotal = item.price * item.quantity;
 
-  const onChangeQty = (e: ChangeEvent<HTMLSelectElement>) => {
-    updateQuantity(item.sku, Number(e.target.value));
-  };
+  const currencyFormatter = useMemo(
+    () =>
+      new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+      }),
+    []
+  );
 
-  const onRemoveFromCart = () => {
+  const options = useMemo(() => {
+    const highestQty = Math.max(20, item.quantity);
+    return Array.from({ length: highestQty }, (_, i) => (
+      <option key={i + 1} value={i + 1}>
+        {i + 1}
+      </option>
+    ));
+  }, [item.quantity]);
+
+  const onChangeQty = useCallback(
+    (e: ChangeEvent<HTMLSelectElement>) => {
+      updateQuantity(item.sku, Number(e.target.value));
+    },
+    [item.sku, updateQuantity]
+  );
+
+  const onRemoveFromCart = useCallback(() => {
     removeFromCart(item.sku);
-  };
+  }, [item.sku, removeFromCart]);
 
   return (
     <li className={classes.cart_item}>
@@ -39,11 +53,9 @@ const CartLineItem = ({ item }: PropsType) => {
       <div className={classes.cart_name}>{item.name}</div>
 
       <div className={classes.cart_price}>
-        {new Intl.NumberFormat("en-US", {
-          style: "currency",
-          currency: "USD",
-        }).format(item.price)}
+        {currencyFormatter.format(item.price)}
       </div>
+
       <select
         name="itemQty"
         id="itemQty"
@@ -56,10 +68,7 @@ const CartLineItem = ({ item }: PropsType) => {
       </select>
 
       <div className={classes.cart_item_subtotal}>
-        {new Intl.NumberFormat("en-US", {
-          style: "currency",
-          currency: "USD",
-        }).format(lineTotal)}
+        {currencyFormatter.format(lineTotal)}
       </div>
 
       <button

@@ -1,7 +1,12 @@
 import classes from "./Product.module.css";
-import { ProductType } from "../context/ProductsProvider";
 import { memo, ReactElement, useState } from "react";
 import { CartItem } from "../context/CartProvider";
+
+interface ProductType {
+  sku: string;
+  name: string;
+  price: number;
+};
 
 type PropsType = {
   product: ProductType;

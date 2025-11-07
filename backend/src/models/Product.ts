@@ -1,19 +1,18 @@
-import mongoose from 'mongoose';
+import { Schema, model } from 'mongoose';
 
-export type ProductType = {
+export interface ProductType {
   sku: string;
   name: string;
   price: number;
 };
 
-
-const productSchema = new mongoose.Schema<ProductType>({
+const ProductSchema = new Schema<ProductType>({
   sku: { type: String, required: true },
   name: { type: String, required: true },
   price: { type: Number, required: true },
 });
 
 
-const ProductModel = mongoose.model('Product', productSchema);
+const ProductModel = model('Product', ProductSchema);
 
 export default ProductModel;

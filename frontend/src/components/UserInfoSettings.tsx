@@ -2,67 +2,87 @@ import { useState } from "react";
 import classes from "./UserInfoSettings.module.css";
 import { useAuthContext } from "../context/AuthProvider";
 
+const API_URL =
+  import.meta.env.API_URL ||
+  "https://the-shopping-hub-backend-production.up.railway.app";
+
 const UserInfo = () => {
-  const { user, token, updateUser} = useAuthContext();
+  const { user, token, updateUser } = useAuthContext();
 
-  const [username, setUsername] = useState(user?.username || "");
-  const [email, setEmail] = useState(user?.email || "");
-  const [oldPassword, setOldPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [message, setMessage] = useState("");
+  const [formData, setFormData] = useState({
+    email: user?.email || "",
+    oldPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  });
 
-  const handleUpdateInfo = async (e: React.FormEvent<HTMLFormElement>) => {
-  e.preventDefault();
-  try {
-    const response = await fetch("https://the-shopping-hub-backend-production.up.railway.app/api/user/update-user", {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ email }),
-    });
+  const [status, setStatus] = useState({
+    loading: false,
+    success: "",
+    error: "",
+  });
 
-    if (!response.ok) throw new Error("Update failed!");
-    const data = await response.json();
-    updateUser(data.user);
-    setMessage("User info updated successfully!");
-  } catch (error) {
-    setMessage("Error: " + (error as Error).message);
-  }
-};
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
-  const handlePasswordChange = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleRequest = async (
+    url: string,
+    method: "PUT" | "POST",
+    body: object,
+    onSuccess?: (data: any) => void
+  ) => {
+    setStatus({ loading: true, success: "", error: "" });
+    try {
+      const response = await fetch(`${API_URL}${url}`, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(body),
+      });
+
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || "Request failed");
+
+      onSuccess?.(data);
+      setStatus({ loading: false, success: "Updated successfully!", error: "" });
+    } catch (err) {
+      setStatus({
+        loading: false,
+        success: "",
+        error: (err as Error).message,
+      });
+    }
+  };
+
+  const handleUpdateInfo = (e: React.FormEvent) => {
     e.preventDefault();
-    if (newPassword !== confirmPassword) {
-      setMessage("New passwords do not match!");
+    handleRequest("/api/user/update-user", "PUT", { email: formData.email }, (data) =>
+      updateUser(data.user)
+    );
+  };
+
+  const handlePasswordChange = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (formData.newPassword !== formData.confirmPassword) {
+      setStatus({ loading: false, success: "", error: "Passwords do not match!" });
       return;
     }
-    try {
-      const response = await fetch(
-        "https://the-shopping-hub-backend-production.up.railway.app/api/user/change-password",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            oldPassword,
-            newPassword,
-          }),
-        }
-      );
-
-      if (!response.ok) throw new Error("Password update failed!");
-      setMessage("Password updated successfully!");
-      setOldPassword("");
-      setNewPassword("");
-      setConfirmPassword("");
-    } catch (error) {
-      setMessage("Error: " + (error as Error).message);
-    }
+    handleRequest("/api/user/change-password", "POST", {
+      oldPassword: formData.oldPassword,
+      newPassword: formData.newPassword,
+    });
+    setFormData((prev) => ({
+      ...prev,
+      oldPassword: "",
+      newPassword: "",
+      confirmPassword: "",
+    }));
   };
 
   if (!user) return <p className={classes.message}>No user info available</p>;
@@ -71,69 +91,78 @@ const UserInfo = () => {
     <div className={classes.userInfoContainer}>
       <h2 className={classes.title}>User Information</h2>
 
-      {message && <p className={classes.message}>{message}</p>}
+      {status.success && (
+        <p className={`${classes.message} ${classes.success}`}>{status.success}</p>
+      )}
+      {status.error && (
+        <p className={`${classes.message} ${classes.error}`}>{status.error}</p>
+      )}
 
       <div className={classes.card}>
         <div className={classes.formsWrapper}>
-          {/* Username & Email */}
-          <form
-            onSubmit={handleUpdateInfo}
-            className={classes.formSection}
-            noValidate
-          >
+          {/* User Info Update */}
+          <form onSubmit={handleUpdateInfo} className={classes.formSection} noValidate>
             <label>
               Username
-              <input type="text" value={username} readOnly />
+              <input type="text" value={user?.username || ""} readOnly />
             </label>
             <label>
               Email
               <input
+                name="email"
                 type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={formData.email}
+                onChange={handleChange}
                 required
               />
             </label>
-            <button type="submit" className={classes.submitButton}>
-              Update Info
+            <button
+              type="submit"
+              className={classes.submitButton}
+              disabled={status.loading}
+            >
+              {status.loading ? "Updating..." : "Update Info"}
             </button>
           </form>
 
-          {/* Password */}
-          <form
-            onSubmit={handlePasswordChange}
-            className={classes.formSection}
-            noValidate
-          >
+          {/* Password Update */}
+          <form onSubmit={handlePasswordChange} className={classes.formSection} noValidate>
             <label>
               Current Password
               <input
+                name="oldPassword"
                 type="password"
-                value={oldPassword}
-                onChange={(e) => setOldPassword(e.target.value)}
+                value={formData.oldPassword}
+                onChange={handleChange}
                 required
               />
             </label>
             <label>
               New Password
               <input
+                name="newPassword"
                 type="password"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
+                value={formData.newPassword}
+                onChange={handleChange}
                 required
               />
             </label>
             <label>
               Confirm New Password
               <input
+                name="confirmPassword"
                 type="password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
+                value={formData.confirmPassword}
+                onChange={handleChange}
                 required
               />
             </label>
-            <button type="submit" className={classes.submitButton}>
-              Update Password
+            <button
+              type="submit"
+              className={classes.submitButton}
+              disabled={status.loading}
+            >
+              {status.loading ? "Updating..." : "Update Password"}
             </button>
           </form>
         </div>

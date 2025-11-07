@@ -3,10 +3,14 @@ import {
   useState,
   useEffect,
   useCallback,
-  useContext,
+  useMemo,
   ReactNode,
 } from "react";
 import { useAuth } from "../hooks/useAuth";
+
+const API_URL =
+  import.meta.env.API_URL ||
+  "https://the-shopping-hub-backend-production.up.railway.app";
 
 export interface CartItem {
   sku: string;
@@ -30,33 +34,92 @@ export interface CartContextType {
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
-interface CartProviderProps {
-  children: ReactNode;
-}
-
-export const CartProvider = ({ children }: CartProviderProps) => {
+export const CartProvider = ({ children }: { children: ReactNode }) => {
   const { token } = useAuth();
   const [cart, setCart] = useState<CartItem[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState(false);
 
+  // Centralized error logger
+  const handleError = (error: unknown, message: string) => {
+    console.error(`${message}:`, error);
+  };
+
+  // ---- API CALLS ---- //
+  const getCart = async (token: string) => {
+    const res = await fetch(`${API_URL}/api/user/cart`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (!res.ok) throw new Error("Failed to fetch cart");
+    const data = await res.json();
+    return Array.isArray(data) ? data : data.cart ?? [];
+  };
+
+  const updateCart = async (token: string, items: CartItem[]) => {
+    const res = await fetch(`${API_URL}/api/user/cart`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ items }),
+    });
+    if (!res.ok) throw new Error("Failed to update cart");
+  };
+
+  const removeItem = async (token: string, sku: string) => {
+    const res = await fetch(`${API_URL}/api/user/cart/${sku}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (!res.ok) throw new Error("Failed to remove item");
+  };
+
+  const updateItemQuantity = async (
+    token: string,
+    sku: string,
+    quantity: number
+  ) => {
+    const res = await fetch(`${API_URL}/api/user/cart/${sku}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ quantity }),
+    });
+    if (!res.ok) throw new Error("Failed to update quantity");
+  };
+
+  const submitOrderRequest = async (token: string, items: CartItem[]) => {
+    const res = await fetch(`${API_URL}/api/user/orders`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ items }),
+    });
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(errorData.message || "Failed to submit order");
+    }
+  };
+
+  // ---- CONTEXT LOGIC ---- //
   const fetchCart = useCallback(async () => {
     if (!token) return;
     setIsLoading(true);
     try {
-      const res = await fetch(
-        "https://the-shopping-hub-backend-production.up.railway.app/api/user/cart",
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      if (!res.ok) throw new Error("Failed to fetch cart");
-      const data = await res.json();
-      setCart(Array.isArray(data) ? data : data.cart ?? []);
+      const data = await getCart(token);
+      setCart(data);
     } catch (error) {
+      handleError(error, "Error fetching cart");
     } finally {
       setIsLoading(false);
     }
@@ -68,106 +131,98 @@ export const CartProvider = ({ children }: CartProviderProps) => {
 
   const safeCart = Array.isArray(cart) ? cart : [];
 
-  const totalItems = safeCart.reduce((sum, item) => sum + item.quantity, 0);
-  const totalPrice = new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-  }).format(
-    safeCart.reduce((sum, item) => sum + item.price * item.quantity, 0)
+  const totalItems = useMemo(
+    () => safeCart.reduce((sum, item) => sum + item.quantity, 0),
+    [safeCart]
   );
 
-  const calculateOrderTotal = (items: CartItem[]) => {
-    return items.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  };
+  const totalPrice = useMemo(
+    () =>
+      new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+      }).format(
+        safeCart.reduce((sum, item) => sum + item.price * item.quantity, 0)
+      ),
+    [safeCart]
+  );
 
-  const addToCart = async (item: CartItem) => {
-    if (!token) return;
-    try {
-      let updatedCart = [...cart];
-      const index = updatedCart.findIndex((i) => i.sku === item.sku);
-      if (index !== -1) {
-        updatedCart[index].quantity += item.quantity;
-      } else {
-        updatedCart.push(item);
+  const calculateOrderTotal = useCallback(
+    (items: CartItem[]) =>
+      items.reduce((sum, item) => sum + item.price * item.quantity, 0),
+    []
+  );
+
+  // Add or update an item in cart
+  const addToCart = useCallback(
+    async (item: CartItem) => {
+      if (!token) return;
+      try {
+        const existing = safeCart.find((i) => i.sku === item.sku);
+        const updatedCart = existing
+          ? safeCart.map((i) =>
+              i.sku === item.sku
+                ? { ...i, quantity: i.quantity + item.quantity }
+                : i
+            )
+          : [...safeCart, item];
+
+        setCart(updatedCart);
+        await updateCart(token, updatedCart);
+      } catch (error) {
+        handleError(error, "Error adding item to cart");
+        fetchCart();
       }
-      const res = await fetch(
-        "https://the-shopping-hub-backend-production.up.railway.app/api/user/cart",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ items: updatedCart }),
-        }
-      );
-      if (!res.ok) throw new Error("Failed to add item");
-      await fetchCart();
-    } catch (error) {
-      console.error(error);
-    }
-  };
+    },
+    [token, safeCart, fetchCart]
+  );
 
-  const removeFromCart = async (sku: string) => {
-    if (!token) return;
-    try {
-      const res = await fetch(
-        `https://the-shopping-hub-backend-production.up.railway.app/api/user/cart/${sku}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      if (!res.ok) throw new Error("Failed to remove item");
-      await fetchCart();
-    } catch (error) {}
-  };
-
-  const updateQuantity = async (sku: string, quantity: number) => {
-    if (!token) return;
-    try {
-      const res = await fetch(
-        `https://the-shopping-hub-backend-production.up.railway.app/api/user/cart/${sku}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ quantity }),
-        }
-      );
-      if (!res.ok) throw new Error("Failed to update quantity");
-      await fetchCart();
-    } catch (error) {}
-  };
-
-  const submitOrder = async () => {
-    if (!token) return;
-    try {
-      const res = await fetch(
-        "https://the-shopping-hub-backend-production.up.railway.app/api/user/orders",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ items: safeCart }),
-        }
-      );
-      if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(errorData.message || "Failed to submit order");
+  // Remove item from cart
+  const removeFromCart = useCallback(
+    async (sku: string) => {
+      if (!token) return;
+      try {
+        setCart((prev) => prev.filter((i) => i.sku !== sku));
+        await removeItem(token, sku);
+      } catch (error) {
+        handleError(error, "Error removing item");
+        fetchCart();
       }
-      await fetchCart();
+    },
+    [token, fetchCart]
+  );
+
+  // Update item quantity
+  const updateQuantity = useCallback(
+    async (sku: string, quantity: number) => {
+      if (!token) return;
+      try {
+        setCart((prev) =>
+          prev.map((i) => (i.sku === sku ? { ...i, quantity } : i))
+        );
+        await updateItemQuantity(token, sku, quantity);
+      } catch (error) {
+        handleError(error, "Error updating quantity");
+        fetchCart();
+      }
+    },
+    [token, fetchCart]
+  );
+
+  // Submit order
+  const submitOrder = useCallback(async () => {
+    if (!token) return;
+    setIsLoading(true);
+    try {
+      await submitOrderRequest(token, safeCart);
+      setCart([]);
     } catch (error) {
+      handleError(error, "Error submitting order");
       throw error;
+    } finally {
+      setIsLoading(false);
     }
-  };
+  }, [token, safeCart]);
 
   return (
     <CartContext.Provider
@@ -187,14 +242,6 @@ export const CartProvider = ({ children }: CartProviderProps) => {
       {children}
     </CartContext.Provider>
   );
-};
-
-export const useCart = (): CartContextType => {
-  const context = useContext(CartContext);
-  if (!context) {
-    throw new Error("useCart must be used within a CartProvider");
-  }
-  return context;
 };
 
 export default CartContext;

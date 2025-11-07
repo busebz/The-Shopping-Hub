@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import classes from "./Orders.module.css";
-
 import useCart from "../hooks/useCart";
+
+const API_URL =
+  import.meta.env.API_URL ||
+  "https://the-shopping-hub-backend-production.up.railway.app";
 
 type OrderItem = {
   sku: string;
@@ -25,36 +28,28 @@ const Orders = () => {
 
   useEffect(() => {
     const fetchOrders = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setError("No token found. Please log in.");
+        setLoading(false);
+        return;
+      }
+
       try {
-        const token = localStorage.getItem("token");
-        console.log("Token from localStorage:", token);
-        if (!token) {
-          setError("Token bulunamadı, lütfen giriş yapın.");
-          setLoading(false);
-          return;
-        }
+        const response = await fetch(`${API_URL}/api/user/orders`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
 
-        const response = await fetch(
-          "https://the-shopping-hub-backend-production.up.railway.app/api/user/orders",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        console.log("Response status:", response.status);
         if (!response.ok) {
           const errorData = await response.json();
-          throw new Error(errorData.message || "Siparişler alınamadı");
+          throw new Error(errorData.message || "Failed to fetch orders");
         }
 
         const data = await response.json();
-        console.log("Sipariş verisi:", data);
-
         setOrders(data);
-      } catch (err: any) {
-        setError(err.message);
+      } catch (err) {
+        if (err instanceof Error) setError(err.message);
+        else setError("An unknown error occurred.");
       } finally {
         setLoading(false);
       }
@@ -63,9 +58,9 @@ const Orders = () => {
     fetchOrders();
   }, []);
 
-  if (loading) return <p>Yükleniyor...</p>;
-  if (error) return <p>Hata: {error}</p>;
-  if (orders.length === 0) return <p>Henüz sipariş bulunmamaktadır.</p>;
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error}</p>;
+  if (orders.length === 0) return <p>No orders yet.</p>;
 
   return (
     <div className={classes.ordersContainer}>
@@ -75,14 +70,12 @@ const Orders = () => {
         <div key={order._id} className={classes.orderRow}>
           <div className={classes.productImagesContainer}>
             {order.items.map((item) => {
-              const imgUrl = new URL(
-                `../images/${item.sku}.jpg`,
-                import.meta.url
-              ).href;
+              const imgUrl = new URL(`../images/${item.sku}.jpg`, import.meta.url).href;
               return (
                 <img
                   key={item.sku}
                   src={imgUrl}
+                  onError={(e) => (e.currentTarget.src = "/images/placeholder.jpg")}
                   alt={item.name}
                   className={classes.productImage}
                   title={`${item.name} x${item.quantity}`}
@@ -94,7 +87,7 @@ const Orders = () => {
           <div className={classes.orderInfoContainer}>
             <div className={classes.datePriceContainer}>
               <div className={classes.orderDate}>
-                {new Date(order.date).toLocaleDateString("en-US", {
+                {new Date(order.date).toLocaleDateString(undefined, {
                   year: "numeric",
                   month: "short",
                   day: "numeric",

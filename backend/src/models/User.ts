@@ -1,19 +1,7 @@
-import mongoose, { Document, Schema, Types } from 'mongoose';
+import mongoose, { Document, Types } from 'mongoose';
 import bcrypt from 'bcrypt';
-
-interface CartItem {
-  sku: string;
-  name: string;
-  price: number;
-  quantity: number;
-}
-
-interface OrderItem extends CartItem {}
-
-interface Order {
-  date: Date;
-  items: OrderItem[];
-}
+import { CartItem, CartItemSchema } from './CartItem';
+import { Order, OrderSchema } from './Order';
 
 export interface IUser extends Document {
   _id: Types.ObjectId;
@@ -25,40 +13,31 @@ export interface IUser extends Document {
   comparePassword(candidatePassword: string): Promise<boolean>;
 }
 
-const CartItemSchema = new Schema<CartItem>({
-  sku: { type: String, required: true },
-  name: { type: String, required: true },
-  price: { type: Number, required: true },
-  quantity: { type: Number, required: true },
-});
-
-const OrderSchema = new Schema<Order>({
-  date: { type: Date, required: true },
-  items: [CartItemSchema],
-});
-
-const UserSchema = new Schema<IUser>({
+const UserSchema = new mongoose.Schema<IUser>({
   username: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   cart: { type: [CartItemSchema], default: [] },
   orders: { type: [OrderSchema], default: [] },
-});
+}, { timestamps: true });
 
 UserSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();
   try {
-    const salt = await bcrypt.genSalt(10);
+    const saltRounds = parseInt(process.env.SALT_ROUNDS || '10', 10);
+    const salt = await bcrypt.genSalt(saltRounds);
     this.password = await bcrypt.hash(this.password, salt);
     next();
   } catch (err) {
-    next(err as any);
+    next(err as Error);
   }
 });
 
-UserSchema.methods.comparePassword = async function (candidatePassword: string): Promise<boolean> {
+UserSchema.methods.comparePassword = async function (this: IUser, candidatePassword: string) {
   return bcrypt.compare(candidatePassword, this.password);
 };
+
+UserSchema.index({ email: 1 });
 
 const User = mongoose.model<IUser>('User', UserSchema);
 export default User;

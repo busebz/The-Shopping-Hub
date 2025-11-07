@@ -3,52 +3,72 @@ import { useNavigate } from "react-router-dom";
 import classes from "./LoginRegister.module.css";
 import { useAuth } from "../hooks/useAuth";
 
+const API_URL =
+  import.meta.env.VITE_API_URL ||
+  "https://the-shopping-hub-backend-production.up.railway.app";
+
 const LoginRegister = () => {
   const [isLogin, setIsLogin] = useState(true);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [errors, setErrors] = useState<{ email?: string; password?: string; confirm?: string }>({});
-
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const navigate = useNavigate();
   const { login } = useAuth();
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+    setErrors((prev) => ({ ...prev, [name]: "" }));
+  };
+
+  const validate = () => {
+    const newErrors: Record<string, string> = {};
+    const { email, password, confirmPassword } = form;
+
+    if (!email.includes("@")) newErrors.email = "Please enter a valid email";
+    if (password.length < 6)
+      newErrors.password = "Password must be at least 6 characters";
+    if (!isLogin && password !== confirmPassword)
+      newErrors.confirmPassword = "Passwords do not match";
+
+    return newErrors;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const newErrors: typeof errors = {};
-
-    if (!email.includes("@")) newErrors.email = "Please enter a valid email";
-    if (password.length < 6) newErrors.password = "Password must be at least 6 characters";
-    if (!isLogin && password !== confirmPassword) {
-      newErrors.password = "Passwords do not match";
-      newErrors.confirm = "Passwords do not match";
-    }
-
+    const newErrors = validate();
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
     }
 
     try {
-      const res = await fetch(`https://the-shopping-hub-backend-production.up.railway.app/api/auth/${isLogin ? "login" : "register"}`, {
+      const endpoint = `${API_URL}/api/auth/${isLogin ? "login" : "register"}`;
+      const body = isLogin
+        ? { email: form.email, password: form.password }
+        : {
+            username: form.email.split("@")[0],
+            email: form.email,
+            password: form.password,
+          };
+
+      const res = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(
-          isLogin
-            ? { email, password }
-            : { username: email.split("@")[0], email, password }
-        ),
+        body: JSON.stringify(body),
       });
 
       const data = await res.json();
 
       if (!res.ok) {
-        if (data.message?.toLowerCase().includes("email")) {
-          setErrors({ email: data.message });
-        } else {
-          setErrors({ password: data.message });
-        }
+        const field = data.message?.toLowerCase().includes("email")
+          ? "email"
+          : "password";
+        setErrors({ [field]: data.message });
         return;
       }
 
@@ -56,11 +76,11 @@ const LoginRegister = () => {
         login(data.user, data.token);
         navigate("/");
       } else {
-        navigate("/login");
         setIsLogin(true);
+        navigate("/login");
       }
     } catch {
-      setErrors({ email: "Server error. Please try again." });
+      setErrors({ general: "Server error. Please try again." });
     }
   };
 
@@ -69,51 +89,63 @@ const LoginRegister = () => {
       <h2 className={classes.authTitle}>{isLogin ? "Login" : "Register"}</h2>
 
       <form onSubmit={handleSubmit} noValidate>
+        {/* Email */}
         <div className={classes.formGroup}>
           <input
             type="email"
+            name="email"
             placeholder="Email"
-            className={`${classes.authInput} ${errors.email ? classes.inputError : ""}`}
-            value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
-              setErrors((prev) => ({ ...prev, email: "" }));
-            }}
+            className={`${classes.authInput} ${
+              errors.email ? classes.inputError : ""
+            }`}
+            value={form.email}
+            onChange={handleChange}
             required
           />
           {errors.email && <p className={classes.errorText}>{errors.email}</p>}
         </div>
 
+        {/* Password */}
         <div className={classes.formGroup}>
           <input
             type="password"
+            name="password"
             placeholder="Password"
-            className={`${classes.authInput} ${errors.password ? classes.inputError : ""}`}
-            value={password}
-            onChange={(e) => {
-              setPassword(e.target.value);
-              setErrors((prev) => ({ ...prev, password: "" }));
-            }}
+            className={`${classes.authInput} ${
+              errors.password ? classes.inputError : ""
+            }`}
+            value={form.password}
+            onChange={handleChange}
             required
           />
-          {errors.password && <p className={classes.errorText}>{errors.password}</p>}
+          {errors.password && (
+            <p className={classes.errorText}>{errors.password}</p>
+          )}
         </div>
 
+        {/* Confirm Password - only for register */}
         {!isLogin && (
           <div className={classes.formGroup}>
             <input
               type="password"
+              name="confirmPassword"
               placeholder="Confirm Password"
-              className={`${classes.authInput} ${errors.confirm ? classes.inputError : ""}`}
-              value={confirmPassword}
-              onChange={(e) => {
-                setConfirmPassword(e.target.value);
-                setErrors((prev) => ({ ...prev, confirm: "" }));
-              }}
+              className={`${classes.authInput} ${
+                errors.confirmPassword ? classes.inputError : ""
+              }`}
+              value={form.confirmPassword}
+              onChange={handleChange}
               required
             />
-            {errors.confirm && <p className={classes.errorText}>{errors.confirm}</p>}
+            {errors.confirmPassword && (
+              <p className={classes.errorText}>{errors.confirmPassword}</p>
+            )}
           </div>
+        )}
+
+        {/* General errors */}
+        {errors.general && (
+          <p className={classes.errorText}>{errors.general}</p>
         )}
 
         <div className={classes.buttonWrapper}>
@@ -126,7 +158,7 @@ const LoginRegister = () => {
       <p className={classes.toggleText}>
         {isLogin ? (
           <>
-            Don't have an account?{" "}
+            Don’t have an account?{" "}
             <span onClick={() => setIsLogin(false)}>Register here</span>
           </>
         ) : (
