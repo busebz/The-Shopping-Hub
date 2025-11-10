@@ -4,7 +4,7 @@ import useCart from "../hooks/useCart";
 
 const API_URL =
   import.meta.env.API_URL ||
-  "https://the-shopping-hub-backend-production.up.railway.app";
+  "https://theshoppinghubstore.azurewebsites.net";
 
 type OrderItem = {
   sku: string;

@@ -3,7 +3,7 @@ import classes from "./ProductList.module.css";
 import useCart from "../hooks/useCart";
 import Product from "./Product";
 
-const API_URL = import.meta.env.VITE_API_URL || "https://the-shopping-hub-backend-production.up.railway.app";
+const API_URL = import.meta.env.VITE_API_URL || "https://theshoppinghubstore.azurewebsites.net";
 
 type ProductType = {
   sku: string;

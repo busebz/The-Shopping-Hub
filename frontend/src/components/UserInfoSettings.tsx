@@ -4,7 +4,7 @@ import { useAuthContext } from "../context/AuthProvider";
 
 const API_URL =
   import.meta.env.API_URL ||
-  "https://the-shopping-hub-backend-production.up.railway.app";
+  "https://theshoppinghubstore.azurewebsites.net";
 
 const UserInfo = () => {
   const { user, token, updateUser } = useAuthContext();

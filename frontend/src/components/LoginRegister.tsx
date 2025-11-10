@@ -5,7 +5,7 @@ import { useAuth } from "../hooks/useAuth";
 
 const API_URL =
   import.meta.env.VITE_API_URL ||
-  "https://the-shopping-hub-backend-production.up.railway.app";
+  "https://theshoppinghubstore.azurewebsites.net";
 
 const LoginRegister = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -73,7 +73,7 @@ const LoginRegister = () => {
       }
 
       if (isLogin) {
-        login(data.user, data.token);
+        login(data.data.user, data.data.token);
         navigate("/");
       } else {
         setIsLogin(true);

@@ -27,9 +27,20 @@ const storage = {
     localStorage.removeItem("token");
   },
   load: () => {
-    const token = localStorage.getItem("token");
-    const user = localStorage.getItem("user");
-    return { token, user: user ? JSON.parse(user) : null };
+    const token = localStorage.getItem("token") || null;
+    let user = null;
+
+    try {
+      const userData = localStorage.getItem("user");
+
+      if (userData && userData !== "undefined") {
+        user = JSON.parse(userData);
+      }
+    } catch (error) {
+      console.error("Failed to parse user from localStorage", error);
+    }
+
+    return { token, user };
   },
 };
 
