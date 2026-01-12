@@ -1,11 +1,11 @@
 import { Router, Response } from "express";
 import User from "../models/User";
-import authenticateMiddleware from "../middleware/Authenticate";
+import Authenticate from "../middleware/Authenticate";
 import { AuthRequest } from "../types";
 
 const router = Router();
 
-router.post("/", authenticateMiddleware, async (req: AuthRequest, res: Response) => {
+router.post("/", Authenticate, async (req: AuthRequest, res: Response) => {
   try {
     const user = await User.findById(req.userId);
     if (!user) {
@@ -29,7 +29,7 @@ router.post("/", authenticateMiddleware, async (req: AuthRequest, res: Response)
   }
 });
 
-router.get("/", authenticateMiddleware, async (req: AuthRequest, res: Response) => {
+router.get("/", Authenticate, async (req: AuthRequest, res: Response) => {
   try {
     const user = await User.findById(req.userId);
     if (!user) {

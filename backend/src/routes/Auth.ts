@@ -8,7 +8,7 @@ if (!process.env.JWT_SECRET) throw new Error('JWT_SECRET is not defined!');
 const JWT_SECRET = process.env.JWT_SECRET;
 
 // Helper to sign JWT
-const signToken = (id: string) => jwt.sign({ id }, JWT_SECRET, { expiresIn: '2h' });
+const signToken = (id: string, role: string) => jwt.sign({ id, role }, JWT_SECRET, { expiresIn: '2h' });
 
 // Helper to send JSON responses
 const sendResponse = (res: Response, status: number, success: boolean, message: string, data?: any) => {
@@ -47,7 +47,7 @@ router.post('/register', async (req: Request, res: Response) => {
 
     return sendResponse(res, 201, true, 'User registered successfully', {
       user: formatUser(user),
-      token: signToken(user._id.toString()),
+      token: signToken(user._id.toString(), user.role),
     });
   } catch (err) {
     console.error('Register error:', err);
@@ -56,23 +56,34 @@ router.post('/register', async (req: Request, res: Response) => {
 });
 
 // Login
-router.post('/login', async (req: Request, res: Response) => {
+router.post("/login", async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
-    if (!email || !password) return sendResponse(res, 400, false, 'Email and password are required');
 
-    const user = await User.findOne({ email }) as IUser | null;
-    if (!user || !(await user.comparePassword(password))) {
-      return sendResponse(res, 401, false, 'Invalid credentials');
+    if (!email || !password) {
+      return sendResponse(res, 400, false, "Email and password required");
     }
 
-    return sendResponse(res, 200, true, 'Login successful', {
-      user: formatUser(user),
-      token: signToken(user._id.toString()),
+    const user = (await User.findOne({ email })) as IUser | null;
+    if (!user) {
+      return sendResponse(res, 401, false, "Invalid credentials");
+    }
+
+    const isMatch = await user.comparePassword(password);
+    if (!isMatch) {
+      return sendResponse(res, 401, false, "Invalid credentials");
+    }
+
+    return sendResponse(res, 200, true, "Login successful", {
+      user: {
+        id: user._id,
+        email: user.email,
+        role: user.role,
+      },
+      token: signToken(user._id.toString(), user.role),
     });
-  } catch (err) {
-    console.error('Login error:', err);
-    return sendResponse(res, 500, false, 'Server error');
+  } catch (error) {
+    return sendResponse(res, 500, false, "Server error");
   }
 });
 

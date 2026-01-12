@@ -13,6 +13,7 @@ import ProductListPage from "./pages/ProductListPage";
 import AuthPage from "./pages/AuthPage";
 import OrdersPage from "./pages/OrdersPage";
 import UserInfoSettingsPage from "./pages/UserInfoSettingsPage";
+import AdminLoginPage from "./pages/Admin/Login"
 
 import { useAuth } from "../src/hooks/useAuth";
 
@@ -27,7 +28,7 @@ const ProtectedRoute = ({ element }: { element: JSX.Element }) => {
 function AppContent() {
   const { isAuthenticated, isLoading } = useAuth();
   const { pathname } = useLocation();
-  const hideLayout = pathname === "/login";
+  const hideLayout = pathname === "/login" || pathname.startsWith("/admin");
 
   if (isLoading) return null;
 
@@ -53,7 +54,11 @@ function AppContent() {
           path="/userinfo"
           element={<ProtectedRoute element={<UserInfoSettingsPage />} />}
         />
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route
+          path="/admin"
+          element={<AdminLoginPage/>}
+        />
+        <Route path="*" element={<Navigate to="/" replace />} /> 
       </Routes>
 
       {!hideLayout && <Footer />}

@@ -8,6 +8,7 @@ export interface IUser extends Document {
   username: string;
   email: string;
   password: string;
+  role: "USER" | "ADMIN";
   cart: CartItem[];
   orders: Order[];
   comparePassword(candidatePassword: string): Promise<boolean>;
@@ -17,6 +18,11 @@ const UserSchema = new mongoose.Schema<IUser>({
   username: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
+  role: {
+    type: String,
+    enum: ["USER", "ADMIN"],
+    default: "USER",
+  },
   cart: { type: [CartItemSchema], default: [] },
   orders: { type: [OrderSchema], default: [] },
 }, { timestamps: true });

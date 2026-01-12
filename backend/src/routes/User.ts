@@ -1,7 +1,7 @@
 import { Router, Response } from "express";
 import bcrypt from "bcrypt";
 import User from "../models/User";
-import authenticateMiddleware from "../middleware/Authenticate";
+import Authenticate from "../middleware/Authenticate";
 import { AuthRequest } from "../types";
 
 const router = Router();
@@ -14,7 +14,7 @@ const getUserById = async (userId?: string) => {
 };
 
 // Update user email & username
-router.put("/update-user", authenticateMiddleware, async (req: AuthRequest, res: Response) => {
+router.put("/update-user", Authenticate, async (req: AuthRequest, res: Response) => {
   try {
     const userId = req.userId;
     const { email } = req.body;
@@ -55,7 +55,7 @@ router.put("/update-user", authenticateMiddleware, async (req: AuthRequest, res:
 });
 
 // Change user password
-router.post("/change-password", authenticateMiddleware, async (req: AuthRequest, res: Response) => {
+router.post("/change-password", Authenticate, async (req: AuthRequest, res: Response) => {
   try {
     const userId = req.userId;
     const { oldPassword, newPassword } = req.body;

@@ -1,11 +1,11 @@
 import { Router, Response, NextFunction } from "express";
 import User from "../models/User";
-import authenticateMiddleware from "../middleware/Authenticate";
+import Authenticate from "../middleware/Authenticate";
 import { AuthRequest } from "../types";
 
 const router = Router();
 
-router.post("/", authenticateMiddleware, async (req: AuthRequest, res: Response) => {
+router.post("/", Authenticate, async (req: AuthRequest, res: Response) => {
   try {
     const { items } = req.body;
     if (!items || !Array.isArray(items)) {
@@ -28,7 +28,7 @@ router.post("/", authenticateMiddleware, async (req: AuthRequest, res: Response)
   }
 });
 
-router.get("/", authenticateMiddleware, async (req: AuthRequest, res: Response) => {
+router.get("/", Authenticate, async (req: AuthRequest, res: Response) => {
   try {
     const user = await User.findById(req.userId);
     if (!user) {
@@ -42,7 +42,7 @@ router.get("/", authenticateMiddleware, async (req: AuthRequest, res: Response) 
   }
 });
 
-router.delete("/:sku", authenticateMiddleware, async (req: AuthRequest, res: Response) => {
+router.delete("/:sku", Authenticate, async (req: AuthRequest, res: Response) => {
   try {
     const { sku } = req.params;
     const user = await User.findById(req.userId);
@@ -60,7 +60,7 @@ router.delete("/:sku", authenticateMiddleware, async (req: AuthRequest, res: Res
   }
 });
 
-router.put("/:sku", authenticateMiddleware, async (req: AuthRequest, res: Response)=> {
+router.put("/:sku", Authenticate, async (req: AuthRequest, res: Response)=> {
   try {
     const { sku } = req.params;
     const { quantity } = req.body;

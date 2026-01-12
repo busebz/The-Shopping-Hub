@@ -1,0 +1,78 @@
+.container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: linear-gradient(135deg, #111827, #020617);
+}
+
+.card {
+  width: 360px;
+  padding: 25px 30px 50px 30px;
+  background-color: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 4px 10px rgba(255, 255, 255, 0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.title {
+  text-align: center;
+  font-size: 1.55rem;
+  font-weight: 700;
+  color: #020617;
+}
+
+.subtitle {
+  text-align: center;
+  font-size: 0.9rem;
+  color: #475569;
+  margin-top: -15px;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  margin: 11px 0px;
+}
+
+.input {
+  padding: 12px;
+  border-radius: 10px;
+  border: 1.5px solid #cbd5e1;
+  font-size: 1rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.input::placeholder {
+  color: #94a3b8;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px #2563eb33;
+}
+
+.button {
+  padding: 10px 30px;
+  text-align: center;
+  background-color: #2563eb;
+  border: none;
+  border-radius: 7px;
+  color: #ffffff;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.button:hover {
+  background-color: #1e40af;
+}
+
+.button:active {
+  transform: scale(0.98);
+}
