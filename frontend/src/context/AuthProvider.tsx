@@ -1,46 +1,59 @@
-import { createContext, useState, useContext, ReactNode, useEffect } from "react";
+import {
+  createContext,
+  useState,
+  useContext,
+  ReactNode,
+  useEffect,
+} from "react";
+
+export type UserRole = "USER" | "ADMIN";
 
 export type User = {
   id: string;
   username: string;
   email: string;
+  role: UserRole;
 };
 
 type AuthContextType = {
   user: User | null;
   token: string | null;
+  isAuthenticated: boolean;
+  isLoading: boolean;
   login: (user: User, token: string) => void;
   logout: () => void;
-  isLoading: boolean;
   updateUser: (user: User) => void;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 const storage = {
-  save: (user: User, token: string) => {
+  save(user: User, token: string) {
     localStorage.setItem("user", JSON.stringify(user));
     localStorage.setItem("token", token);
   },
-  clear: () => {
-    localStorage.removeItem("user");
-    localStorage.removeItem("token");
-  },
-  load: () => {
-    const token = localStorage.getItem("token") || null;
-    let user = null;
 
-    try {
-      const userData = localStorage.getItem("user");
+  load(): { user: User | null; token: string | null } {
+    const token = localStorage.getItem("token");
+    const userRaw = localStorage.getItem("user");
 
-      if (userData && userData !== "undefined") {
-        user = JSON.parse(userData);
-      }
-    } catch (error) {
-      console.error("Failed to parse user from localStorage", error);
+    if (!token || !userRaw) {
+      return { user: null, token: null };
     }
 
-    return { token, user };
+    try {
+      return {
+        token,
+        user: JSON.parse(userRaw) as User,
+      };
+    } catch {
+      return { user: null, token: null };
+    }
+  },
+
+  clear() {
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
   },
 };
 
@@ -50,11 +63,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const { token, user } = storage.load();
-    if (token && user) {
+    const { user, token } = storage.load();
+
+    if (user && token) {
       setUser(user);
       setToken(token);
     }
+
     setIsLoading(false);
   }, []);
 
@@ -76,7 +91,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout, isLoading, updateUser }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        token,
+        isAuthenticated: !!token,
+        isLoading,
+        login,
+        logout,
+        updateUser,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
@@ -84,6 +109,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
 export const useAuthContext = () => {
   const context = useContext(AuthContext);
-  if (!context) throw new Error("AuthContext not found");
+  if (!context) {
+    throw new Error("AuthContext not found");
+  }
   return context;
 };

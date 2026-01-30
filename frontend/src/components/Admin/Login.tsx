@@ -1,7 +1,12 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth";
 import classes from "./Login.module.css";
 
 const Login = () => {
+  const navigate = useNavigate();
+  const { login } = useAuth();
+
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -33,10 +38,12 @@ const Login = () => {
       if (result.data.user.role !== "ADMIN") {
         throw new Error("Admin access only");
       }
-      localStorage.setItem("adminToken", result.data.token);
-      console.log("Admin logged in:", result.data.user);
+
+      login(result.data.user, result.data.token);
+
+      navigate("/admin/dashboard", { replace: true });
+
     } catch (error: any) {
-      console.error("Admin login error:", error.message);
       alert(error.message);
     }
   };
