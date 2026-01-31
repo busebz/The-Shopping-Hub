@@ -5,8 +5,6 @@ import {
   FaClipboardList,
   FaUsers,
   FaSignOutAlt,
-  FaPlus,
-  FaList,
 } from "react-icons/fa";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -14,7 +12,6 @@ import classes from "./Sidebar.module.css";
 
 const Sidebar = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [productsMenuOpen, setProductsMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   return (
@@ -40,18 +37,18 @@ const Sidebar = () => {
 
         <li
           className={classes.menuItem}
-          onClick={() => navigate("/admin/products")}
+          onClick={() => navigate("/admin/dashboard")}
         >
           <FaBoxOpen className={classes.icon} />
           {sidebarOpen && <span className={classes.menuText}>Products</span>}
         </li>
 
-        <li className={classes.menuItem} onClick={() => navigate("/admin/orders")}>
+        <li className={classes.menuItem} onClick={() => navigate("/admin/dashboard")}>
           <FaClipboardList className={classes.icon} />
           {sidebarOpen && <span className={classes.menuText}>Orders</span>}
         </li>
 
-        <li className={classes.menuItem} onClick={() => navigate("/admin/users")}>
+        <li className={classes.menuItem} onClick={() => navigate("/admin/dashboard")}>
           <FaUsers className={classes.icon} />
           {sidebarOpen && <span className={classes.menuText}>Users</span>}
         </li>
