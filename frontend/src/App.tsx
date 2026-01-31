@@ -3,6 +3,7 @@ import {
   Routes,
   Route,
   Navigate,
+  Outlet,
   useLocation,
 } from "react-router-dom";
 
@@ -18,6 +19,8 @@ import UserInfoSettingsPage from "./pages/UserInfoSettingsPage";
 import AdminLoginPage from "./pages/Admin/Login";
 import AdminDashboardPage from "./pages/Admin/Dashboard";
 
+import AdminLayout from "./layouts/AdminLayout";
+
 import { useAuth } from "./hooks/useAuth";
 
 const ProtectedRoute = ({ element }: { element: JSX.Element }) => {
@@ -26,34 +29,28 @@ const ProtectedRoute = ({ element }: { element: JSX.Element }) => {
   return isAuthenticated ? element : <Navigate to="/login" replace />;
 };
 
-const AdminProtectedRoute = ({ element }: { element: JSX.Element }) => {
+const AdminProtectedRoute = () => {
   const { isAuthenticated, isLoading, user } = useAuth();
 
   if (isLoading) return null;
+  if (!isAuthenticated) return <Navigate to="/admin/login" replace />;
+  if (user?.role !== "ADMIN") return <Navigate to="/" replace />;
 
-  if (!isAuthenticated) {
-    return <Navigate to="/admin/login" replace />;
-  }
-
-  if (user?.role !== "ADMIN") {
-    return <Navigate to="/" replace />;
-  }
-
-  return element;
+  return <Outlet />;
 };
 
 function AppContent() {
   const { isAuthenticated, isLoading, user } = useAuth();
-  const { pathname } = useLocation();
+  const location = useLocation();
 
-  const hideLayout =
-    pathname === "/login" || pathname.startsWith("/admin");
+  const isAuthPage = location.pathname === "/login";
+  const isAdminRoute = location.pathname.startsWith("/admin");
 
   if (isLoading) return null;
 
   return (
     <>
-      {!hideLayout && <Header />}
+      {!isAuthPage && !isAdminRoute && <Header />}
 
       <Routes>
         <Route
@@ -99,15 +96,19 @@ function AppContent() {
           }
         />
 
-        <Route
-          path="/admin/dashboard"
-          element={<AdminProtectedRoute element={<AdminDashboardPage />} />}
-        />
+        <Route element={<AdminProtectedRoute />}>
+          <Route element={<AdminLayout />}>
+            <Route
+              path="/admin/dashboard"
+              element={<AdminDashboardPage />}
+            />          
+          </Route>
+        </Route>
 
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
 
-      {!hideLayout && <Footer />}
+      {!isAuthPage && !isAdminRoute && <Footer />}
     </>
   );
 }
