@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import classes from "./Dashboard.module.css";
 
-const API_URL = "http://localhost:5000/api/admin/dashboard";
+const API_URL = import.meta.env.VITE_API_URL || "https://theshoppinghubstore.azurewebsites.net";
 
 type Order = {
   user: string;
@@ -29,7 +29,7 @@ const Dashboard = () => {
           return;
         }
 
-        const res = await fetch(API_URL, {
+        const res = await fetch(`${API_URL}/api/admin/dashboard`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

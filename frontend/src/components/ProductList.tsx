@@ -2,6 +2,7 @@ import { useEffect, useState, useMemo } from "react";
 import classes from "./ProductList.module.css";
 import useCart from "../hooks/useCart";
 import Product from "./Product";
+import ProductSkeleton from "./ProductSkeleton";
 
 const API_URL = import.meta.env.VITE_API_URL || "https://theshoppinghubstore.azurewebsites.net";
 
@@ -44,20 +45,22 @@ const ProductList = () => {
     return () => controller.abort();
   }, []);
 
-  if (loading) return <p>Loading products...</p>;
   if (error) return <p className={classes.error}>{error}</p>;
-  if (!products.length) return <p>No products found</p>;
+  if (!products.length && !loading) return <p>No products found</p>;
 
   return (
     <div className={classes.mainProducts}>
-      {products.map((product) => (
-        <Product
-          key={product.sku}
-          product={product}
-          inCart={cartItems.includes(product.sku)}
-          addToCart={addToCart}
-        />
-      ))}
+      {loading
+        ? Array.from({ length: 8 }).map((_, i) => <ProductSkeleton key={i} />)
+        : products.map((product) => (
+            <Product
+              key={product.sku}
+              product={product}
+              inCart={cartItems.includes(product.sku)}
+              addToCart={addToCart}
+            />
+          ))
+      }
     </div>
   );
 };

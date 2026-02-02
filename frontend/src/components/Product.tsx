@@ -1,12 +1,14 @@
 import classes from "./Product.module.css";
 import { memo, ReactElement, useState } from "react";
 import { CartItem } from "../context/CartProvider";
+import { useAuth } from "../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 interface ProductType {
   sku: string;
   name: string;
   price: number;
-};
+}
 
 type PropsType = {
   product: ProductType;
@@ -16,8 +18,15 @@ type PropsType = {
 
 const Product = ({ product, inCart, addToCart }: PropsType): ReactElement => {
   const [isAdded, setIsAdded] = useState(false);
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
 
   const onAddToCart = async () => {
+    if (!isAuthenticated) {
+      navigate("/login"); 
+      return;
+    }
+
     await addToCart({
       sku: product.sku,
       name: product.name,
@@ -28,7 +37,10 @@ const Product = ({ product, inCart, addToCart }: PropsType): ReactElement => {
     setTimeout(() => setIsAdded(false), 2000);
   };
 
-  const img: string = new URL(`../images/${product.sku}.jpg`, import.meta.url).href;
+  const img: string = new URL(
+    `../images/${product.sku}.jpg`,
+    import.meta.url
+  ).href;
 
   return (
     <article className={classes.product}>

@@ -4,6 +4,9 @@ import { useAuth } from "../../hooks/useAuth";
 import classes from "./Login.module.css";
 
 const Login = () => {
+
+  const API_URL = import.meta.env.VITE_API_URL || "https://theshoppinghubstore.azurewebsites.net";
+  
   const navigate = useNavigate();
   const { login } = useAuth();
 
@@ -21,7 +24,8 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const res = await fetch("http://localhost:5000/api/auth/login", {
+      const res = await fetch(`${API_URL}/api/auth/login`, {
+        
         method: "POST",
         headers: {
           "Content-Type": "application/json",
