@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import classes from "./Dashboard.module.css";
 
-const API_URL = import.meta.env.VITE_API_URL || "https://theshoppinghubstore.azurewebsites.net";
-
 type Order = {
   user: string;
   total: number;
@@ -14,51 +12,43 @@ const Dashboard = () => {
   const [totalOrders, setTotalOrders] = useState(0);
   const [totalUsers, setTotalUsers] = useState(0);
   const [recentOrders, setRecentOrders] = useState<Order[]>([]);
-
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchDashboard = async () => {
-      try {
-        const token = localStorage.getItem("token");
+  const fetchDashboard = async () => {
+    try {
+      const token = localStorage.getItem("adminToken");
 
-        if (!token) {
-          setError("Unauthorized");
-          setLoading(false);
-          return;
-        }
-
-        const res = await fetch(`${API_URL}/api/admin/dashboard`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        const data = await res.json();
-
-        if (!res.ok) {
-          setError(data.message || "Failed to load dashboard");
-          return;
-        }
-
-        setTotalProducts(data.totalProducts ?? 0);
-        setTotalOrders(data.totalOrders ?? 0);
-        setTotalUsers(data.totalUsers ?? 0);
-        setRecentOrders(Array.isArray(data.recentOrders) ? data.recentOrders : []);
-      } catch {
-        setError("Server error");
-      } finally {
-        setLoading(false);
+      if (!token) {
+        setError("Unauthorized");
+        return;
       }
-    };
 
-    fetchDashboard();
-  }, []);
+      const res = await fetch("http://localhost:5000/api/admin/dashboard", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-  if (loading) {
-    return <div className={classes.main}>Loading dashboard...</div>;
-  }
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.message || "Failed to load dashboard");
+        return;
+      }
+
+      setTotalProducts(data.totalProducts ?? 0);
+      setTotalOrders(data.totalOrders ?? 0);
+      setTotalUsers(data.totalUsers ?? 0);
+      setRecentOrders(Array.isArray(data.recentOrders) ? data.recentOrders : []);
+    } catch {
+      setError("Server error");
+    }
+  };
+
+  fetchDashboard();
+}, []);
+
 
   if (error) {
     return <div className={classes.main}>{error}</div>;

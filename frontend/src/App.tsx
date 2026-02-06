@@ -21,26 +21,26 @@ import AdminDashboardPage from "./pages/Admin/Dashboard";
 
 import AdminLayout from "./layouts/AdminLayout";
 
-import { useAuth } from "./hooks/useAuth";
+import { useAuthContext } from "./context/AuthProvider";
 
 const ProtectedRoute = ({ element }: { element: JSX.Element }) => {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isUserAuthenticated, isLoading } = useAuthContext();
+
   if (isLoading) return null;
-  return isAuthenticated ? element : <Navigate to="/login" replace />;
+
+  return isUserAuthenticated ? element : <Navigate to="/login" replace />;
 };
 
 const AdminProtectedRoute = () => {
-  const { isAuthenticated, isLoading, user } = useAuth();
+  const { isAdminAuthenticated, isLoading } = useAuthContext();
 
   if (isLoading) return null;
-  if (!isAuthenticated) return <Navigate to="/admin/login" replace />;
-  if (user?.role !== "ADMIN") return <Navigate to="/" replace />;
 
-  return <Outlet />;
+  return isAdminAuthenticated ? <Outlet /> : <Navigate to="/admin/login" replace />;
 };
 
 function AppContent() {
-  const { isAuthenticated, isLoading, user } = useAuth();
+  const { isLoading } = useAuthContext();
   const location = useLocation();
 
   const isAuthPage = location.pathname === "/login";
@@ -53,20 +53,7 @@ function AppContent() {
       {!isAuthPage && !isAdminRoute && <Header />}
 
       <Routes>
-        <Route
-          path="/login"
-          element={
-            isAuthenticated ? (
-              user?.role === "ADMIN" ? (
-                <Navigate to="/admin/dashboard" replace />
-              ) : (
-                <Navigate to="/" replace />
-              )
-            ) : (
-              <AuthPage />
-            )
-          }
-        />
+        <Route path="/login" element={<AuthPage />} />
 
         <Route path="/" element={<ProductListPage />} />
 
@@ -85,23 +72,11 @@ function AppContent() {
           element={<ProtectedRoute element={<UserInfoSettingsPage />} />}
         />
 
-        <Route
-          path="/admin/login"
-          element={
-            isAuthenticated && user?.role === "ADMIN" ? (
-              <Navigate to="/admin/dashboard" replace />
-            ) : (
-              <AdminLoginPage />
-            )
-          }
-        />
+        <Route path="/admin/login" element={<AdminLoginPage />} />
 
         <Route element={<AdminProtectedRoute />}>
           <Route element={<AdminLayout />}>
-            <Route
-              path="/admin/dashboard"
-              element={<AdminDashboardPage />}
-            />          
+            <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
           </Route>
         </Route>
 

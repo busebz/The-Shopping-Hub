@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import classes from "./LoginRegister.module.css";
-import { useAuth } from "../hooks/useAuth";
+import { useAuthContext } from "../context/AuthProvider";
 
 const API_URL =
   import.meta.env.VITE_API_URL ||
@@ -9,19 +9,15 @@ const API_URL =
 
 const LoginRegister = () => {
   const [isLogin, setIsLogin] = useState(true);
-  const [form, setForm] = useState({
-    email: "",
-    password: "",
-    confirmPassword: "",
-  });
+  const [form, setForm] = useState({ email: "", password: "", confirmPassword: "" });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { loginUser } = useAuthContext(); 
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
-    setErrors((prev) => ({ ...prev, [name]: "" }));
+    setForm(prev => ({ ...prev, [name]: value }));
+    setErrors(prev => ({ ...prev, [name]: "" }));
   };
 
   const validate = () => {
@@ -29,17 +25,14 @@ const LoginRegister = () => {
     const { email, password, confirmPassword } = form;
 
     if (!email.includes("@")) newErrors.email = "Please enter a valid email";
-    if (password.length < 6)
-      newErrors.password = "Password must be at least 6 characters";
-    if (!isLogin && password !== confirmPassword)
-      newErrors.confirmPassword = "Passwords do not match";
+    if (password.length < 6) newErrors.password = "Password must be at least 6 characters";
+    if (!isLogin && password !== confirmPassword) newErrors.confirmPassword = "Passwords do not match";
 
     return newErrors;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     const newErrors = validate();
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -50,11 +43,7 @@ const LoginRegister = () => {
       const endpoint = `${API_URL}/api/auth/${isLogin ? "login" : "register"}`;
       const body = isLogin
         ? { email: form.email, password: form.password }
-        : {
-            username: form.email.split("@")[0],
-            email: form.email,
-            password: form.password,
-          };
+        : { username: form.email.split("@")[0], email: form.email, password: form.password };
 
       const res = await fetch(endpoint, {
         method: "POST",
@@ -65,15 +54,13 @@ const LoginRegister = () => {
       const data = await res.json();
 
       if (!res.ok) {
-        const field = data.message?.toLowerCase().includes("email")
-          ? "email"
-          : "password";
+        const field = data.message?.toLowerCase().includes("email") ? "email" : "password";
         setErrors({ [field]: data.message });
         return;
       }
 
       if (isLogin) {
-        login(data.data.user, data.data.token);
+        loginUser(data.data.user, data.data.token); 
         navigate("/");
       } else {
         setIsLogin(true);
@@ -87,85 +74,31 @@ const LoginRegister = () => {
   return (
     <div className={classes.authContainer}>
       <h2 className={classes.authTitle}>{isLogin ? "Login" : "Register"}</h2>
-
       <form onSubmit={handleSubmit} noValidate>
-        {/* Email */}
         <div className={classes.formGroup}>
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            className={`${classes.authInput} ${
-              errors.email ? classes.inputError : ""
-            }`}
-            value={form.email}
-            onChange={handleChange}
-            required
-          />
+          <input type="email" name="email" placeholder="Email" className={`${classes.authInput} ${errors.email ? classes.inputError : ""}`} value={form.email} onChange={handleChange} required />
           {errors.email && <p className={classes.errorText}>{errors.email}</p>}
         </div>
-
-        {/* Password */}
         <div className={classes.formGroup}>
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            className={`${classes.authInput} ${
-              errors.password ? classes.inputError : ""
-            }`}
-            value={form.password}
-            onChange={handleChange}
-            required
-          />
-          {errors.password && (
-            <p className={classes.errorText}>{errors.password}</p>
-          )}
+          <input type="password" name="password" placeholder="Password" className={`${classes.authInput} ${errors.password ? classes.inputError : ""}`} value={form.password} onChange={handleChange} required />
+          {errors.password && <p className={classes.errorText}>{errors.password}</p>}
         </div>
-
-        {/* Confirm Password - only for register */}
         {!isLogin && (
           <div className={classes.formGroup}>
-            <input
-              type="password"
-              name="confirmPassword"
-              placeholder="Confirm Password"
-              className={`${classes.authInput} ${
-                errors.confirmPassword ? classes.inputError : ""
-              }`}
-              value={form.confirmPassword}
-              onChange={handleChange}
-              required
-            />
-            {errors.confirmPassword && (
-              <p className={classes.errorText}>{errors.confirmPassword}</p>
-            )}
+            <input type="password" name="confirmPassword" placeholder="Confirm Password" className={`${classes.authInput} ${errors.confirmPassword ? classes.inputError : ""}`} value={form.confirmPassword} onChange={handleChange} required />
+            {errors.confirmPassword && <p className={classes.errorText}>{errors.confirmPassword}</p>}
           </div>
         )}
-
-        {/* General errors */}
-        {errors.general && (
-          <p className={classes.errorText}>{errors.general}</p>
-        )}
-
+        {errors.general && <p className={classes.errorText}>{errors.general}</p>}
         <div className={classes.buttonWrapper}>
-          <button className={classes.authButton} type="submit">
-            {isLogin ? "Login" : "Register"}
-          </button>
+          <button className={classes.authButton} type="submit">{isLogin ? "Login" : "Register"}</button>
         </div>
       </form>
-
       <p className={classes.toggleText}>
         {isLogin ? (
-          <>
-            Don’t have an account?{" "}
-            <span onClick={() => setIsLogin(false)}>Register here</span>
-          </>
+          <>Don’t have an account? <span onClick={() => setIsLogin(false)}>Register here</span></>
         ) : (
-          <>
-            Already have an account?{" "}
-            <span onClick={() => setIsLogin(true)}>Login here</span>
-          </>
+          <>Already have an account? <span onClick={() => setIsLogin(true)}>Login here</span></>
         )}
       </p>
     </div>

@@ -1,8 +1,36 @@
 import { useAuthContext } from "../context/AuthProvider";
 
 export const useAuth = () => {
-  const { token, user, login, logout, isLoading} = useAuthContext();
-  const isAuthenticated = !!token;
+  const {
+    user,
+    userToken,
+    isUserAuthenticated,
+    admin,
+    adminToken,
+    isAdminAuthenticated,
+    isLoading,
+    loginUser,
+    loginAdmin,
+    logoutUser,
+    logoutAdmin,
+    updateUser,
+    updateAdmin,
+  } = useAuthContext();
 
-  return { token, user, login, logout, isAuthenticated , isLoading};
+  return {
+    user,
+    userToken,
+    isUserAuthenticated,
+    loginUser,
+    logoutUser,
+    updateUser,
+    admin,
+    adminToken,
+    isAdminAuthenticated,
+    loginAdmin,
+    logoutAdmin,
+    updateAdmin,
+
+    isLoading,
+  };
 };

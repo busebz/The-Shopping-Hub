@@ -9,16 +9,17 @@ type PropsType = {
 const Nav = ({ totalItems }: PropsType) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { logout, isAuthenticated } = useAuth();
+
+  const { logoutUser, isUserAuthenticated } = useAuth();
 
   const isCartPage = location.pathname === "/cart";
 
   const handleLogout = () => {
-    logout();
-    navigate("/");
+    logoutUser();
+    navigate("/", { replace: true });
   };
 
-  const button = isCartPage ? (
+  const cartButton = isCartPage ? (
     <button onClick={() => navigate("/")} className={classes.navButton}>
       View Products
     </button>
@@ -33,11 +34,12 @@ const Nav = ({ totalItems }: PropsType) => {
 
   return (
     <nav className={classes.nav}>
-      {isAuthenticated ? (
+      {isUserAuthenticated ? (
         <div className={classes.profileMenuWrapper}>
           <button className={`${classes.navButton} ${classes.logoutButton}`}>
             My Profile
           </button>
+
           <div className={classes.profileDropdown}>
             <button
               className={classes.profileItem}
@@ -45,13 +47,18 @@ const Nav = ({ totalItems }: PropsType) => {
             >
               My Orders
             </button>
+
             <button
               className={classes.profileItem}
               onClick={() => navigate("/userinfo")}
             >
               User Info Settings
             </button>
-            <button className={classes.profileItem} onClick={handleLogout}>
+
+            <button
+              className={classes.profileItem}
+              onClick={handleLogout}
+            >
               Logout
             </button>
           </div>
@@ -64,7 +71,8 @@ const Nav = ({ totalItems }: PropsType) => {
           Login
         </button>
       )}
-      {button}
+
+      {cartButton}
     </nav>
   );
 };

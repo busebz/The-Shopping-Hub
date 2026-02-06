@@ -29,6 +29,7 @@ const formatUser = (user: IUser) => ({
   id: user._id.toString(),
   username: user.username,
   email: user.email,
+  role: user.role,
 });
 
 // Register
