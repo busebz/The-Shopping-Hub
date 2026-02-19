@@ -3,11 +3,11 @@ import classes from "./UserInfoSettings.module.css";
 import { useAuthContext } from "../context/AuthProvider";
 
 const API_URL =
-  import.meta.env.API_URL ||
-  "https://theshoppinghubstore.azurewebsites.net";
+  import.meta.env.VITE_API_URL ||
+  "https://the-shopping-hub-backend.onrender.com";
 
 const UserInfo = () => {
-  const { user, token, updateUser } = useAuthContext();
+  const { user, userToken, updateUser } = useAuthContext();
 
   const [formData, setFormData] = useState({
     email: user?.email || "",
@@ -41,7 +41,7 @@ const UserInfo = () => {
         method,
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${userToken}`,
         },
         body: JSON.stringify(body),
       });
@@ -104,7 +104,11 @@ const UserInfo = () => {
           <form onSubmit={handleUpdateInfo} className={classes.formSection} noValidate>
             <label>
               Username
-              <input type="text" value={user?.username || ""} readOnly />
+              <input
+                type="text"
+                value={user?.username || user?.email?.split("@")[0] || ""}
+                readOnly
+              />
             </label>
             <label>
               Email

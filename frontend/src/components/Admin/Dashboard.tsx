@@ -24,7 +24,7 @@ const Dashboard = () => {
         return;
       }
 
-      const res = await fetch("http://localhost:5000/api/admin/dashboard", {
+      const res = await fetch("https://the-shopping-hub-backend.onrender.com/api/admin/dashboard", {
         headers: {
           Authorization: `Bearer ${token}`,
         },

@@ -41,17 +41,17 @@ const Sidebar = () => {
           {sidebarOpen && <span className={classes.menuText}>Dashboard</span>}
         </li>
 
-        <li className={classes.menuItem} onClick={() => navigate("/admin/products")}>
+        <li className={classes.menuItem} onClick={() => navigate("/admin/dashboard")}>
           <FaBoxOpen className={classes.icon} />
           {sidebarOpen && <span className={classes.menuText}>Products</span>}
         </li>
 
-        <li className={classes.menuItem} onClick={() => navigate("/admin/orders")}>
+        <li className={classes.menuItem} onClick={() => navigate("/admin/dashboard")}>
           <FaClipboardList className={classes.icon} />
           {sidebarOpen && <span className={classes.menuText}>Orders</span>}
         </li>
 
-        <li className={classes.menuItem} onClick={() => navigate("/admin/users")}>
+        <li className={classes.menuItem} onClick={() => navigate("/admin/dashboard")}>
           <FaUsers className={classes.icon} />
           {sidebarOpen && <span className={classes.menuText}>Users</span>}
         </li>

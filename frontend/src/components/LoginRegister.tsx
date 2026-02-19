@@ -5,7 +5,7 @@ import { useAuthContext } from "../context/AuthProvider";
 
 const API_URL =
   import.meta.env.VITE_API_URL ||
-  "https://theshoppinghubstore.azurewebsites.net";
+  "https://the-shopping-hub-backend.onrender.com";
 
 const LoginRegister = () => {
   const [isLogin, setIsLogin] = useState(true);

@@ -10,7 +10,7 @@ import { useAuth } from "../hooks/useAuth";
 
 const API_URL =
   import.meta.env.API_URL ||
-  "https://theshoppinghubstore.azurewebsites.net";
+  "https://the-shopping-hub-backend.onrender.com";
 
 export interface CartItem {
   sku: string;
@@ -35,7 +35,7 @@ export interface CartContextType {
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
-  const { token } = useAuth();
+  const { userToken } = useAuth();
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -113,17 +113,17 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   // ---- CONTEXT LOGIC ---- //
   const fetchCart = useCallback(async () => {
-    if (!token) return;
+    if (!userToken) return;
     setIsLoading(true);
     try {
-      const data = await getCart(token);
+      const data = await getCart(userToken);
       setCart(data);
     } catch (error) {
       handleError(error, "Error fetching cart");
     } finally {
       setIsLoading(false);
     }
-  }, [token]);
+  }, [userToken]);
 
   useEffect(() => {
     fetchCart();
@@ -156,7 +156,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   // Add or update an item in cart
   const addToCart = useCallback(
     async (item: CartItem) => {
-      if (!token) return;
+      if (!userToken) return;
       try {
         const existing = safeCart.find((i) => i.sku === item.sku);
         const updatedCart = existing
@@ -168,53 +168,53 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
           : [...safeCart, item];
 
         setCart(updatedCart);
-        await updateCart(token, updatedCart);
+        await updateCart(userToken, updatedCart);
       } catch (error) {
         handleError(error, "Error adding item to cart");
         fetchCart();
       }
     },
-    [token, safeCart, fetchCart]
+    [userToken, safeCart, fetchCart]
   );
 
   // Remove item from cart
   const removeFromCart = useCallback(
     async (sku: string) => {
-      if (!token) return;
+      if (!userToken) return;
       try {
         setCart((prev) => prev.filter((i) => i.sku !== sku));
-        await removeItem(token, sku);
+        await removeItem(userToken, sku);
       } catch (error) {
         handleError(error, "Error removing item");
         fetchCart();
       }
     },
-    [token, fetchCart]
+    [userToken, fetchCart]
   );
 
   // Update item quantity
   const updateQuantity = useCallback(
     async (sku: string, quantity: number) => {
-      if (!token) return;
+      if (!userToken) return;
       try {
         setCart((prev) =>
           prev.map((i) => (i.sku === sku ? { ...i, quantity } : i))
         );
-        await updateItemQuantity(token, sku, quantity);
+        await updateItemQuantity(userToken, sku, quantity);
       } catch (error) {
         handleError(error, "Error updating quantity");
         fetchCart();
       }
     },
-    [token, fetchCart]
+    [userToken, fetchCart]
   );
 
   // Submit order
   const submitOrder = useCallback(async () => {
-    if (!token) return;
+    if (!userToken) return;
     setIsLoading(true);
     try {
-      await submitOrderRequest(token, safeCart);
+      await submitOrderRequest(userToken, safeCart);
       setCart([]);
     } catch (error) {
       handleError(error, "Error submitting order");
@@ -222,7 +222,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     } finally {
       setIsLoading(false);
     }
-  }, [token, safeCart]);
+  }, [userToken, safeCart]);
 
   return (
     <CartContext.Provider

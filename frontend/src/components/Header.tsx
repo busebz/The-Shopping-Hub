@@ -7,10 +7,10 @@ import { useAuth } from "../hooks/useAuth";
 const Header = () => {
   const {totalItems} = useCart();
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
+  const { isUserAuthenticated } = useAuth();
 
   const handleLogoClick = () => {
-    if (isAuthenticated) {
+    if (isUserAuthenticated) {
       navigate("/");
     }
   };
@@ -21,7 +21,7 @@ const Header = () => {
         <span
           onClick={handleLogoClick}
           className={classes.logo}
-          style={{ cursor: isAuthenticated ? "pointer" : "default" }}
+          style={{ cursor: isUserAuthenticated ? "pointer" : "default" }}
         >
           TheShoppingHub
         </span>

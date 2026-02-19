@@ -16,25 +16,34 @@ type PropsType = {
   addToCart: (item: CartItem) => Promise<void>;
 };
 
-const Product = ({ product, inCart, addToCart }: PropsType): ReactElement => {
+const Product = ({ product, addToCart }: PropsType): ReactElement => {
   const [isAdded, setIsAdded] = useState(false);
-  const { isAuthenticated } = useAuth();
+  const { isUserAuthenticated } = useAuth();
   const navigate = useNavigate();
 
   const onAddToCart = async () => {
-    if (!isAuthenticated) {
-      navigate("/login"); 
+    if (!isUserAuthenticated) {
+      navigate("/login");
       return;
     }
 
-    await addToCart({
-      sku: product.sku,
-      name: product.name,
-      price: product.price,
-      quantity: 1,
-    });
-    setIsAdded(true);
-    setTimeout(() => setIsAdded(false), 2000);
+    try {
+      setIsAdded(true);
+
+      await addToCart({
+        sku: product.sku,
+        name: product.name,
+        price: product.price,
+        quantity: 1,
+      });
+
+      setTimeout(() => {
+        setIsAdded(false);
+      }, 2000);
+    } catch (err) {
+      setIsAdded(false);
+      console.error(err);
+    }
   };
 
   const img: string = new URL(
@@ -45,21 +54,24 @@ const Product = ({ product, inCart, addToCart }: PropsType): ReactElement => {
   return (
     <article className={classes.product}>
       <h3>{product.name}</h3>
+
       <div className={classes.img_container}>
         <img src={img} alt={product.name} className={classes.product_img} />
       </div>
+
       <p>
-        {new Intl.NumberFormat("en-us", {
+        {new Intl.NumberFormat("en-US", {
           style: "currency",
           currency: "USD",
         }).format(product.price)}
       </p>
+
       <button
         onClick={onAddToCart}
+        disabled={isAdded}
         className={`${classes.addButton} ${isAdded ? classes.added : ""}`}
-        disabled={inCart}
       >
-        {inCart ? "Added to Cart" : isAdded ? "Added!" : "Add to Cart"}
+        {isAdded ? "Added!" : "Add to Cart"}
       </button>
     </article>
   );

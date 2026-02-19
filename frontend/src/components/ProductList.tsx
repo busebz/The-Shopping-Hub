@@ -4,7 +4,7 @@ import useCart from "../hooks/useCart";
 import Product from "./Product";
 import ProductSkeleton from "./ProductSkeleton";
 
-const API_URL = import.meta.env.VITE_API_URL || "https://theshoppinghubstore.azurewebsites.net";
+const API_URL = import.meta.env.VITE_API_URL || "https://the-shopping-hub-backend.onrender.com";
 
 type ProductType = {
   sku: string;

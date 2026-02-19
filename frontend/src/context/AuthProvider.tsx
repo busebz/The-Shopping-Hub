@@ -1,4 +1,10 @@
-import { createContext, useState, useContext, ReactNode, useEffect } from "react";
+import {
+  createContext,
+  useState,
+  useContext,
+  ReactNode,
+  useEffect,
+} from "react";
 
 export type UserRole = "USER" | "ADMIN";
 
@@ -22,58 +28,37 @@ type AuthContextType = {
 
   loginUser: (user: User, token: string) => void;
   loginAdmin: (user: User, token: string) => void;
+
   logoutUser: () => void;
   logoutAdmin: () => void;
+
   updateUser: (user: User) => void;
-  updateAdmin: (user: User) => void;
+  updateAdmin: (admin: User) => void;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const storage = {
-  load(): {
-    user: User | null;
-    userToken: string | null;
-    admin: User | null;
-    adminToken: string | null;
-  } {
-    const user = localStorage.getItem("userUser");
-    const userToken = localStorage.getItem("userToken");
-    const admin = localStorage.getItem("adminUser");
-    const adminToken = localStorage.getItem("adminToken");
-
-    return {
-      user: user ? JSON.parse(user) : null,
-      userToken: userToken || null,
-      admin: admin ? JSON.parse(admin) : null,
-      adminToken: adminToken || null,
-    };
-  },
-
-  clear(role: UserRole) {
-    if (role === "ADMIN") {
-      localStorage.removeItem("adminUser");
-      localStorage.removeItem("adminToken");
-    } else {
-      localStorage.removeItem("userUser");
-      localStorage.removeItem("userToken");
-    }
-  },
-};
-
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [userToken, setUserToken] = useState<string | null>(null);
+
   const [admin, setAdmin] = useState<User | null>(null);
   const [adminToken, setAdminToken] = useState<string | null>(null);
+
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const { user, userToken, admin, adminToken } = storage.load();
-    setUser(user);
-    setUserToken(userToken);
-    setAdmin(admin);
-    setAdminToken(adminToken);
+    const storedUser = localStorage.getItem("userUser");
+    const storedUserToken = localStorage.getItem("userToken");
+    const storedAdmin = localStorage.getItem("adminUser");
+    const storedAdminToken = localStorage.getItem("adminToken");
+
+    if (storedUser) setUser(JSON.parse(storedUser));
+    if (storedUserToken) setUserToken(storedUserToken);
+
+    if (storedAdmin) setAdmin(JSON.parse(storedAdmin));
+    if (storedAdminToken) setAdminToken(storedAdminToken);
+
     setIsLoading(false);
   }, []);
 
@@ -94,23 +79,25 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const logoutUser = () => {
     setUser(null);
     setUserToken(null);
-    storage.clear("USER");
+    localStorage.removeItem("userUser");
+    localStorage.removeItem("userToken");
   };
 
   const logoutAdmin = () => {
     setAdmin(null);
     setAdminToken(null);
-    storage.clear("ADMIN");
+    localStorage.removeItem("adminUser");
+    localStorage.removeItem("adminToken");
   };
 
   const updateUser = (updated: User) => {
-    if (updated.role === "USER") {
-      setUser(updated);
-      localStorage.setItem("userUser", JSON.stringify(updated));
-    } else {
-      setAdmin(updated);
-      localStorage.setItem("adminUser", JSON.stringify(updated));
-    }
+    setUser(updated);
+    localStorage.setItem("userUser", JSON.stringify(updated));
+  };
+
+  const updateAdmin = (updated: User) => {
+    setAdmin(updated);
+    localStorage.setItem("adminUser", JSON.stringify(updated));
   };
 
   return (
@@ -128,7 +115,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         logoutUser,
         logoutAdmin,
         updateUser,
-        updateAdmin: updateUser,
+        updateAdmin,
       }}
     >
       {children}

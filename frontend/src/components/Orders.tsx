@@ -4,7 +4,7 @@ import useCart from "../hooks/useCart";
 
 const API_URL =
   import.meta.env.API_URL ||
-  "https://theshoppinghubstore.azurewebsites.net";
+  "https://the-shopping-hub-backend.onrender.com";
 
 type OrderItem = {
   sku: string;
@@ -28,8 +28,8 @@ const Orders = () => {
 
   useEffect(() => {
     const fetchOrders = async () => {
-      const token = localStorage.getItem("token");
-      if (!token) {
+      const userToken = localStorage.getItem("userToken");
+      if (!userToken) {
         setError("No token found. Please log in.");
         setLoading(false);
         return;
@@ -37,7 +37,7 @@ const Orders = () => {
 
       try {
         const response = await fetch(`${API_URL}/api/user/orders`, {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: { Authorization: `Bearer ${userToken}` },
         });
 
         if (!response.ok) {
