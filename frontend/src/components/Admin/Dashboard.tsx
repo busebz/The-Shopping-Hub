@@ -95,7 +95,7 @@ const Dashboard = () => {
               recentOrders.map((order, index) => (
                 <tr key={index}>
                   <td>{order.user}</td>
-                  <td>{order.total} ₺</td>
+                  <td>{order.total} $</td>
                   <td>{new Date(order.date).toLocaleDateString()}</td>
                 </tr>
               ))

@@ -18,6 +18,8 @@ import UserInfoSettingsPage from "./pages/UserInfoSettingsPage";
 
 import AdminLoginPage from "./pages/Admin/Login";
 import AdminDashboardPage from "./pages/Admin/Dashboard";
+import AdminProductsPage from "./pages/Admin/Products";
+import AdminAddEditProductPage from "./pages/Admin/AddEditProduct";
 
 import AdminLayout from "./layouts/AdminLayout";
 
@@ -77,6 +79,8 @@ function AppContent() {
         <Route element={<AdminProtectedRoute />}>
           <Route element={<AdminLayout />}>
             <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
+            <Route path="/admin/products" element={<AdminProductsPage />} />
+            <Route path="/admin/products/new" element={<AdminAddEditProductPage />} /> 
           </Route>
         </Route>
 

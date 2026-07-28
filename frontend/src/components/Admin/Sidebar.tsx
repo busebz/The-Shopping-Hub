@@ -41,7 +41,7 @@ const Sidebar = () => {
           {sidebarOpen && <span className={classes.menuText}>Dashboard</span>}
         </li>
 
-        <li className={classes.menuItem} onClick={() => navigate("/admin/dashboard")}>
+        <li className={classes.menuItem} onClick={() => navigate("/admin/products")}>
           <FaBoxOpen className={classes.icon} />
           {sidebarOpen && <span className={classes.menuText}>Products</span>}
         </li>

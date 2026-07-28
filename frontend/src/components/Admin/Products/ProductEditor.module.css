@@ -23,7 +23,7 @@
 }
 
 .form input {
-  width: 100%;
+  width: 95%;
   padding: 10px 12px;
   margin-bottom: 14px;
   border-radius: 8px;
@@ -51,14 +51,14 @@
   cursor: pointer;
 }
 
+.saveBtn:hover {
+  background: #1d4ed8;
+}
+
 .cancelBtn {
   background: #e5e7eb;
   border: none;
   padding: 10px 14px;
   border-radius: 8px;
   cursor: pointer;
-}
-
-.saveBtn:hover {
-  background: #1d4ed8;
 }

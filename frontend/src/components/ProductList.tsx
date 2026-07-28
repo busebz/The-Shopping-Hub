@@ -4,12 +4,14 @@ import useCart from "../hooks/useCart";
 import Product from "./Product";
 import ProductSkeleton from "./ProductSkeleton";
 
-const API_URL = import.meta.env.VITE_API_URL || "https://the-shopping-hub-backend.onrender.com";
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 type ProductType = {
+  id: string;
   sku: string;
   name: string;
   price: number;
+  image: string;
 };
 
 const ProductList = () => {
@@ -18,49 +20,47 @@ const ProductList = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const cartItems = useMemo(() => cart.map(item => item.sku), [cart]);
+  const cartItems = useMemo(() => cart.map((i) => i.sku), [cart]);
 
   useEffect(() => {
     const controller = new AbortController();
+
     const fetchProducts = async () => {
       try {
-        const response = await fetch(
-          `${API_URL}/api/products`,
-          { signal: controller.signal }
-        );
+        const res = await fetch(`${API_URL}/api/products`, {
+          signal: controller.signal,
+        });
 
-        if (!response.ok) throw new Error("Failed to fetch products");
-        const data = await response.json();
+        const data = await res.json();
         setProducts(data);
-      } catch (err) {
-        if ((err as Error).name !== "AbortError") {
-          setError((err as Error).message);
-        }
+      } catch (err: any) {
+        if (err.name !== "AbortError") setError(err.message);
       } finally {
         setLoading(false);
       }
     };
 
     fetchProducts();
+
     return () => controller.abort();
   }, []);
 
-  if (error) return <p className={classes.error}>{error}</p>;
-  if (!products.length && !loading) return <p>No products found</p>;
+  if (error) return <p>{error}</p>;
 
   return (
     <div className={classes.mainProducts}>
       {loading
-        ? Array.from({ length: 8 }).map((_, i) => <ProductSkeleton key={i} />)
-        : products.map((product) => (
+        ? Array.from({ length: 8 }).map((_, i) => (
+            <ProductSkeleton key={i} />
+          ))
+        : products.map((p) => (
             <Product
-              key={product.sku}
-              product={product}
-              inCart={cartItems.includes(product.sku)}
+              key={p.id}
+              product={p}
+              inCart={cartItems.includes(p.sku)}
               addToCart={addToCart}
             />
-          ))
-      }
+          ))}
     </div>
   );
 };

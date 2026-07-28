@@ -1,22 +1,22 @@
+import { memo, useState } from "react";
 import classes from "./Product.module.css";
-import { memo, ReactElement, useState } from "react";
-import { CartItem } from "../context/CartProvider";
 import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 
-interface ProductType {
+type ProductType = {
   sku: string;
   name: string;
   price: number;
-}
-
-type PropsType = {
-  product: ProductType;
-  inCart: boolean;
-  addToCart: (item: CartItem) => Promise<void>;
+  image: string;
 };
 
-const Product = ({ product, addToCart }: PropsType): ReactElement => {
+type Props = {
+  product: ProductType;
+  inCart: boolean;
+  addToCart: (item: any) => Promise<void>;
+};
+
+const Product = ({ product, addToCart }: Props) => {
   const [isAdded, setIsAdded] = useState(false);
   const { isUserAuthenticated } = useAuth();
   const navigate = useNavigate();
@@ -27,50 +27,33 @@ const Product = ({ product, addToCart }: PropsType): ReactElement => {
       return;
     }
 
-    try {
-      setIsAdded(true);
+    setIsAdded(true);
 
-      await addToCart({
-        sku: product.sku,
-        name: product.name,
-        price: product.price,
-        quantity: 1,
-      });
+    await addToCart({
+      sku: product.sku,
+      name: product.name,
+      price: product.price,
+      quantity: 1,
+    });
 
-      setTimeout(() => {
-        setIsAdded(false);
-      }, 2000);
-    } catch (err) {
-      setIsAdded(false);
-      console.error(err);
-    }
+    setTimeout(() => setIsAdded(false), 1500);
   };
-
-  const img: string = new URL(
-    `../images/${product.sku}.jpg`,
-    import.meta.url
-  ).href;
 
   return (
     <article className={classes.product}>
       <h3>{product.name}</h3>
 
       <div className={classes.img_container}>
-        <img src={img} alt={product.name} className={classes.product_img} />
+        <img
+          src={product.image}
+          alt={product.name}
+          className={classes.product_img}
+        />
       </div>
 
-      <p>
-        {new Intl.NumberFormat("en-US", {
-          style: "currency",
-          currency: "USD",
-        }).format(product.price)}
-      </p>
+      <p>${product.price}</p>
 
-      <button
-        onClick={onAddToCart}
-        disabled={isAdded}
-        className={`${classes.addButton} ${isAdded ? classes.added : ""}`}
-      >
+      <button onClick={onAddToCart} disabled={isAdded}>
         {isAdded ? "Added!" : "Add to Cart"}
       </button>
     </article>

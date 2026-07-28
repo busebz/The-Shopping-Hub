@@ -13,6 +13,7 @@ const ProductsTable = ({ products, onAdd, onEdit, onDelete }: Props) => {
     <div className={classes.wrapper}>
       <div className={classes.header}>
         <h2>Products</h2>
+
         <button className={classes.addBtn} onClick={onAdd}>
           Add Product
         </button>
@@ -23,36 +24,29 @@ const ProductsTable = ({ products, onAdd, onEdit, onDelete }: Props) => {
           <tr>
             <th>Name</th>
             <th>Price</th>
-            <th className={classes.actionsCol}>Actions</th>
+            <th>Actions</th>
           </tr>
         </thead>
+
         <tbody>
           {products.length === 0 ? (
             <tr>
-              <td colSpan={3} className={classes.empty}>
-                No products found
-              </td>
+              <td colSpan={3}>No products found</td>
             </tr>
           ) : (
             products.map(p => (
               <tr key={p.id}>
                 <td>{p.name}</td>
                 <td>{p.price} ₺</td>
+
                 <td>
-                  <div className={classes.actions}>
-                    <button
-                      className={classes.editBtn}
-                      onClick={() => onEdit(p)}
-                    >
-                      Edit
-                    </button>
-                    <button
-                      className={classes.deleteBtn}
-                      onClick={() => onDelete(p.id)}
-                    >
-                      Delete
-                    </button>
-                  </div>
+                  <button onClick={() => onEdit(p)}>
+                    Edit
+                  </button>
+
+                  <button onClick={() => onDelete(p.id)}>
+                    Delete
+                  </button>
                 </td>
               </tr>
             ))

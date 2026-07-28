@@ -1,66 +1,85 @@
-import { useState } from "react";
-import { Product } from "../../../types/product";
+import { useEffect, useState } from "react";
 import classes from "./ProductEditor.module.css";
 
 type Props = {
-  initialData?: Product;
+  initialData?: any;
   onCancel: () => void;
-  onSave: (p: Product) => void;
+  onSave: (p: any) => void;
 };
 
 const ProductForm = ({ initialData, onCancel, onSave }: Props) => {
-  const [name, setName] = useState(initialData?.name ?? "");
-  const [price, setPrice] = useState(
-    initialData?.price?.toString() ?? ""
-  );
-  const [image, setImage] = useState(initialData?.image ?? "");
+  const [name, setName] = useState("");
+  const [price, setPrice] = useState("");
+  const [image, setImage] = useState<File | null>(null);
+  const [preview, setPreview] = useState<string | null>(null);
 
-  const submitHandler = (e: React.FormEvent) => {
+  useEffect(() => {
+    if (initialData) {
+      setName(initialData.name);
+      setPrice(initialData.price?.toString() || "");
+      setPreview(initialData.image);
+      setImage(null);
+    } else {
+      setName("");
+      setPrice("");
+      setImage(null);
+      setPreview(null);
+    }
+  }, [initialData]);
+
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     onSave({
-      id: initialData?.id ?? Date.now().toString(),
+      id: initialData?.id,
       name,
-      price: Number(price),
+      price,
       image,
     });
   };
 
   return (
-    <div className={classes.overlay}>
-      <form className={classes.form} onSubmit={submitHandler}>
+    <div className={classes.overlay} onClick={onCancel}>
+      <form
+        className={classes.form}
+        onClick={(e) => e.stopPropagation()}
+        onSubmit={handleSubmit}
+      >
         <h3>{initialData ? "Edit Product" : "Add Product"}</h3>
 
         <input
           placeholder="Product name"
           value={name}
-          onChange={e => setName(e.target.value)}
+          onChange={(e) => setName(e.target.value)}
         />
 
         <input
           type="number"
-          placeholder="Price"
           value={price}
-          onChange={e => setPrice(e.target.value)}
+          onChange={(e) => setPrice(e.target.value)}
         />
 
         <input
-          placeholder="Image URL"
-          value={image}
-          onChange={e => setImage(e.target.value)}
+          type="file"
+          accept="image/*"
+          onChange={(e) => {
+            const file = e.target.files?.[0] || null;
+            setImage(file);
+
+            if (file) {
+              setPreview(URL.createObjectURL(file));
+            }
+          }}
         />
 
+        {preview && <img src={preview} width={100} />}
+
         <div className={classes.actions}>
-          <button
-            type="button"
-            className={classes.cancelBtn}
-            onClick={onCancel}
-          >
+          <button type="button" onClick={onCancel}>
             Cancel
           </button>
-          <button type="submit" className={classes.saveBtn}>
-            Save
-          </button>
+
+          <button type="submit">Save</button>
         </div>
       </form>
     </div>
