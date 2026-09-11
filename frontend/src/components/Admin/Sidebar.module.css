@@ -1,88 +1,420 @@
 .sidebar {
-  width: 220px;
-  background-color: #111827;
-  color: #fff;
-  transition: width 0.3s;
-  overflow: hidden;
+  width: clamp(220px, 14.5vw, 235px);
+  min-width: clamp(220px, 14.5vw, 235px);
+  height: 100vh;
+
+  box-sizing: border-box;
+
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+
+  padding:
+    clamp(22px, 1.5vw, 26px)
+    clamp(14px, 1vw, 17px)
+    clamp(18px, 1.3vw, 22px);
+
+  overflow: hidden;
+
+  color: #ffffff;
+
+  background:
+    radial-gradient(
+      circle at 15% 90%,
+      rgba(255, 101, 29, 0.14),
+      transparent 24%
+    ),
+    linear-gradient(
+      180deg,
+      #171e2b 0%,
+      #121927 100%
+    );
+
+  box-shadow:
+    7px 0 26px
+    rgba(17, 24, 39, 0.07);
+
+  transition:
+    width 0.3s ease,
+    min-width 0.3s ease,
+    padding 0.3s ease;
 }
 
 .collapsed {
-  width: 70px;
+  width: clamp(66px, 4.6vw, 72px);
+  min-width: clamp(66px, 4.6vw, 72px);
+
+  padding-left: 10px;
+  padding-right: 10px;
 }
+
+/* TOP */
 
 .top {
+  position: relative;
+
+  min-height: clamp(68px, 4.6vw, 74px);
+
   display: flex;
-  align-items: center;
-  padding: 15px;
-  height: 50px;
+  align-items: flex-start;
+
+  margin-bottom: clamp(32px, 2.3vw, 38px);
 }
 
-.toggle {
-  background: none;
-  border: none;
-  color: white;
-  font-size: 1.3rem;
-  cursor: pointer;
-  margin-right: 10px;
+.brandText {
+  display: flex;
+  flex-direction: column;
+
+  min-width: 0;
+
+  padding-right: 38px;
 }
 
 .brand {
-  font-size: 1.3rem;
-  font-weight: bold;
   white-space: nowrap;
+
+  color: #ffffff;
+
+  font-size: clamp(19px, 1.35vw, 22px);
+
+  font-weight: 700;
+
+  letter-spacing: -0.5px;
+
+  line-height: 1.1;
 }
+
+.brand strong {
+  color: #ff6a24;
+}
+
+.adminText {
+  margin-top: 7px;
+
+  color: #909aaa;
+
+  font-size: clamp(9px, 0.62vw, 10px);
+
+  font-weight: 600;
+
+  letter-spacing: 2.4px;
+}
+
+/* TOGGLE */
+
+.toggle {
+  position: absolute;
+
+  top: 0;
+  right: 0;
+
+  width: clamp(31px, 2.15vw, 34px);
+  height: clamp(31px, 2.15vw, 34px);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border: none;
+  border-radius: 8px;
+
+  background: transparent;
+
+  color: #aeb6c4;
+
+  font-size: clamp(16px, 1.15vw, 18px);
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.toggle:hover {
+  color: #ffffff;
+
+  background:
+    rgba(255, 255, 255, 0.07);
+}
+
+/* MENU */
 
 .menu {
   list-style: none;
+
+  margin: 0;
   padding: 0;
-  margin-top: 10px;
+
   display: flex;
   flex-direction: column;
+
+  gap: clamp(9px, 0.7vw, 11px);
 }
 
 .menuItem {
+  width: 100%;
+
+  min-height: clamp(48px, 3.3vw, 54px);
+
+  padding:
+    0
+    clamp(13px, 0.95vw, 16px);
+
+  box-sizing: border-box;
+
   display: flex;
   align-items: center;
-  padding: 12px 15px;
+
+  gap: clamp(12px, 0.9vw, 14px);
+
+  border-radius: 11px;
+
+  color: #b7bfcd;
+
+  font-size: clamp(14px, 1vw, 16px);
+
+  font-weight: 500;
+
   cursor: pointer;
-  transition: background 0.2s;
-  border-radius: 6px;
-  margin-bottom: 5px;
+
+  transition:
+    color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .menuItem:hover {
-  background-color: #2563eb;
+  color: #ffffff;
+
+  background:
+    rgba(255, 255, 255, 0.06);
 }
 
+.menuItem:hover .icon {
+  color: #ff762d;
+}
+
+/* ACTIVE */
+
+.active {
+  color: #ffffff;
+
+  background:
+    linear-gradient(
+      90deg,
+      #ff762d 0%,
+      #ff591d 100%
+    );
+
+  box-shadow:
+    0 7px 18px
+    rgba(255, 89, 29, 0.22);
+}
+
+.active:hover {
+  background:
+    linear-gradient(
+      90deg,
+      #ff762d 0%,
+      #ff591d 100%
+    );
+}
+
+.active .icon {
+  color: #ffffff;
+}
+
+/* ICON */
+
 .icon {
-  min-width: 24px;
-  text-align: center;
+  min-width: clamp(18px, 1.3vw, 21px);
+
+  font-size: clamp(17px, 1.2vw, 19px);
+
+  color: #aeb7c5;
+
+  transition: color 0.2s ease;
 }
 
 .menuText {
-  margin-left: 12px;
   white-space: nowrap;
 }
 
-.subMenu {
-  list-style: none;
-  padding-left: 35px;
-  margin-top: 5px;
+/* BOTTOM */
+
+.bottom {
+  margin-top: auto;
+
+  padding-top: clamp(17px, 1.2vw, 20px);
+
+  border-top:
+    1px solid
+    rgba(255, 255, 255, 0.07);
 }
 
-.subMenu li {
-  padding: 8px 0;
+.logout {
+  width: 100%;
+
+  min-height: clamp(46px, 3.2vw, 52px);
+
+  padding:
+    0
+    clamp(13px, 0.95vw, 16px);
+
   display: flex;
   align-items: center;
+
+  gap: clamp(12px, 0.9vw, 14px);
+
+  border: none;
+  border-radius: 10px;
+
+  background: transparent;
+
+  color: #c3cad5;
+
+  font-family: inherit;
+
+  font-size: clamp(14px, 1vw, 16px);
+
+  font-weight: 500;
+
+  cursor: pointer;
+
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.logout:hover {
+  color: #ffffff;
+
+  background:
+    rgba(255, 101, 29, 0.11);
+}
+
+.logout:hover .icon {
+  color: #ff762d;
+}
+
+/* COLLAPSED */
+
+.collapsed .top {
+  min-height: 46px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 30px;
+}
+
+.collapsed .brandText {
+  display: none;
+}
+
+.collapsed .toggle {
+  position: static;
+
+  margin: 0 auto;
+}
+
+.collapsed .menuItem {
+  min-height: 48px;
+
+  padding: 0;
+
+  justify-content: center;
 }
 
 .collapsed .menuText {
   display: none;
 }
 
-.collapsed .menuItem {
+.collapsed .logout {
+  min-height: 48px;
+
+  padding: 0;
+
   justify-content: center;
+}
+
+.collapsed .logout span {
+  display: none;
+}
+
+/* TABLET */
+
+@media (max-width: 900px) {
+  .sidebar {
+    width: 68px;
+    min-width: 68px;
+
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .brandText,
+  .menuText,
+  .logout span {
+    display: none;
+  }
+
+  .top {
+    min-height: 46px;
+
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 30px;
+  }
+
+  .toggle {
+    position: static;
+
+    margin: 0 auto;
+  }
+
+  .menuItem {
+    padding: 0;
+
+    justify-content: center;
+  }
+
+  .logout {
+    padding: 0;
+
+    justify-content: center;
+  }
+}
+
+/* MOBILE */
+
+@media (max-width: 520px) {
+  .sidebar {
+    width: 62px;
+    min-width: 62px;
+
+    padding:
+      18px
+      8px
+      16px;
+  }
+
+  .toggle {
+    width: 32px;
+    height: 32px;
+  }
+
+  .menuItem {
+    min-height: 46px;
+
+    border-radius: 9px;
+  }
+
+  .icon {
+    font-size: 17px;
+  }
 }

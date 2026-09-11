@@ -13,8 +13,7 @@ import {
 } from "react-icons/fi";
 
 const API_URL =
-  import.meta.env.VITE_API_URL ||
-  "https://the-shopping-hub-backend.onrender.com";
+  import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 type OrderItem = {
   sku: string;
@@ -23,7 +22,10 @@ type OrderItem = {
   quantity: number;
 };
 
-type OrderStatus = "Processing" | "Completed" | "Cancelled";
+type OrderStatus =
+  | "Processing"
+  | "Completed"
+  | "Cancelled";
 
 type Order = {
   _id: string;
@@ -32,13 +34,23 @@ type Order = {
   status?: OrderStatus;
 };
 
-type FilterType = "All" | "Processing" | "Completed" | "Cancelled";
-type SortType = "Newest" | "Oldest" | "Highest" | "Lowest";
+type FilterType =
+  | "All"
+  | "Processing"
+  | "Completed"
+  | "Cancelled";
+
+type SortType =
+  | "Newest"
+  | "Oldest"
+  | "Highest"
+  | "Lowest";
 
 const Orders = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] =
+    useState<string | null>(null);
 
   const [activeFilter, setActiveFilter] =
     useState<FilterType>("All");
@@ -83,7 +95,8 @@ const Orders = () => {
           );
         }
 
-        const data = await response.json();
+        const data =
+          await response.json();
 
         setOrders(data);
       } catch (err) {
