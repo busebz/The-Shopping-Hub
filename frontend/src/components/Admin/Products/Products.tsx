@@ -30,18 +30,21 @@ const Products = () => {
         const token =
           localStorage.getItem("adminToken");
 
-        const res = await fetch(API_URL, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const res = await fetch(
+          `${API_URL}/api/admin/products`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         const data = await res.json();
 
         if (!res.ok) {
           setError(
             data.message ||
-            "Failed to load products."
+              "Failed to load products."
           );
 
           return;
@@ -74,7 +77,7 @@ const Products = () => {
         localStorage.getItem("adminToken");
 
       const res = await fetch(
-        `${API_URL}/${id}`,
+        `${API_URL}/api/admin/products/${id}`,
         {
           method: "DELETE",
 
@@ -89,7 +92,7 @@ const Products = () => {
 
         setError(
           data.message ||
-          "Failed to delete product."
+            "Failed to delete product."
         );
 
         return;
@@ -152,8 +155,8 @@ const Products = () => {
         Boolean(product.id);
 
       const url = isEdit
-        ? `${API_URL}/${product.id}`
-        : API_URL;
+        ? `${API_URL}/api/admin/products/${product.id}`
+        : `${API_URL}/api/admin/products`;
 
       const method = isEdit
         ? "PUT"
@@ -181,17 +184,17 @@ const Products = () => {
       if (!res.ok) {
         throw new Error(
           data.message ||
-          "Failed to save product."
+            "Failed to save product."
         );
       }
 
       setProducts((prev) =>
         isEdit
           ? prev.map((p) =>
-            p.id === data.id
-              ? data
-              : p
-          )
+              p.id === data.id
+                ? data
+                : p
+            )
           : [...prev, data]
       );
     } catch (err) {
