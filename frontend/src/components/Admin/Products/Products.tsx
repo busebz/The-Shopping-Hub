@@ -39,6 +39,7 @@ const Products = () => {
   formData.append("sku", product.sku);
   formData.append("name", product.name);
   formData.append("price", product.price);
+  formData.append("category", product.category);
 
   if (product.image instanceof File) {
     formData.append("image", product.image);

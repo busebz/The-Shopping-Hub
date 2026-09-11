@@ -2,6 +2,7 @@ import { memo, useState } from "react";
 import classes from "./Product.module.css";
 import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
+import { FaCartShopping } from "react-icons/fa6";
 
 type ProductType = {
   sku: string;
@@ -18,6 +19,7 @@ type Props = {
 
 const Product = ({ product, addToCart }: Props) => {
   const [isAdded, setIsAdded] = useState(false);
+
   const { isUserAuthenticated } = useAuth();
   const navigate = useNavigate();
 
@@ -36,13 +38,13 @@ const Product = ({ product, addToCart }: Props) => {
       quantity: 1,
     });
 
-    setTimeout(() => setIsAdded(false), 1500);
+    setTimeout(() => {
+      setIsAdded(false);
+    }, 1500);
   };
 
   return (
     <article className={classes.product}>
-      <h3>{product.name}</h3>
-
       <div className={classes.img_container}>
         <img
           src={product.image}
@@ -51,10 +53,18 @@ const Product = ({ product, addToCart }: Props) => {
         />
       </div>
 
-      <p>${product.price}</p>
+      <p>{product.name}</p>
 
-      <button onClick={onAddToCart} disabled={isAdded}>
-        {isAdded ? "Added!" : "Add to Cart"}
+      <h3>${product.price}</h3>
+
+      <button
+        onClick={onAddToCart}
+        disabled={isAdded}
+        className={isAdded ? classes.addedButton : ""}
+      >
+        <FaCartShopping />
+
+        {isAdded ? "Added!" : "Add To Cart"}
       </button>
     </article>
   );

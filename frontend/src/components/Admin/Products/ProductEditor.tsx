@@ -8,20 +8,26 @@ type Props = {
 };
 
 const ProductForm = ({ initialData, onCancel, onSave }: Props) => {
+  const [sku, setSku] = useState("");
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
+  const [category, setCategory] = useState("Accessories");
   const [image, setImage] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
 
   useEffect(() => {
     if (initialData) {
+      setSku(initialData.sku || "");
       setName(initialData.name);
       setPrice(initialData.price?.toString() || "");
+      setCategory(initialData.category || "Accessories");
       setPreview(initialData.image);
       setImage(null);
     } else {
+      setSku("");
       setName("");
       setPrice("");
+      setCategory("Accessories");
       setImage(null);
       setPreview(null);
     }
@@ -32,8 +38,10 @@ const ProductForm = ({ initialData, onCancel, onSave }: Props) => {
 
     onSave({
       id: initialData?.id,
+      sku,
       name,
       price,
+      category,
       image,
     });
   };
@@ -48,10 +56,28 @@ const ProductForm = ({ initialData, onCancel, onSave }: Props) => {
         <h3>{initialData ? "Edit Product" : "Add Product"}</h3>
 
         <input
+          placeholder="SKU"
+          value={sku}
+          onChange={(e) => setSku(e.target.value)}
+        />
+
+        <input
           placeholder="Product name"
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
+
+        <select
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+        >
+          <option value="Audio">Audio</option>
+          <option value="Mobiles">Mobiles</option>
+          <option value="Accessories">Accessories</option>
+          <option value="Wearables">Wearables</option>
+          <option value="Smart Home">Smart Home</option>
+          <option value="Laptops">Laptops</option>
+        </select>
 
         <input
           type="number"

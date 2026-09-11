@@ -1,86 +1,283 @@
-.authContainer {
-  width: 320px;
-  margin: 100px auto;
-  padding: 30px;
-  background-color: #fff;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-  border-radius: 12px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+.page {
+  width: 100%;
+  height: 100vh;
+  min-height: 100vh;
   display: flex;
-  flex-direction: column;
-  gap: 16px;
+  overflow: hidden;
+  background-image: url("../images/loginRegister.png");
+  background-size: cover;
+  background-position: center 85%;
+  font-family: var(--font-shopping);
 }
 
-.authTitle {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #333;
+.leftSide {
+  width: 47%;
+  height: 100vh;
+  position: relative;
+  padding: 35px 50px;
+  box-sizing: border-box;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 25px;
+  font-weight: 700;
+  color: #101b3c;
+  cursor: pointer;
+}
+
+.logo span span {
+  color: #e92b8f;
+}
+
+.logo svg {
+  color: #4c1d95;
+  font-size: 1.75rem;
+}
+
+.rightSide {
+  width: 50%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 25px 45px;
+  box-sizing: border-box;
+}
+
+.authCard {
+  width: 100%;
+  max-width: 500px;
+  box-sizing: border-box;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 22px;
+  padding: 38px 42px 30px;
+  box-shadow: 0 15px 45px rgba(70, 40, 120, 0.14);
+}
+
+.cardHeader {
   text-align: center;
-  margin-bottom: 12px;
+  margin-bottom: 28px;
+}
+
+.cardHeader h1 {
+  margin: 0 0 8px;
+  font-size: 32px;
+  line-height: 1.2;
+  font-weight: 700;
+  color: #101b3c;
+}
+
+.cardHeader p {
+  margin: 0;
+  font-size: 15px;
+  color: #536080;
 }
 
 .formGroup {
+  margin-bottom: 18px;
+}
+
+.formGroup label {
+  display: block;
+  margin-bottom: 7px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #101b3c;
+}
+
+.inputWrapper {
+  width: 100%;
+  height: 52px;
   display: flex;
-  flex-direction: column;
-  margin-bottom: 12px; 
+  align-items: center;
+  box-sizing: border-box;
+  border: 1px solid #dcdce7;
+  border-radius: 9px;
+  background: #fff;
+  transition: 0.2s ease;
 }
 
-.authInput {
-  padding: 10px;
-  border: 1.5px solid #ccc;
-  border-radius: 6px;
-  font-size: 1rem;
-  transition: border-color 0.2s;
+.inputWrapper:focus-within {
+  border-color: #8050e8;
+  box-shadow: 0 0 0 3px rgba(128, 80, 232, 0.08);
 }
 
-.authInput:focus {
+.inputWrapper input {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  border: none;
   outline: none;
-  border-color: #f59140;
-  box-shadow: 0 0 5px #f5914090;
+  padding: 0 10px;
+  font-size: 15px;
+  color: #101b3c;
+  background: transparent;
+}
+
+.inputWrapper input::placeholder {
+  color: #858ca5;
+}
+
+.inputIcon {
+  width: 38px;
+  height: 100%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #7748df;
+  padding-left: 6px;
+  box-sizing: border-box;
+}
+
+.inputIcon svg {
+  width: 15px;
+  height: 15px;
+}
+
+.eyeIcon {
+  width: 36px;
+  height: 100%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  padding: 0 10px 0 0;
+  background: transparent;
+  color: #8063c9;
+  cursor: pointer;
+}
+
+.eyeIcon svg {
+  width: 15px;
+  height: 15px;
 }
 
 .inputError {
   border-color: #e03a3a;
-  background-color: #fff5f5;
+  background-color: #fff7f7;
 }
 
 .errorText {
+  display: block;
+  margin-top: 5px;
+  margin-left: 2px;
   color: #e03a3a;
-  font-size: 0.78rem;
-  margin: 4px 0 0 4px;
-  line-height: 1.1;
+  font-size: 12px;
   font-weight: 600;
+}
+
+.loginOptions {
+  display: flex;
+  align-items: center;
+  margin: 2px 0 22px;
+}
+
+.rememberMe {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  color: #101b3c;
+  cursor: pointer;
+}
+
+.rememberMe input {
+  width: 17px;
+  height: 17px;
+  margin: 0;
+  accent-color: #7748df;
+  cursor: pointer;
 }
 
 .authButton {
-  padding: 10px 30px;
-  background-color: #f59140;
+  width: 100%;
+  height: 52px;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #f52286, #7742dc);
   color: white;
-  font-size: 1.1rem;
+  font-size: 16px;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: 0.2s ease;
 }
 
 .authButton:hover {
-  background-color: #e0842f;
+  transform: translateY(-1px);
+  box-shadow: 0 7px 18px rgba(180, 45, 180, 0.22);
 }
 
-.buttonWrapper {
-  display: flex;
-  justify-content: center;
+.generalError {
+  margin-bottom: 12px;
+  padding: 8px;
+  border-radius: 7px;
+  background: #fff1f1;
+  color: #d83232;
+  text-align: center;
+  font-size: 13px;
 }
 
 .toggleText {
+  margin-top: 22px;
   text-align: center;
-  font-size: 0.9rem;
-  color: #555;
+  color: #101b3c;
+  font-size: 13px;
 }
 
-.toggleText span {
-  color: #f59140;
-  cursor: pointer;
+.toggleText button {
+  border: none;
+  background: transparent;
+  padding: 0;
+  color: #ec268b;
+  font-size: 13px;
   font-weight: 600;
+  cursor: pointer;
+}
+
+@media (max-width: 900px) {
+  .leftSide {
+    width: 42%;
+    padding: 30px;
+  }
+
+  .rightSide {
+    width: 58%;
+    padding: 20px 30px;
+  }
+
+  .authCard {
+    max-width: 460px;
+    padding: 32px 35px 27px;
+  }
+}
+
+@media (max-width: 700px) {
+  .page {
+    min-height: 100vh;
+    height: 100vh;
+    overflow-y: auto;
+  }
+
+  .leftSide {
+    width: 100%;
+    height: auto;
+    padding: 25px 25px 10px;
+  }
+
+  .rightSide {
+    width: 100%;
+    height: auto;
+    min-height: calc(100vh - 75px);
+    padding: 15px 20px 30px;
+  }
+
+  .authCard {
+    max-width: 500px;
+  }
 }

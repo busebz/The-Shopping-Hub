@@ -1,19 +1,92 @@
 import classes from "./CartLineItem.module.css";
-import { ChangeEvent, memo, useMemo, useCallback } from "react";
+
+import {
+  ChangeEvent,
+  memo,
+  useMemo,
+  useCallback,
+} from "react";
+
+import { FiTrash2 } from "react-icons/fi";
+
 import { CartItem } from "../context/CartProvider";
+
 import useCart from "../hooks/useCart";
 
-type PropsType = { item: CartItem };
+type PropsType = {
+  item: CartItem;
+};
 
-const CartLineItem = ({ item }: PropsType) => {
-  const { updateQuantity, removeFromCart } = useCart();
+const productImages = import.meta.glob(
+  "../images/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}",
+  {
+    eager: true,
+    import: "default",
+  }
+) as Record<string, string>;
 
-  const img = useMemo(
-    () => new URL(`../images/${item.sku}.jpg`, import.meta.url).href,
-    [item.sku]
-  );
+const CartLineItem = ({
+  item,
+}: PropsType) => {
+  const {
+    updateQuantity,
+    removeFromCart,
+  } = useCart();
 
-  const lineTotal = item.price * item.quantity;
+  const image = useMemo(() => {
+    const sku = String(
+      item.sku ?? ""
+    )
+      .trim()
+      .toLowerCase();
+
+    const imagePath = Object.keys(
+      productImages
+    ).find((path) => {
+      const fileName = path
+        .split("/")
+        .pop()
+        ?.replace(
+          /\.(jpg|jpeg|png|webp)$/i,
+          ""
+        )
+        .trim()
+        .toLowerCase();
+
+      return fileName === sku;
+    });
+
+    return imagePath
+      ? productImages[imagePath]
+      : "";
+  }, [item.sku]);
+
+  const itemPrice = useMemo(() => {
+    if (
+      typeof item.price === "number"
+    ) {
+      return item.price;
+    }
+
+    const parsed = Number(
+      String(
+        item.price ?? 0
+      ).replace(
+        /[^0-9.-]+/g,
+        ""
+      )
+    );
+
+    return Number.isFinite(parsed)
+      ? parsed
+      : 0;
+  }, [item.price]);
+
+  const quantity =
+    Number(item.quantity) || 1;
+
+  const lineTotal =
+    itemPrice * quantity;
 
   const currencyFormatter = useMemo(
     () =>
@@ -25,73 +98,162 @@ const CartLineItem = ({ item }: PropsType) => {
   );
 
   const options = useMemo(() => {
-    const highestQty = Math.max(20, item.quantity);
-    return Array.from({ length: highestQty }, (_, i) => (
-      <option key={i + 1} value={i + 1}>
-        {i + 1}
-      </option>
-    ));
-  }, [item.quantity]);
+    const highestQty = Math.max(
+      20,
+      quantity
+    );
+
+    return Array.from(
+      {
+        length: highestQty,
+      },
+      (_, index) => {
+        const value = index + 1;
+
+        return (
+          <option
+            key={value}
+            value={value}
+          >
+            {value}
+          </option>
+        );
+      }
+    );
+  }, [quantity]);
 
   const onChangeQty = useCallback(
-    (e: ChangeEvent<HTMLSelectElement>) => {
-      updateQuantity(item.sku, Number(e.target.value));
+    (
+      e: ChangeEvent<HTMLSelectElement>
+    ) => {
+      updateQuantity(
+        item.sku,
+        Number(e.target.value)
+      );
     },
-    [item.sku, updateQuantity]
+    [
+      item.sku,
+      updateQuantity,
+    ]
   );
 
-  const onRemoveFromCart = useCallback(() => {
-    removeFromCart(item.sku);
-  }, [item.sku, removeFromCart]);
+  const onRemoveFromCart =
+    useCallback(() => {
+      removeFromCart(item.sku);
+    }, [
+      item.sku,
+      removeFromCart,
+    ]);
 
   return (
-    <li className={classes.cart_item}>
-      <div className={classes.img_container}>
-        <img src={img} alt={item.name} className={classes.cart_img} />
+    <li className={classes.cartItem}>
+      <div className={classes.product}>
+        <div
+          className={
+            classes.imgContainer
+          }
+        >
+          {image ? (
+            <img
+              src={image}
+              alt={item.name}
+              className={
+                classes.cartImg
+              }
+            />
+          ) : (
+            <div
+              className={
+                classes.imagePlaceholder
+              }
+            >
+              No Image
+            </div>
+          )}
+        </div>
+
+        <div
+          className={
+            classes.productInfo
+          }
+        >
+          <h3>
+            {item.name}
+          </h3>
+
+          <span>
+            {currencyFormatter.format(
+              itemPrice
+            )}
+          </span>
+        </div>
       </div>
 
-      <div className={classes.cart_name}>{item.name}</div>
-
-      <div className={classes.cart_price}>
-        {currencyFormatter.format(item.price)}
+      <div className={classes.quantity}>
+        <select
+          name={`itemQty-${String(
+            item.sku
+          )}`}
+          id={`itemQty-${String(
+            item.sku
+          )}`}
+          className={
+            classes.cartSelect
+          }
+          value={quantity}
+          aria-label={`${item.name} quantity`}
+          onChange={onChangeQty}
+        >
+          {options}
+        </select>
       </div>
 
-      <select
-        name="itemQty"
-        id="itemQty"
-        className={classes.cart_select}
-        value={item.quantity}
-        aria-label="Item Quantity"
-        onChange={onChangeQty}
-      >
-        {options}
-      </select>
-
-      <div className={classes.cart_item_subtotal}>
-        {currencyFormatter.format(lineTotal)}
+      <div className={classes.subtotal}>
+        {currencyFormatter.format(
+          lineTotal
+        )}
       </div>
 
-      <button
-        className={classes.cart_button}
-        aria-label="Remove Item From Cart"
-        title="Remove Item From Cart"
-        onClick={onRemoveFromCart}
-      >
-        ❌
-      </button>
+      <div className={classes.remove}>
+        <button
+          type="button"
+          className={
+            classes.cartButton
+          }
+          aria-label={`Remove ${item.name} from cart`}
+          title="Remove Item From Cart"
+          onClick={
+            onRemoveFromCart
+          }
+        >
+          <FiTrash2 />
+        </button>
+      </div>
     </li>
   );
 };
 
 function areItemsEqual(
-  { item: prevItem }: PropsType,
-  { item: nextItem }: PropsType
+  {
+    item: prevItem,
+  }: PropsType,
+  {
+    item: nextItem,
+  }: PropsType
 ) {
   return (
-    prevItem.sku === nextItem.sku &&
-    prevItem.quantity === nextItem.quantity &&
-    prevItem.price === nextItem.price
+    prevItem.sku ===
+      nextItem.sku &&
+    prevItem.name ===
+      nextItem.name &&
+    prevItem.quantity ===
+      nextItem.quantity &&
+    prevItem.price ===
+      nextItem.price
   );
 }
 
-export default memo(CartLineItem, areItemsEqual);
+export default memo(
+  CartLineItem,
+  areItemsEqual
+);

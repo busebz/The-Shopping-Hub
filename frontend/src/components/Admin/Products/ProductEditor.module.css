@@ -22,7 +22,8 @@
   color: #0f172a;
 }
 
-.form input {
+.form input,
+.form select {
   width: 95%;
   padding: 10px 12px;
   margin-bottom: 14px;

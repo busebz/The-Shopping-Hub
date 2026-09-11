@@ -84,6 +84,7 @@ router.get(
           name: p.name,
           price: p.price,
           image: p.image,
+          category: p.category,
         }))
       );
     } catch (err) {
@@ -106,7 +107,7 @@ router.post(
         return;
       }
 
-      const { sku, name, price } = req.body;
+      const { sku, name, price, category } = req.body;
 
       const result = await new Promise<any>((resolve, reject) => {
         const stream = cloudinary.uploader.upload_stream(
@@ -125,6 +126,7 @@ router.post(
         name,
         price,
         image: result.secure_url,
+        category,
       });
 
       res.json({
@@ -133,6 +135,7 @@ router.post(
         name: product.name,
         price: product.price,
         image: product.image,
+        category: product.category,
       });
       return;
 
@@ -153,12 +156,13 @@ router.put(
     try {
 
       const file = req.file;
-      const { sku, name, price } = req.body;
+      const { sku, name, price, category } = req.body;
 
       let updateData: any = {
         sku,
         name,
         price: Number(price),
+        category,
       };
 
       if (file) {
@@ -189,6 +193,7 @@ router.put(
         name: updated?.name,
         price: updated?.price,
         image: updated?.image,
+        category: updated?.category,
       });
 
     } catch (err) {

@@ -11,9 +11,10 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 
 import CartPage from "./pages/CartPage";
-import ProductListPage from "./pages/ProductListPage";
+import HomePage from "./pages/HomePage";
 import AuthPage from "./pages/AuthPage";
 import OrdersPage from "./pages/OrdersPage";
+import OrderSuccessPage from "./pages/OrdersSuccessPage";
 import UserInfoSettingsPage from "./pages/UserInfoSettingsPage";
 
 import AdminLoginPage from "./pages/Admin/Login";
@@ -38,7 +39,11 @@ const AdminProtectedRoute = () => {
 
   if (isLoading) return null;
 
-  return isAdminAuthenticated ? <Outlet /> : <Navigate to="/admin/login" replace />;
+  return isAdminAuthenticated ? (
+    <Outlet />
+  ) : (
+    <Navigate to="/admin/login" replace />
+  );
 };
 
 function AppContent() {
@@ -57,34 +62,68 @@ function AppContent() {
       <Routes>
         <Route path="/login" element={<AuthPage />} />
 
-        <Route path="/" element={<ProductListPage />} />
+        <Route path="/" element={<HomePage />} />
 
         <Route
           path="/cart"
-          element={<ProtectedRoute element={<CartPage />} />}
+          element={
+            <ProtectedRoute element={<CartPage />} />
+          }
         />
 
         <Route
           path="/orders"
-          element={<ProtectedRoute element={<OrdersPage />} />}
+          element={
+            <ProtectedRoute element={<OrdersPage />} />
+          }
+        />
+
+        <Route
+          path="/order-success"
+          element={
+            <ProtectedRoute
+              element={<OrderSuccessPage />}
+            />
+          }
         />
 
         <Route
           path="/userinfo"
-          element={<ProtectedRoute element={<UserInfoSettingsPage />} />}
+          element={
+            <ProtectedRoute
+              element={<UserInfoSettingsPage />}
+            />
+          }
         />
 
-        <Route path="/admin/login" element={<AdminLoginPage />} />
+        <Route
+          path="/admin/login"
+          element={<AdminLoginPage />}
+        />
 
         <Route element={<AdminProtectedRoute />}>
           <Route element={<AdminLayout />}>
-            <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
-            <Route path="/admin/products" element={<AdminProductsPage />} />
-            <Route path="/admin/products/new" element={<AdminAddEditProductPage />} /> 
+            <Route
+              path="/admin/dashboard"
+              element={<AdminDashboardPage />}
+            />
+
+            <Route
+              path="/admin/products"
+              element={<AdminProductsPage />}
+            />
+
+            <Route
+              path="/admin/products/new"
+              element={<AdminAddEditProductPage />}
+            />
           </Route>
         </Route>
 
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route
+          path="*"
+          element={<Navigate to="/" replace />}
+        />
       </Routes>
 
       {!isAuthPage && !isAdminRoute && <Footer />}

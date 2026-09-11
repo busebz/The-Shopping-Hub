@@ -1,0 +1,295 @@
+.hero {
+    position: relative;
+    /* The artwork has a taller aspect ratio than the banner.  Using `cover`
+       crops the headphones from the top on wide screens, so keep its width
+       proportional and control the vertical crop explicitly instead. */
+    height: clamp(360px, 37vw, 430px);
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    background-image: url("../../images/homepageBanner.png");
+    background-size: 100% auto;
+    background-repeat: no-repeat;
+    background-position: center -11vw;
+}
+
+.hero::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+
+    width: 93%;
+    height: 180px;
+
+    background: linear-gradient(
+        to bottom,
+        rgba(255,255,255,0) 60%,
+        rgba(255,255,255,0.15) 80%,
+        rgba(255,255,255,0.5) 90%,
+        rgba(255,255,255,1) 100%
+    );
+}
+
+.content,
+.offer {
+    position: relative;
+    z-index: 1;
+}
+
+.badge {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+    color: #EC4899;
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+    margin-bottom: 10px;
+
+    background-color: #e6dbdb;
+    width: max-content;
+    padding: 2px 5px;
+    border-radius: 7px;
+}
+
+.badge svg {
+
+    color: #EC4899;
+
+}
+
+.content {
+    margin: -25px 0px 0px 75px;
+    flex: 1;
+}
+
+
+.content h1 {
+
+    font-size: 45px;
+
+    font-weight: 700;
+
+    letter-spacing: -0.055em;
+
+    line-height: 1.1;
+
+    color: #25103d;
+
+    margin: 0 0 10px;
+
+}
+
+
+.content h1 span {
+
+    color: #EC4899;
+
+}
+
+
+
+.content p {
+
+    color: #666;
+
+    font-size: 17px;
+
+    font-weight: 500;
+
+    line-height: 1.6;
+
+    max-width: 430px;
+
+    margin-bottom: 25px;
+
+}
+
+
+
+/* BUTTONS */
+
+.buttons {
+
+    display: flex;
+
+    gap: 15px;
+
+}
+
+
+.buttons button {
+
+    width: 125px;
+    padding: 14px 8px;
+
+    border-radius: 8px;
+
+    font-size: 0.75rem;
+    font-weight: 600;
+    
+    cursor: pointer;
+
+}
+
+
+
+.primary {
+
+    border: none;
+
+    background: #EC4899;
+
+    color: white;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+
+}
+
+
+.secondary {
+
+    background: #fff5f9;
+
+    border: 1px solid #EC4899;
+
+    color: #EC4899;
+
+}
+
+
+.offer {
+    width: 130px;
+    flex-shrink: 0;
+
+    padding: 15px;
+
+    border-radius: 18px;
+
+    background: white;
+
+    box-shadow: 0 15px 35px rgba(0, 0, 0, .12);
+
+    text-align: left;
+
+    margin-right: 80px;
+    margin-bottom: 40px;
+}
+
+
+.offerIcon {
+
+    width: 45px;
+
+    height: 45px;
+
+    margin: 0;
+
+    border-radius: 50%;
+
+    background: #f7e5ff;
+
+    color: #EC4899;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+}
+
+
+.offer h4 {
+    margin: 12px 0;
+    color: #555;
+    font-size: 13px;
+}
+
+
+
+.offer p {
+    color: #777;
+    margin: 0;
+    font-size: 13px;
+}
+
+
+.offer h2 {
+    font-size: 32px;
+    margin: 5px 0;
+    color: #EC4899;
+}
+
+
+
+.offer h2 span {
+
+    color: #EC4899;
+
+}
+
+
+.limited {
+    color: #777;
+    font-size: 12px;
+}
+
+
+
+.offer button {
+    width: 100%;
+
+    margin: 18px auto 0;
+
+    padding: 10px;
+
+    font-size: 13px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: #EC4899;
+
+    color: white;
+
+    font-weight: 600;
+}
+
+@media (max-width: 760px) {
+    .hero {
+        height: 500px;
+        background-size: auto 100%;
+        background-position: 62% center;
+        align-items: flex-start;
+    }
+
+    .content {
+        margin: 48px 24px 0;
+    }
+
+    .content h1 {
+        font-size: 38px;
+    }
+
+    .offer {
+        display: none;
+    }
+
+    .badge {
+        width: fit-content;
+    }
+}

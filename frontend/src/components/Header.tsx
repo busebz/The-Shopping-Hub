@@ -2,38 +2,33 @@ import Nav from "./Nav";
 import classes from "./Header.module.css";
 import useCart from "../hooks/useCart";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth";
+import { FiShoppingBag } from "react-icons/fi";
 
 const Header = () => {
-  const {totalItems} = useCart();
+  const { totalItems } = useCart();
   const navigate = useNavigate();
-  const { isUserAuthenticated } = useAuth();
 
-  const handleLogoClick = () => {
-    if (isUserAuthenticated) {
-      navigate("/");
-    }
-  };
-
-  const content = (
+  return (
     <header className={classes.header}>
-      <div className={classes.header_titlebar}>
-        <span
-          onClick={handleLogoClick}
+      <div className={classes.container}>
+        <div
           className={classes.logo}
-          style={{ cursor: isUserAuthenticated ? "pointer" : "default" }}
+          onClick={() => navigate("/")}
         >
-          TheShoppingHub
-        </span>
-          <div className={classes.header_pricebox}>
-            <Nav totalItems={totalItems} />
-          </div>
-        
+          <FiShoppingBag aria-hidden="true" />
+
+          <span>
+            TheShopping
+            <span className={classes.hub}>
+              Hub
+            </span>
+          </span>
+        </div>
+
+        <Nav totalItems={totalItems} />
       </div>
     </header>
   );
-
-  return content;
 };
 
-export default Header;  
+export default Header;

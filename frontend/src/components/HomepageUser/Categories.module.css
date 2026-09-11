@@ -1,0 +1,99 @@
+
+.categories {
+  width: 90%;
+  max-width: 1250px;
+
+  margin: 35px auto;
+  scroll-margin-top: 150px;
+}
+
+.heading {
+  text-align: center;
+
+  margin-bottom: 35px;
+}
+
+.heading h2 {
+  margin: 0;
+
+  font-size: 34px;
+
+  color: #25103d;
+}
+
+.heading p {
+  margin-top: 10px;
+
+  color: #64748b;
+
+  font-size: 15px;
+}
+
+.list {
+  display: grid;
+
+  grid-template-columns: repeat(6, 1fr);
+
+  gap: 18px;
+}
+
+.card {
+  height: 80px;
+
+  padding: 18px;
+
+  background: #fdf2f8;
+
+  border: 2px solid white;
+
+  border-radius: 18px;
+
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+
+  transition: 0.3s;
+
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.04);
+}
+
+.card:hover {
+  transform: translateY(-5px);
+
+  box-shadow: 0 12px 25px rgba(236, 72, 153, 0.15);
+}
+
+.icon {
+  width: 55px;
+  height: 55px;
+
+  border-radius: 50%;
+
+  background: white;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+}
+
+.icon svg {
+  font-size: 24px;
+
+  color: #ec4899;
+}
+
+.card h3 {
+  margin: 0;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  color: #25103d;
+}
+

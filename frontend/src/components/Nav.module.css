@@ -1,98 +1,200 @@
-.nav{
+.nav {
   display: flex;
   align-items: center;
+  gap: 36px;
 }
 
-.navButton {
-  background-color: transparent;
+.menu {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 6px 10px;
-  font-size: 0.8rem;
+  gap: 22px;
+}
+
+.menu button {
+  background: none;
   border: none;
-  border-radius: 5px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #18181b;
   cursor: pointer;
-  gap: 5px;
-  white-space: nowrap;
+  position: relative;
+  padding: 31px 0;
 }
 
-.navButton i {
-  font-size: 1.1rem;
+.menu button:hover {
+  color: #ec4899;
 }
 
-.navButton:hover {
-  background-color: #f0f0f0;
+.active {
+  color: #ec4899 !important;
 }
 
-.itemCount {
-  background-color: #f59140;
-  color: white;
-  font-size: 0.8rem;
-  font-weight: bold;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
+.active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 3px;
+  background: #ec4899;
+  border-radius: 20px;
+}
+
+.actions {
   display: flex;
   align-items: center;
-  justify-content: center;
-  line-height: 1.1; 
+  gap: 16px;
 }
 
-.navButton:focus {
-  outline: none;
-}
-
-.logoutButton {
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 6px 12px;
-  border-radius: 4px;
-}
-
-.logoutButton:hover {
-  background-color: #f0f0f0;
-}
-
-.profileMenuWrapper {
+.search {
+  width: 260px;
+  height: 42px;
+  padding: 0 16px;
+  border-radius: 12px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   position: relative;
 }
 
-.profileDropdown {
-  display: none;
-  position: absolute;
-  top: 110%;
-  right: 0;
-  background-color: white;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  min-width: 120px;
-  z-index: 100;
-  padding: 8px 8px;
-}
-
-.profileMenuWrapper:hover .profileDropdown {
-  display: block;
-}
-
-.profileItem {
-  background-color: white;
-  padding: 7px 5px;
-  margin: 3px 0px;
-  font-size: 0.75rem;
-  cursor: pointer;
+.search input {
   width: 100%;
-  text-align: left;
-  border-radius: 6px;
   border: none;
-  color:#7c7c7c;
+  outline: none;
+  background: transparent;
+  font-size: 0.85rem;
 }
 
-.profileItem:hover{
-  background-color:#faf1ef;
+.search i {
+  color: #94a3b8;
+  cursor: pointer;
 }
 
+.suggestions {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 20;
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: white;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.12);
+}
 
+.suggestion {
+  width: 100%;
+  padding: 10px 14px;
+  border: none;
+  border-bottom: 1px solid #f1f5f9;
+  background: white;
+  color: #18181b;
+  cursor: pointer;
+  font-size: 0.8rem;
+  text-align: left;
+}
 
+.suggestion:last-child {
+  border-bottom: none;
+}
+
+.suggestion:hover {
+  background: #fff5f9;
+  color: #ec4899;
+}
+
+.profileWrapper {
+  position: relative;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.login {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  background: none;
+  border: none;
+  font-size: 0.85rem;
+  font-weight: 500;
+  line-height: 1;
+  cursor: pointer;
+  padding: 31px 0;
+}
+
+.login i {
+  color: #4c1d95;
+}
+
+.profileDropdown {
+  position: absolute;
+  top: calc(100% - 5px);
+  right: -25px;
+  width: 170px;
+  padding: 8px 0;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.15);
+  z-index: 100;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-5px);
+  transition:
+    opacity 0.18s ease,
+    transform 0.18s ease,
+    visibility 0.18s ease;
+}
+
+.profileWrapper:hover .profileDropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.profileDropdown button {
+  width: 100%;
+  display: block;
+  padding: 11px 16px;
+  border: none;
+  background: white;
+  color: #64748b;
+  font-size: 0.82rem;
+  text-align: left;
+  cursor: pointer;
+  transition: 0.15s ease;
+}
+
+.profileDropdown button:hover {
+  background: #fff5f9;
+  color: #ec4899;
+}
+
+.cart {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.cart i {
+  color: #4c1d95;
+  font-size: 1.4rem;
+}
+
+.badge {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #ec4899;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+}

@@ -1,83 +1,586 @@
+.page {
+  width: 100%;
+  min-height: 100vh;
+
+  padding: 28px 5% 60px;
+
+  box-sizing: border-box;
+
+  font-family: var(--font-shopping);
+
+  background:
+    radial-gradient(
+      circle at 90% 10%,
+      rgba(255, 221, 239, 0.85),
+      transparent 34%
+    ),
+    radial-gradient(
+      circle at 10% 18%,
+      rgba(224, 218, 255, 0.9),
+      transparent 38%
+    ),
+    linear-gradient(
+      90deg,
+      #f7f5ff 0%,
+      #fdfbff 52%,
+      #fff4f9 100%
+    );
+}
+
 .ordersContainer {
-  max-width: 1000px;
-  margin: 125px auto 0px auto;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  color: #222;
-  background-color: #fff;
+  width: 100%;
+  max-width: 1180px;
+
+  margin: 0 auto;
+}
+
+.header {
+  width: 100%;
+
+  margin-bottom: 20px;
 }
 
 .pageTitle {
-  font-size: 1.7rem;
-  text-align: left;
-  color: #252525; 
+  margin: 0;
+
+  color: #111547;
+
+  font-size: 32px;
+  font-weight: 700;
 }
 
-.orderRow {
+.pageSubtitle {
+  margin: 4px 0 0;
+
+  color: #767998;
+
+  font-size: 13px;
+}
+
+.controlsRow {
+  width: 100%;
+
+  margin-bottom: 18px;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 20px 15px;
-  border: 1px solid #ddd;
+
+  gap: 20px;
+}
+
+.filters {
+  display: flex;
+  align-items: center;
+
+  gap: 5px;
+}
+
+.filterButton {
+  height: 40px;
+
+  padding: 0 13px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 7px;
+
+  border: 1px solid transparent;
+
   border-radius: 10px;
-  margin-bottom: 20px;
-  background: #fafafa;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-  transition: box-shadow 0.3s ease;
+
+  background: transparent;
+
+  color: #686b8b;
+
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 500;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.filterButton svg {
+  font-size: 16px;
+}
+
+.filterButton:hover {
+  background: rgba(255, 255, 255, 0.65);
+
+  color: #6e38d7;
+}
+
+.activeFilter {
+  background: white;
+
+  border-color: #e5dff3;
+
+  color: #7038d8;
+
+  box-shadow:
+    0 4px 12px
+    rgba(65, 45, 120, 0.06);
+}
+
+.filterCount {
+  min-width: 21px;
+  height: 21px;
+
+  padding: 0 5px;
+
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 20px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #8c3ce2,
+      #ec34a0
+    );
+
+  color: white;
+
+  font-size: 10px;
+}
+
+.sortContainer {
+  height: 40px;
+
+  padding: 0 9px 0 13px;
+
+  display: flex;
+  align-items: center;
+
+  border: 1px solid #e4e0ef;
+
+  border-radius: 10px;
+
+  background: rgba(255, 255, 255, 0.82);
+
+  color: #1c204e;
+
+  font-size: 12px;
+}
+
+.sortSelect {
+  min-width: 90px;
+
+  border: none;
+  outline: none;
+
+  background: transparent;
+
+  color: #1c204e;
+
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.ordersList {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 13px;
+}
+
+.orderCard {
+  width: 100%;
+
+  min-height: 116px;
+
+  padding: 18px 22px;
+
+  box-sizing: border-box;
+
+  display: grid;
+
+  grid-template-columns:
+    220px
+    minmax(260px, 1fr)
+    150px
+    145px;
+
+  align-items: center;
+
+  column-gap: 24px;
+
+  background: rgba(255, 255, 255, 0.96);
+
+  border: 1px solid #e9e5f1;
+
+  border-radius: 15px;
+
+  box-shadow:
+    0 7px 21px
+    rgba(56, 44, 100, 0.055);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.orderCard:hover {
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 10px 28px
+    rgba(56, 44, 100, 0.09);
 }
 
 .productImagesContainer {
   display: flex;
-  gap: 10px;
-  flex: 2;
-  min-width: 180px;
+  align-items: center;
+  justify-content: flex-start;
+
+  gap: 9px;
 }
 
 .productImage {
-  width: 50px;
-  height: 50px;
-  border-radius: 8px;
+  width: 72px;
+  height: 72px;
+
+  padding: 4px;
+
+  box-sizing: border-box;
+
+  border: 1px solid #ece9f4;
+
+  border-radius: 10px;
+
+  background: #f8f7fc;
+
   object-fit: cover;
-  box-shadow: 0 1px 5px rgba(0,0,0,0.1);
 }
 
-.orderInfoContainer {
+.moreItems {
+  width: 44px;
+  height: 44px;
+
   display: flex;
   align-items: center;
-  gap: 20px;
-  flex: 1.2;
-  justify-content: flex-end;
+  justify-content: center;
+
+  border-radius: 12px;
+
+  background: #f0ecfb;
+
+  color: #474a78;
+
+  font-size: 12px;
+  font-weight: 700;
 }
 
-.datePriceContainer {
+.orderMainInfo {
+  min-width: 0;
+}
+
+.orderNumber {
+  margin: 0 0 9px;
+
+  color: #111547;
+
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.orderMeta {
+  display: flex;
+  align-items: center;
+
+  gap: 17px;
+
+  color: #787b9b;
+
+  font-size: 11px;
+}
+
+.orderMeta span {
+  display: flex;
+  align-items: center;
+
+  gap: 6px;
+}
+
+.orderMeta svg {
+  color: #7660c5;
+
+  font-size: 14px;
+}
+
+.viewItemsButton {
+  margin-top: 8px;
+
+  padding: 0;
+
+  display: flex;
+  align-items: center;
+
+  gap: 3px;
+
+  border: none;
+
+  background: none;
+
+  color: #7a2ed7;
+
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.viewItemsButton svg {
+  font-size: 13px;
+}
+
+.statusPrice {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
-  color: #555;
+
+  align-items: flex-start;
+
+  gap: 11px;
+}
+
+.statusBadge {
+  padding: 6px 10px;
+
+  display: inline-flex;
+  align-items: center;
+
+  gap: 5px;
+
+  border-radius: 20px;
+
+  font-size: 11px;
   font-weight: 600;
-  font-size: 1rem;
 }
 
-.orderDate {
-  margin-bottom: 4px;
+.statusBadge svg {
+  font-size: 13px;
 }
 
-.orderTotal {
-  color: #f59140;
+.completed {
+  background: #e7f8ef;
+
+  color: #138b60;
+}
+
+.processing {
+  background: #e8f4ff;
+
+  color: #237bd1;
+}
+
+.cancelled {
+  background: #fdebef;
+
+  color: #c33a59;
+}
+
+.totalBlock {
+  display: flex;
+  flex-direction: column;
+
+  gap: 1px;
+}
+
+.totalBlock span {
+  color: #7d8099;
+
+  font-size: 10px;
+}
+
+.totalBlock strong {
+  color: #df31a0;
+
+  font-size: 18px;
+  font-weight: 700;
 }
 
 .detailsButton {
-  background-color: #f59140;
-  color: white;
+  width: 145px;
+  height: 42px;
+
+  padding: 0 14px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 6px;
+
+  justify-self: end;
+
   border: none;
-  border-radius: 6px;
-  padding: 8px 14px;
-  font-weight: 700;
-  font-size: 0.95rem;
+
+  border-radius: 8px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #8538df,
+      #ed36a1
+    );
+
+  color: white;
+
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+
   cursor: pointer;
-  transition: background-color 0.25s ease;
+
   white-space: nowrap;
+
+  box-shadow:
+    0 5px 12px
+    rgba(196, 55, 177, 0.18);
+
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
 }
 
 .detailsButton:hover {
-  background-color: #d97900;
+  opacity: 0.92;
+
+  transform: translateY(-1px);
+}
+
+.detailsButton svg {
+  font-size: 15px;
+}
+
+.emptyOrders {
+  width: 100%;
+
+  padding: 50px 20px;
+
+  box-sizing: border-box;
+
+  text-align: center;
+
+  background: rgba(255, 255, 255, 0.85);
+
+  border: 1px solid #e9e5f1;
+
+  border-radius: 15px;
+
+  color: #757894;
+
+  font-size: 13px;
+}
+
+.stateMessage {
+  min-height: 65vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #666982;
+
+  font-family: var(--font-shopping);
+
+  font-size: 15px;
+}
+
+@media (max-width: 1000px) {
+  .orderCard {
+    grid-template-columns:
+      190px
+      1fr
+      135px;
+
+    gap: 18px;
+  }
+
+  .detailsButton {
+    grid-column: 2 / 4;
+
+    width: 150px;
+
+    justify-self: end;
+  }
+
+  .productImage {
+    width: 65px;
+    height: 65px;
+  }
+}
+
+@media (max-width: 800px) {
+  .page {
+    padding: 28px 20px 50px;
+  }
+
+  .controlsRow {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .filters {
+    overflow-x: auto;
+  }
+
+  .sortContainer {
+    align-self: flex-start;
+  }
+
+  .orderCard {
+    display: flex;
+    flex-direction: column;
+
+    align-items: stretch;
+
+    gap: 16px;
+  }
+
+  .statusPrice {
+    flex-direction: row;
+
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .detailsButton {
+    width: 100%;
+  }
+}
+
+@media (max-width: 500px) {
+  .pageTitle {
+    font-size: 27px;
+  }
+
+  .filterButton {
+    flex-shrink: 0;
+  }
+
+  .productImage {
+    width: 60px;
+    height: 60px;
+  }
+
+  .orderMeta {
+    align-items: flex-start;
+    flex-direction: column;
+
+    gap: 6px;
+  }
 }
