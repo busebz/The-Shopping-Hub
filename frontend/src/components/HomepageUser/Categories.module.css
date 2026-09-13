@@ -1,51 +1,39 @@
-
 .categories {
-  width: 90%;
-  max-width: 1250px;
-
+  width: 91%;
   margin: 35px auto;
   scroll-margin-top: 150px;
 }
 
 .heading {
   text-align: center;
-
   margin-bottom: 35px;
 }
 
 .heading h2 {
   margin: 0;
-
   font-size: 34px;
-
   color: #25103d;
 }
 
 .heading p {
   margin-top: 10px;
-
   color: #64748b;
-
   font-size: 15px;
 }
 
 .list {
   display: grid;
-
   grid-template-columns: repeat(6, 1fr);
-
   gap: 18px;
 }
 
 .card {
   height: 80px;
-
   padding: 18px;
 
   background: #fdf2f8;
 
   border: 2px solid white;
-
   border-radius: 18px;
 
   display: flex;
@@ -53,6 +41,7 @@
   gap: 14px;
 
   cursor: pointer;
+
   font-family: inherit;
   text-align: left;
 
@@ -84,7 +73,6 @@
 
 .icon svg {
   font-size: 24px;
-
   color: #ec4899;
 }
 
@@ -97,3 +85,68 @@
   color: #25103d;
 }
 
+
+/* =========================
+   ZOOM OUT / GENİŞ EKRAN
+   ========================= */
+
+@media (min-width: 1750px) {
+
+  .card {
+    height: 88px;
+    padding: 20px;
+    gap: 16px;
+  }
+
+  .icon {
+    width: 60px;
+    height: 60px;
+  }
+
+  .icon svg {
+    font-size: 27px;
+  }
+
+  .card h3 {
+    font-size: 18px;
+  }
+
+  .heading h2 {
+    font-size: 38px;
+  }
+
+  .heading p {
+    font-size: 17px;
+  }
+}
+
+
+@media (min-width: 2100px) {
+
+  .card {
+    height: 98px;
+    padding: 22px;
+    gap: 18px;
+  }
+
+  .icon {
+    width: 66px;
+    height: 66px;
+  }
+
+  .icon svg {
+    font-size: 30px;
+  }
+
+  .card h3 {
+    font-size: 20px;
+  }
+
+  .heading h2 {
+    font-size: 42px;
+  }
+
+  .heading p {
+    font-size: 19px;
+  }
+}

@@ -1,12 +1,8 @@
 .product {
   background: white;
-
   border-radius: 18px;
-
   overflow: hidden;
-
   box-shadow: 0 10px 25px rgba(0,0,0,.06);
-
   transition: .3s;
 
   display: flex;
@@ -22,64 +18,53 @@
 .img_container {
   width: 100%;
   aspect-ratio: 1 / 1;
-
   overflow: hidden;
-
   background: #F8FAFC;
 }
 
 .product_img {
   width: 100%;
   height: 100%;
-
   object-fit: cover;
   object-position: center;
 }
+
 .product p {
   padding: 0 13px;
-
   margin: 14px 0 5px;
-
   color: #000000;
-
   font-size: 13px;
-
 }
 
 .product h3 {
   padding: 0 13px;
-
-  margin: 14px 0px;
+  margin: 14px 0;
   font-size: 13px;
-
   color: #000000;
   font-weight: 700;
 }
 
 .product button {
   width: 90%;
-
   margin: auto 10px 18px;
-
   height: 40px;
 
   border: none;
-
   border-radius: 10px;
 
   background: #4C1D95;
-
   color: white;
 
   display: flex;
   align-items: center;
   justify-content: center;
+
   gap: 10px;
 
+  font-size: 13px;
   font-weight: 600;
 
   cursor: pointer;
-
   transition: .3s;
 }
 
@@ -94,4 +79,53 @@
 
 .product button.addedButton:hover {
   background: #ec4899;
+}
+
+
+/* =========================
+   GENİŞ EKRAN / ZOOM OUT
+   ========================= */
+
+@media (min-width: 1900px) {
+  .product p {
+    padding: 0 15px;
+    margin: 15px 0 5px;
+    font-size: 15px;
+  }
+
+  .product h3 {
+    padding: 0 15px;
+    margin: 14px 0;
+    font-size: 15px;
+  }
+
+  .product button {
+    margin: auto 10px 18px;
+    height: 42px;
+
+    font-size: 14px;
+    gap: 10px;
+  }
+}
+
+
+@media (min-width: 2300px) {
+  .product p {
+    padding: 0 16px;
+    margin: 16px 0 6px;
+    font-size: 17px;
+  }
+
+  .product h3 {
+    padding: 0 16px;
+    margin: 15px 0;
+    font-size: 17px;
+  }
+
+  .product button {
+    height: 46px;
+
+    font-size: 16px;
+    gap: 11px;
+  }
 }

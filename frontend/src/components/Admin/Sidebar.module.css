@@ -1,6 +1,6 @@
 .sidebar {
-  width: clamp(220px, 14.5vw, 235px);
-  min-width: clamp(220px, 14.5vw, 235px);
+  width: 235px;
+  min-width: 235px;
   height: 100vh;
 
   box-sizing: border-box;
@@ -8,10 +8,7 @@
   display: flex;
   flex-direction: column;
 
-  padding:
-    clamp(22px, 1.5vw, 26px)
-    clamp(14px, 1vw, 17px)
-    clamp(18px, 1.3vw, 22px);
+  padding: 24px 15px 20px;
 
   overflow: hidden;
 
@@ -40,47 +37,49 @@
 }
 
 .collapsed {
-  width: clamp(66px, 4.6vw, 72px);
-  min-width: clamp(66px, 4.6vw, 72px);
+  width: 72px;
+  min-width: 72px;
 
   padding-left: 10px;
   padding-right: 10px;
 }
 
-/* TOP */
+
+/* =========================
+   TOP
+   ========================= */
 
 .top {
-  position: relative;
-
-  min-height: clamp(68px, 4.6vw, 74px);
+  min-height: 74px;
 
   display: flex;
   align-items: flex-start;
+  justify-content: space-between;
 
-  margin-bottom: clamp(32px, 2.3vw, 38px);
+  gap: 10px;
+
+  margin-bottom: 36px;
 }
 
 .brandText {
+  min-width: 0;
+  flex: 1;
+
   display: flex;
   flex-direction: column;
-
-  min-width: 0;
-
-  padding-right: 38px;
 }
 
 .brand {
-  white-space: nowrap;
-
   color: #ffffff;
 
-  font-size: clamp(19px, 1.35vw, 22px);
-
+  font-size: 19px;
   font-weight: 700;
 
   letter-spacing: -0.5px;
 
   line-height: 1.1;
+
+  white-space: nowrap;
 }
 
 .brand strong {
@@ -92,29 +91,29 @@
 
   color: #909aaa;
 
-  font-size: clamp(9px, 0.62vw, 10px);
-
+  font-size: 9px;
   font-weight: 600;
 
   letter-spacing: 2.4px;
+
+  white-space: nowrap;
 }
 
-/* TOGGLE */
+
+/* =========================
+   TOGGLE
+   ========================= */
 
 .toggle {
-  position: absolute;
+  width: 32px;
+  height: 32px;
 
-  top: 0;
-  right: 0;
-
-  width: clamp(31px, 2.15vw, 34px);
-  height: clamp(31px, 2.15vw, 34px);
+  min-width: 32px;
+  flex: 0 0 32px;
 
   display: flex;
   align-items: center;
   justify-content: center;
-
-  flex-shrink: 0;
 
   border: none;
   border-radius: 8px;
@@ -123,7 +122,7 @@
 
   color: #aeb6c4;
 
-  font-size: clamp(16px, 1.15vw, 18px);
+  font-size: 17px;
 
   cursor: pointer;
 
@@ -139,7 +138,10 @@
     rgba(255, 255, 255, 0.07);
 }
 
-/* MENU */
+
+/* =========================
+   MENU
+   ========================= */
 
 .menu {
   list-style: none;
@@ -150,31 +152,27 @@
   display: flex;
   flex-direction: column;
 
-  gap: clamp(9px, 0.7vw, 11px);
+  gap: 10px;
 }
 
 .menuItem {
   width: 100%;
+  min-height: 50px;
 
-  min-height: clamp(48px, 3.3vw, 54px);
-
-  padding:
-    0
-    clamp(13px, 0.95vw, 16px);
+  padding: 0 14px;
 
   box-sizing: border-box;
 
   display: flex;
   align-items: center;
 
-  gap: clamp(12px, 0.9vw, 14px);
+  gap: 13px;
 
   border-radius: 11px;
 
   color: #b7bfcd;
 
-  font-size: clamp(14px, 1vw, 16px);
-
+  font-size: 15px;
   font-weight: 500;
 
   cursor: pointer;
@@ -196,7 +194,10 @@
   color: #ff762d;
 }
 
-/* ACTIVE */
+
+/* =========================
+   ACTIVE
+   ========================= */
 
 .active {
   color: #ffffff;
@@ -226,28 +227,35 @@
   color: #ffffff;
 }
 
-/* ICON */
+
+/* =========================
+   ICON
+   ========================= */
 
 .icon {
-  min-width: clamp(18px, 1.3vw, 21px);
+  min-width: 19px;
 
-  font-size: clamp(17px, 1.2vw, 19px);
+  font-size: 18px;
 
   color: #aeb7c5;
 
-  transition: color 0.2s ease;
+  transition:
+    color 0.2s ease;
 }
 
 .menuText {
   white-space: nowrap;
 }
 
-/* BOTTOM */
+
+/* =========================
+   BOTTOM
+   ========================= */
 
 .bottom {
   margin-top: auto;
 
-  padding-top: clamp(17px, 1.2vw, 20px);
+  padding-top: 18px;
 
   border-top:
     1px solid
@@ -256,17 +264,14 @@
 
 .logout {
   width: 100%;
+  min-height: 48px;
 
-  min-height: clamp(46px, 3.2vw, 52px);
-
-  padding:
-    0
-    clamp(13px, 0.95vw, 16px);
+  padding: 0 14px;
 
   display: flex;
   align-items: center;
 
-  gap: clamp(12px, 0.9vw, 14px);
+  gap: 13px;
 
   border: none;
   border-radius: 10px;
@@ -277,8 +282,7 @@
 
   font-family: inherit;
 
-  font-size: clamp(14px, 1vw, 16px);
-
+  font-size: 15px;
   font-weight: 500;
 
   cursor: pointer;
@@ -299,14 +303,16 @@
   color: #ff762d;
 }
 
-/* COLLAPSED */
+
+/* =========================
+   COLLAPSED
+   ========================= */
 
 .collapsed .top {
   min-height: 46px;
 
-  display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
 
   margin-bottom: 30px;
 }
@@ -316,8 +322,6 @@
 }
 
 .collapsed .toggle {
-  position: static;
-
   margin: 0 auto;
 }
 
@@ -345,7 +349,57 @@
   display: none;
 }
 
-/* TABLET */
+
+/* =========================
+   ZOOM OUT
+   ========================= */
+
+@media (min-width: 1750px) {
+  .sidebar:not(.collapsed) {
+    width: 250px;
+    min-width: 250px;
+  }
+
+  .brand {
+    font-size: 19px;
+  }
+
+  .toggle {
+    width: 32px;
+    height: 32px;
+
+    min-width: 32px;
+    flex-basis: 32px;
+
+    font-size: 17px;
+  }
+}
+
+@media (min-width: 2100px) {
+  .sidebar:not(.collapsed) {
+    width: 260px;
+    min-width: 260px;
+  }
+
+  .brand {
+    font-size: 19px;
+  }
+
+  .toggle {
+    width: 32px;
+    height: 32px;
+
+    min-width: 32px;
+    flex-basis: 32px;
+
+    font-size: 17px;
+  }
+}
+
+
+/* =========================
+   TABLET
+   ========================= */
 
 @media (max-width: 900px) {
   .sidebar {
@@ -372,8 +426,6 @@
   }
 
   .toggle {
-    position: static;
-
     margin: 0 auto;
   }
 
@@ -390,7 +442,10 @@
   }
 }
 
-/* MOBILE */
+
+/* =========================
+   MOBILE
+   ========================= */
 
 @media (max-width: 520px) {
   .sidebar {
@@ -406,6 +461,8 @@
   .toggle {
     width: 32px;
     height: 32px;
+
+    min-width: 32px;
   }
 
   .menuItem {
