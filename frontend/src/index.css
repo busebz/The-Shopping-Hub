@@ -2,13 +2,14 @@
 
 :root {
   --font-shopping: "Plus Jakarta Sans", Inter, system-ui, sans-serif;
+
   font-family: var(--font-shopping);
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color-scheme: light only;
+  color: #213547;
+  background-color: #ffffff;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -16,11 +17,18 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-body{
-  margin:0;
-  padding:0;
+html {
+  color-scheme: light only;
+  background-color: #ffffff;
+}
+
+body {
+  margin: 0;
+  padding: 0;
   font-family: var(--font-shopping);
   letter-spacing: -0.01em;
+  background-color: #ffffff;
+  color: #213547;
 }
 
 button,
@@ -28,6 +36,7 @@ input,
 textarea,
 select {
   font: inherit;
+  color-scheme: light only;
 }
 
 h1,
@@ -38,18 +47,4 @@ h5,
 h6 {
   font-family: var(--font-shopping);
   letter-spacing: -0.035em;
-}
-
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
 }
