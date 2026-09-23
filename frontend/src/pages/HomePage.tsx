@@ -5,9 +5,6 @@ import ProductList from "../components/ProductList";
 import Features from "../components/HomepageUser/Features"
 import Categories from "../components/HomepageUser/Categories"
 import PromoBanner from "../components/HomepageUser/PromoBanner";
-// import Categories from "../components/Home/Categories";
-// import PromotionalBanners from "../components/Home/PromotionalBanners";
-
 
 const HomePage = () => {
   const location = useLocation();
@@ -38,13 +35,9 @@ const HomePage = () => {
   return (
     <>
       <HeroBanner />
-
       <Features />
-
       <Categories /> 
-
       <ProductList />
-
       <PromoBanner />
     </>
   );

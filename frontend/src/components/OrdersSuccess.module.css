@@ -1,211 +1,166 @@
 .page {
   width: 100%;
   min-height: 72vh;
-
   padding: 48px 5% 34px;
-
   box-sizing: border-box;
   background-image: url("../images/loginRegister.png");
-
   background:
-    radial-gradient(circle at 88% 30%,
+    radial-gradient(
+      circle at 88% 30%,
       rgba(255, 222, 237, 0.82),
-      transparent 40%),
-    radial-gradient(circle at 14% 30%,
+      transparent 40%
+    ),
+    radial-gradient(
+      circle at 14% 30%,
       rgba(224, 218, 255, 0.9),
-      transparent 40%),
-    linear-gradient(90deg,
+      transparent 40%
+    ),
+    linear-gradient(
+      90deg,
       #f4f2ff 0%,
       #fffafd 50%,
-      #fff1f7 100%);
+      #fff1f7 100%
+    );
 }
 
 .successCard {
   width: 100%;
   max-width: 570px;
-
   margin: 0 auto;
-
   padding: 40px 46px 36px;
-
   box-sizing: border-box;
-
   text-align: center;
-
   background: rgba(255, 255, 255, 0.97);
-
   border: 1px solid #eeeaf4;
-
   border-radius: 17px;
-
-  box-shadow:
-    0 12px 34px rgba(64, 48, 110, 0.1);
+  box-shadow: 0 12px 34px rgba(64, 48, 110, 0.1);
 }
 
 .checkIcon {
   width: 74px;
   height: 74px;
-
   margin: 0 auto 20px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   border-radius: 50%;
-
-  background: linear-gradient(135deg,
-      #f3298b,
-      #7c48e7);
-
+  background: linear-gradient(
+    135deg,
+    #f3298b,
+    #7c48e7
+  );
   color: white;
-
   font-size: 40px;
 }
 
 .successCard h1 {
   margin: 0;
-
   color: #101447;
-
   font-size: 27px;
   font-weight: 700;
 }
 
 .subtitle {
   margin: 8px 0 0;
-
   color: #747790;
-
   font-size: 13px;
 }
 
 .divider {
   width: 38px;
   height: 1px;
-
   margin: 17px auto;
-
   background: #ecebf1;
 }
 
 .orderBox {
   width: 325px;
-
   margin: 0 auto;
-
   padding: 13px 16px;
-
   box-sizing: border-box;
-
   display: flex;
   align-items: center;
-
   gap: 14px;
-
   text-align: left;
-
-  background: linear-gradient(90deg,
-      #f4eeff,
-      #fff0f7);
-
+  background: linear-gradient(
+    90deg,
+    #f4eeff,
+    #fff0f7
+  );
   border-radius: 9px;
 }
 
 .orderIcon {
   width: 42px;
   height: 42px;
-
   min-width: 42px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   border-radius: 50%;
-
   background: #eee4ff;
-
   color: #7f49e7;
-
   font-size: 20px;
 }
 
 .orderInfo {
   display: flex;
   flex-direction: column;
-
   gap: 3px;
 }
 
 .orderInfo span {
   color: #555875;
-
   font-size: 12px;
 }
 
 .orderInfo strong {
   color: #111548;
-
   font-size: 14px;
 }
 
 .confirmationText {
   max-width: 390px;
-
   margin: 20px auto 0;
-
   color: #5d617a;
-
   font-size: 13px;
-
   line-height: 1.6;
 }
 
 .buttons {
   margin-top: 24px;
-
   display: grid;
-
   grid-template-columns: 1fr 1fr;
-
   gap: 14px;
 }
 
 .buttons button {
   height: 43px;
-
   border-radius: 7px;
-
   font-size: 13px;
   font-weight: 600;
-
   cursor: pointer;
-
   transition: 0.2s ease;
 }
 
 .ordersButton {
   border: none;
-
-  background: linear-gradient(90deg,
-      #f42c88,
-      #8b42e6);
-
+  background: linear-gradient(
+    90deg,
+    #f42c88,
+    #8b42e6
+  );
   color: white;
 }
 
 .ordersButton:hover {
   opacity: 0.9;
-
   transform: translateY(-1px);
 }
 
 .shoppingButton {
   border: 1px solid #9a73dc;
-
   background: white;
-
   color: #6730cb;
 }
 
@@ -216,36 +171,22 @@
 .features {
   width: 100%;
   max-width: 1160px;
-
   margin: 28px auto 0;
-
   padding: 22px 18px;
-
   box-sizing: border-box;
-
   display: grid;
-
-  grid-template-columns:
-    repeat(4, 1fr);
-
+  grid-template-columns: repeat(4, 1fr);
   background: rgba(255, 255, 255, 0.94);
-
   border: 1px solid #ededf4;
-
   border-radius: 12px;
-
-  box-shadow:
-    0 5px 18px rgba(37, 33, 92, 0.06);
+  box-shadow: 0 5px 18px rgba(37, 33, 92, 0.06);
 }
 
 .feature {
   min-width: 0;
-
   padding: 0 22px;
-
   display: flex;
   align-items: center;
-
   gap: 13px;
 }
 
@@ -256,40 +197,30 @@
 .featureIcon {
   width: 46px;
   height: 46px;
-
   min-width: 46px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   border-radius: 50%;
-
   background: #f4efff;
-
   color: #7143e5;
-
   font-size: 21px;
 }
 
 .featureText {
   min-width: 0;
-
   display: flex;
   flex-direction: column;
-
   gap: 4px;
 }
 
 .featureText strong {
   color: #17194d;
-
   font-size: 12px;
 }
 
 .featureText span {
   color: #73758c;
-
   font-size: 10px;
 }
 
@@ -300,7 +231,6 @@
 
   .successCard {
     max-width: 500px;
-
     padding: 34px 26px;
   }
 
@@ -318,9 +248,7 @@
   }
 
   .features {
-    grid-template-columns:
-      repeat(2, 1fr);
-
+    grid-template-columns: repeat(2, 1fr);
     gap: 20px 0;
   }
 
@@ -337,7 +265,6 @@
   .checkIcon {
     width: 64px;
     height: 64px;
-
     font-size: 34px;
   }
 
@@ -347,7 +274,6 @@
 
   .features {
     grid-template-columns: 1fr;
-
     gap: 0;
   }
 
@@ -357,7 +283,6 @@
 
   .feature:not(:last-child) {
     border-right: none;
-
     border-bottom: 1px solid #ebebf1;
   }
 }

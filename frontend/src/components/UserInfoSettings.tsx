@@ -7,10 +7,6 @@ import {
   FiLock,
   FiEye,
   FiEyeOff,
-  FiTruck,
-  FiShield,
-  FiRefreshCcw,
-  FiHeadphones,
 } from "react-icons/fi";
 
 const API_URL =
@@ -198,10 +194,7 @@ const UserInfo = () => {
 
                 <div>
                   <h2>Personal Information</h2>
-
-                  <p>
-                    Update your personal details.
-                  </p>
+                  <p>Update your personal details.</p>
                 </div>
               </div>
 
@@ -260,10 +253,7 @@ const UserInfo = () => {
 
                 <div>
                   <h2>Change Password</h2>
-
-                  <p>
-                    Set a new password for your account.
-                  </p>
+                  <p>Set a new password for your account.</p>
                 </div>
               </div>
 
@@ -376,52 +366,6 @@ const UserInfo = () => {
                   : "Update Password"}
               </button>
             </form>
-          </div>
-        </div>
-
-        <div className={classes.features}>
-          <div className={classes.feature}>
-            <div className={classes.featureIcon}>
-              <FiTruck />
-            </div>
-
-            <div className={classes.featureText}>
-              <strong>Free Shipping</strong>
-              <span>On orders over $50</span>
-            </div>
-          </div>
-
-          <div className={classes.feature}>
-            <div className={classes.featureIcon}>
-              <FiShield />
-            </div>
-
-            <div className={classes.featureText}>
-              <strong>Secure Payment</strong>
-              <span>100% secure checkout</span>
-            </div>
-          </div>
-
-          <div className={classes.feature}>
-            <div className={classes.featureIcon}>
-              <FiRefreshCcw />
-            </div>
-
-            <div className={classes.featureText}>
-              <strong>Easy Returns</strong>
-              <span>30-day return policy</span>
-            </div>
-          </div>
-
-          <div className={classes.feature}>
-            <div className={classes.featureIcon}>
-              <FiHeadphones />
-            </div>
-
-            <div className={classes.featureText}>
-              <strong>24/7 Support</strong>
-              <span>We're here to help</span>
-            </div>
           </div>
         </div>
       </div>

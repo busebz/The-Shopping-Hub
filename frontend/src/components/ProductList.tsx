@@ -1,11 +1,12 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import classes from "./ProductList.module.css";
 import useCart from "../hooks/useCart";
 import Product from "./Product";
 import ProductSkeleton from "./ProductSkeleton";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const API_URL =
+  import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 type ProductType = {
   id: string;
@@ -33,16 +34,29 @@ const getProductCategory = (product: ProductType) => {
 const ProductList = () => {
   const { cart, addToCart } = useCart();
   const [searchParams] = useSearchParams();
+
   const [products, setProducts] = useState<ProductType[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const cartItems = useMemo(() => cart.map((i) => i.sku), [cart]);
-  const searchTerm = searchParams.get("search")?.trim().toLocaleLowerCase() ?? "";
+  const searchTerm =
+    searchParams.get("search")?.trim().toLocaleLowerCase() ?? "";
+
   const category = searchParams.get("category");
-  const filteredProducts = products.filter((product) =>
-    product.name.toLocaleLowerCase().includes(searchTerm) &&
-    (!category || getProductCategory(product) === category)
+
+  const cartItems = useMemo(
+    () => new Set(cart.map((item) => item.sku)),
+    [cart]
+  );
+
+  const filteredProducts = useMemo(
+    () =>
+      products.filter(
+        (product) =>
+          product.name.toLocaleLowerCase().includes(searchTerm) &&
+          (!category || getProductCategory(product) === category)
+      ),
+    [products, searchTerm, category]
   );
 
   useEffect(() => {
@@ -54,12 +68,20 @@ const ProductList = () => {
           signal: controller.signal,
         });
 
+        if (!res.ok) {
+          throw new Error("Failed to fetch products");
+        }
+
         const data = await res.json();
         setProducts(data);
-      } catch (err: any) {
-        if (err.name !== "AbortError") setError(err.message);
+      } catch (err) {
+        if (err instanceof Error && err.name !== "AbortError") {
+          setError(err.message);
+        }
       } finally {
-        setLoading(false);
+        if (!controller.signal.aborted) {
+          setLoading(false);
+        }
       }
     };
 
@@ -68,35 +90,36 @@ const ProductList = () => {
     return () => controller.abort();
   }, []);
 
-  if (error) return <p>{error}</p>;
+  if (error) {
+    return <p>{error}</p>;
+  }
 
   return (
     <section id="products" className={classes.productsSection}>
       <div className={classes.header}>
-
         <h2>Featured Products</h2>
-
-        <button>
-          View All Products →
-        </button>
+        <button>View All Products →</button>
       </div>
+
       <div className={classes.mainProducts}>
-        {loading
-          ? Array.from({ length: 8 }).map((_, i) => (
-            <ProductSkeleton key={i} />
+        {loading ? (
+          Array.from({ length: 8 }, (_, index) => (
+            <ProductSkeleton key={index} />
           ))
-          : filteredProducts.length > 0
-            ? filteredProducts.map((p) => (
-              <Product
-                key={p.id}
-                product={p}
-                inCart={cartItems.includes(p.sku)}
-                addToCart={addToCart}
-              />
-            ))
-            : <p>No products found in this category.</p>}
-    </div>
-  </section >
+        ) : filteredProducts.length > 0 ? (
+          filteredProducts.map((product) => (
+            <Product
+              key={product.id}
+              product={product}
+              inCart={cartItems.has(product.sku)}
+              addToCart={addToCart}
+            />
+          ))
+        ) : (
+          <p>No products found in this category.</p>
+        )}
+      </div>
+    </section>
   );
 };
 

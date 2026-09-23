@@ -1,13 +1,9 @@
 .page {
   width: 100%;
   min-height: 100vh;
-
   padding: 60px 5% 45px;
-
   box-sizing: border-box;
-
   font-family: var(--font-shopping);
-
   background:
     radial-gradient(
       circle at 88% 12%,
@@ -19,143 +15,98 @@
       rgba(224, 218, 255, 0.88),
       transparent 38%
     ),
-    linear-gradient(
-      90deg,
-      #f7f5ff 0%,
-      #fdfbff 52%,
-      #fff4f9 100%
-    );
+    linear-gradient(90deg, #f7f5ff 0%, #fdfbff 52%, #fff4f9 100%);
 }
 
 .userInfoContainer {
   width: 100%;
   max-width: 960px;
-
   margin: 0 auto;
 }
 
 .pageHeader {
   margin: 12px 0 28px;
-
   text-align: center;
 }
 
 .title {
   margin: 0;
-
   color: #111547;
-
   font-size: 32px;
   font-weight: 700;
 }
 
 .subtitle {
   margin: 7px 0 0;
-
   color: #777a97;
-
   font-size: 13px;
 }
 
 .card {
   width: 100%;
-
   padding: 34px 38px;
-
   box-sizing: border-box;
-
   background: rgba(255, 255, 255, 0.96);
-
   border: 1px solid #ebe7f2;
-
   border-radius: 16px;
-
-  box-shadow:
-    0 10px 28px
-    rgba(55, 42, 105, 0.08);
+  box-shadow: 0 10px 28px rgba(55, 42, 105, 0.08);
 }
 
 .formsWrapper {
   display: grid;
-
-  grid-template-columns:
-    1fr
-    1px
-    1fr;
-
+  grid-template-columns: 1fr 1px 1fr;
   gap: 36px;
 }
 
 .formSection {
   display: flex;
   flex-direction: column;
-
   gap: 17px;
 }
 
 .sectionHeader {
   margin-bottom: 5px;
-
   display: flex;
   align-items: center;
-
   gap: 13px;
 }
 
 .sectionIcon {
   width: 44px;
   height: 44px;
-
   min-width: 44px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   border-radius: 50%;
-
-  background:
-    linear-gradient(
-      135deg,
-      #f0e7ff,
-      #ffe6f3
-    );
-
+  background: linear-gradient(135deg, #f0e7ff, #ffe6f3);
   color: #7c3fe2;
-
   font-size: 21px;
 }
 
 .sectionHeader h2 {
   margin: 0;
-
   color: #111547;
-
   font-size: 17px;
   font-weight: 700;
 }
 
 .sectionHeader p {
   margin: 4px 0 0;
-
   color: #7a7d97;
-
   font-size: 11px;
 }
 
 .divider {
   width: 1px;
   height: 100%;
-
   background: #ece9f2;
 }
 
 .formSection label {
   display: flex;
   flex-direction: column;
-
   color: #25294e;
-
   font-size: 13px;
   font-weight: 600;
 }
@@ -163,48 +114,31 @@
 .formSection input {
   width: 100%;
   height: 46px;
-
   margin-top: 7px;
-
   padding: 0 14px;
-
   box-sizing: border-box;
-
   border: 1px solid #dcd9e7;
-
   border-radius: 8px;
-
   outline: none;
-
   background: #fff;
-
   color: #191d45;
-
   font-family: inherit;
   font-size: 13px;
-
-  transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .formSection input:focus {
   border-color: #9b63e4;
-
-  box-shadow:
-    0 0 0 3px
-    rgba(139, 75, 219, 0.1);
+  box-shadow: 0 0 0 3px rgba(139, 75, 219, 0.1);
 }
 
 .formSection input[readonly] {
   background: #f8f8fb;
-
   color: #686b83;
 }
 
 .passwordInput {
   position: relative;
-
   width: 100%;
 }
 
@@ -214,199 +148,73 @@
 
 .passwordInput button {
   position: absolute;
-
   right: 13px;
   bottom: 12px;
-
   padding: 0;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   border: none;
-
   background: transparent;
-
   color: #7a7d96;
-
   font-size: 17px;
-
   cursor: pointer;
 }
 
 .inputHint {
   margin: -8px 0 0;
-
   color: #878aa1;
-
   font-size: 10px;
-
   line-height: 1.5;
 }
 
 .submitButton {
   width: 100%;
   height: 44px;
-
   margin-top: 3px;
-
   border: none;
-
   border-radius: 8px;
-
-  background:
-    linear-gradient(
-      90deg,
-      #8a3ce1,
-      #ed38a1
-    );
-
+  background: linear-gradient(90deg, #8a3ce1, #ed38a1);
   color: white;
-
   font-family: inherit;
   font-size: 13px;
   font-weight: 600;
-
   cursor: pointer;
-
-  box-shadow:
-    0 5px 14px
-    rgba(191, 56, 178, 0.16);
-
-  transition:
-    transform 0.2s ease,
-    opacity 0.2s ease;
+  box-shadow: 0 5px 14px rgba(191, 56, 178, 0.16);
+  transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
 .submitButton:hover:not(:disabled) {
   transform: translateY(-1px);
-
   opacity: 0.93;
 }
 
 .submitButton:disabled {
   opacity: 0.65;
-
   cursor: default;
 }
 
 .message {
   max-width: 650px;
-
   margin: 0 auto 16px;
-
   padding: 10px 15px;
-
   box-sizing: border-box;
-
   text-align: center;
-
   border-radius: 8px;
-
   font-size: 12px;
   font-weight: 600;
 }
 
 .success {
   background: #e9f8f0;
-
   color: #178258;
-
   border: 1px solid #cef0df;
 }
 
 .error {
   background: #fff0f2;
-
   color: #c63d58;
-
   border: 1px solid #ffd5dc;
-}
-
-.features {
-  width: 100%;
-
-  margin-top: 28px;
-
-  padding: 20px 16px;
-
-  box-sizing: border-box;
-
-  display: grid;
-
-  grid-template-columns:
-    repeat(4, 1fr);
-
-  background: rgba(255, 255, 255, 0.92);
-
-  border: 1px solid #ebe7f2;
-
-  border-radius: 12px;
-
-  box-shadow:
-    0 5px 18px
-    rgba(37, 33, 92, 0.05);
-}
-
-.feature {
-  min-width: 0;
-
-  padding: 0 22px;
-
-  display: flex;
-  align-items: center;
-
-  gap: 12px;
-}
-
-.feature:not(:last-child) {
-  border-right: 1px solid #ece9f2;
-}
-
-.featureIcon {
-  width: 43px;
-  height: 43px;
-
-  min-width: 43px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 50%;
-
-  background:
-    linear-gradient(
-      135deg,
-      #f1e9ff,
-      #ffeaf4
-    );
-
-  color: #7b42df;
-
-  font-size: 20px;
-}
-
-.featureText {
-  min-width: 0;
-
-  display: flex;
-  flex-direction: column;
-
-  gap: 3px;
-}
-
-.featureText strong {
-  color: #17194d;
-
-  font-size: 12px;
-}
-
-.featureText span {
-  color: #73758c;
-
-  font-size: 10px;
 }
 
 @media (max-width: 800px) {
@@ -424,7 +232,6 @@
 
   .formsWrapper {
     grid-template-columns: 1fr;
-
     gap: 30px;
   }
 
@@ -435,17 +242,6 @@
 
   .title {
     font-size: 27px;
-  }
-
-  .features {
-    grid-template-columns:
-      repeat(2, 1fr);
-
-    gap: 20px 0;
-  }
-
-  .feature:nth-child(2) {
-    border-right: none;
   }
 }
 
@@ -461,29 +257,11 @@
   .sectionIcon {
     width: 40px;
     height: 40px;
-
     min-width: 40px;
-
     font-size: 19px;
   }
 
   .sectionHeader h2 {
     font-size: 15px;
-  }
-
-  .features {
-    grid-template-columns: 1fr;
-
-    gap: 0;
-  }
-
-  .feature {
-    padding: 14px;
-  }
-
-  .feature:not(:last-child) {
-    border-right: none;
-
-    border-bottom: 1px solid #ece9f2;
   }
 }

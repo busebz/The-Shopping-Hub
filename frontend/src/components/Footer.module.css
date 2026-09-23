@@ -1,249 +1,174 @@
 .footer {
   background: linear-gradient(135deg, #2b0a4d, #5b21b6);
-  color:white;
-  padding:5px 0px 15px;
+  color: white;
+  padding: 5px 0 15px;
 }
 
 .container {
-  width:92%;
-  max-width:1400px;
-  margin:auto;
-
-  display:grid;
+  width: 92%;
+  max-width: 1400px;
+  margin: auto;
+  display: grid;
   grid-template-columns: 1.7fr repeat(3, 1fr) 1.8fr;
-  column-gap:50px;
-  row-gap:30px;
-
-  align-items:start;
+  column-gap: 50px;
+  row-gap: 30px;
+  align-items: start;
 }
-
 
 .brand {
-  padding-top:12px;
+  padding-top: 12px;
 }
-
 
 /* BRAND */
 
 .logo {
-  font-size:20px;
-  font-weight:700;
+  font-size: 20px;
+  font-weight: 700;
 }
 
 .hub {
-  color:#d46aff;
+  color: #d46aff;
 }
-
 
 .brand p {
-  color:#ddd;
-  font-size:14px;
-  line-height:1.6;
-  max-width:260px;
+  color: #ddd;
+  font-size: 14px;
+  line-height: 1.6;
+  max-width: 260px;
 }
-
 
 /* SOCIAL */
 
 .social {
-  display:flex;
-  gap:12px;
+  display: flex;
+  gap: 12px;
 }
-
 
 .social div {
-  width:36px;
-  height:36px;
-
-  border-radius:50%;
-  background:rgba(255,255,255,.15);
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  transition:.3s;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.3s;
 }
-
 
 .social div:hover {
-  background:#d46aff;
+  background: #d46aff;
 }
-
-
 
 /* COLUMNS */
 
 .column {
-  display:flex;
-  flex-direction:column;
-  gap:9px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
 }
-
 
 .column h3,
 .subscribe h3 {
-  font-size:16px;
-  margin-bottom:8px;
+  font-size: 16px;
+  margin-bottom: 8px;
 }
-
 
 .column a {
-  color:#ddd;
-  font-size:14px;
-  text-decoration:none;
+  color: #ddd;
+  font-size: 14px;
+  text-decoration: none;
 }
-
 
 .column a:hover {
-  color:white;
+  color: white;
 }
-
-
 
 /* SUBSCRIBE */
 
 .subscribe {
-  min-width:250px;
+  min-width: 250px;
 }
-
 
 .subscribe p {
-  color:#ddd;
-  font-size:14px;
-  line-height:1.5;
-
-  margin-bottom:18px;
+  color: #ddd;
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: 18px;
 }
-
 
 .emailBox {
-  display:flex;
-  width:100%;
+  display: flex;
+  width: 100%;
 }
-
 
 .emailBox input {
-
-  flex:1;
-
-  height:38px;
-
-  border:none;
-  outline:none;
-
-  padding:0 12px;
-
-  border-radius:6px 0 0 6px;
-
-  font-size:13px;
+  flex: 1;
+  height: 38px;
+  border: none;
+  outline: none;
+  padding: 0 12px;
+  border-radius: 6px 0 0 6px;
+  font-size: 13px;
 }
-
 
 .emailBox button {
-
-  height:38px;
-
-  border:none;
-
-  padding:0 18px;
-
-  background:#e05cff;
-
-  color:white;
-
-  font-weight:600;
-
-  border-radius:0 6px 6px 0;
-
-  cursor:pointer;
-
+  height: 38px;
+  border: none;
+  padding: 0 18px;
+  background: #e05cff;
+  color: white;
+  font-weight: 600;
+  border-radius: 0 6px 6px 0;
+  cursor: pointer;
 }
-
 
 .emailBox button:hover {
-  background:#c947f5;
+  background: #c947f5;
 }
-
-
 
 /* BOTTOM */
 
 .bottom {
-
-  width:92%;
-  max-width:1400px;
-
-  margin:35px auto 0;
-
-  padding-top:18px;
-
-  border-top:1px solid rgba(255,255,255,.2);
-
-  display:flex;
-
-  justify-content:space-between;
-
-  align-items:center;
+  width: 92%;
+  max-width: 1400px;
+  margin: 35px auto 0;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
-
 
 .copyright {
-
-  color:#ddd;
-
-  font-size:13px;
-
+  color: #ddd;
+  font-size: 13px;
 }
-
 
 .payment {
-
-  display:flex;
-
-  align-items:center;
-
-  gap:12px;
-
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
-
 
 .payment span {
-
-  color:#ddd;
-
-  font-size:13px;
-
+  color: #ddd;
+  font-size: 13px;
 }
-
 
 .paymentCards {
-
-  display:flex;
-
-  gap:8px;
-
+  display: flex;
+  gap: 8px;
 }
-
 
 .card {
-
-  width:48px;
-  height:10px;
-
- 
-
-  border-radius:5px;
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  width: 48px;
+  height: 10px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-
 .card svg {
-
-  font-size:40px;
-  
-
+  font-size: 40px;
 }

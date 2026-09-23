@@ -2,12 +2,10 @@
   background: white;
   border-radius: 18px;
   overflow: hidden;
-  box-shadow: 0 10px 25px rgba(0,0,0,.06);
-  transition: .3s;
-
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+  transition: 0.3s;
   display: flex;
   flex-direction: column;
-
   min-height: 210px;
 }
 
@@ -19,7 +17,7 @@
   width: 100%;
   aspect-ratio: 1 / 1;
   overflow: hidden;
-  background: #F8FAFC;
+  background: #f8fafc;
 }
 
 .product_img {
@@ -48,28 +46,22 @@
   width: 90%;
   margin: auto 10px 18px;
   height: 40px;
-
   border: none;
   border-radius: 10px;
-
-  background: #4C1D95;
+  background: #4c1d95;
   color: white;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   gap: 10px;
-
   font-size: 13px;
   font-weight: 600;
-
   cursor: pointer;
-  transition: .3s;
+  transition: 0.3s;
 }
 
 .product button:hover {
-  background: #5B21B6;
+  background: #5b21b6;
 }
 
 .product button.addedButton {
@@ -81,10 +73,7 @@
   background: #ec4899;
 }
 
-
-/* =========================
-   GENİŞ EKRAN / ZOOM OUT
-   ========================= */
+/* LARGE SCREENS / ZOOM OUT */
 
 @media (min-width: 1900px) {
   .product p {
@@ -102,12 +91,10 @@
   .product button {
     margin: auto 10px 18px;
     height: 42px;
-
     font-size: 14px;
     gap: 10px;
   }
 }
-
 
 @media (min-width: 2300px) {
   .product p {
@@ -124,7 +111,6 @@
 
   .product button {
     height: 46px;
-
     font-size: 16px;
     gap: 11px;
   }

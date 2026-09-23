@@ -4,6 +4,8 @@ import {
   useState,
 } from "react";
 
+import { useNavigate } from "react-router-dom";
+
 import {
   FaBoxOpen,
   FaXmark,
@@ -13,28 +15,34 @@ import {
 
 import classes from "./ProductEditor.module.css";
 
+const API_URL =
+  import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 type Props = {
   initialData?: any;
-  onCancel: () => void;
-  onSave: (p: any) => void;
+  onCancel?: () => void;
+  onSave?: (p: any) => void | Promise<void>;
 };
 
-const ProductForm = ({
+const ProductEditor = ({
   initialData,
   onCancel,
   onSave,
 }: Props) => {
+  const navigate = useNavigate();
+
   const [sku, setSku] = useState("");
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
-
   const [category, setCategory] =
     useState("Accessories");
-
   const [image, setImage] =
     useState<File | null>(null);
-
   const [preview, setPreview] =
+    useState<string | null>(null);
+  const [loading, setLoading] =
+    useState(false);
+  const [error, setError] =
     useState<string | null>(null);
 
   const fileInputRef =
@@ -44,20 +52,13 @@ const ProductForm = ({
     if (initialData) {
       setSku(initialData.sku || "");
       setName(initialData.name || "");
-
       setPrice(
         initialData.price?.toString() || ""
       );
-
       setCategory(
-        initialData.category ||
-          "Accessories"
+        initialData.category || "Accessories"
       );
-
-      setPreview(
-        initialData.image || null
-      );
-
+      setPreview(initialData.image || null);
       setImage(null);
     } else {
       setSku("");
@@ -69,19 +70,99 @@ const ProductForm = ({
     }
   }, [initialData]);
 
-  const handleSubmit = (
+  const handleCancel = () => {
+    if (onCancel) {
+      onCancel();
+      return;
+    }
+
+    navigate("/admin/products");
+  };
+
+  const saveNewProduct = async (
+    product: any
+  ) => {
+    const formData = new FormData();
+
+    formData.append("sku", product.sku);
+    formData.append("name", product.name);
+    formData.append(
+      "price",
+      product.price
+    );
+    formData.append(
+      "category",
+      product.category
+    );
+
+    if (product.image instanceof File) {
+      formData.append(
+        "image",
+        product.image
+      );
+    }
+
+    const token =
+      localStorage.getItem("adminToken");
+
+    const res = await fetch(
+      `${API_URL}/api/admin/products`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      }
+    );
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(
+        data.message ||
+          "Failed to add product."
+      );
+    }
+
+    return data;
+  };
+
+  const handleSubmit = async (
     e: React.FormEvent
   ) => {
     e.preventDefault();
 
-    onSave({
+    const product = {
       id: initialData?.id,
       sku,
       name,
       price,
       category,
       image,
-    });
+    };
+
+    try {
+      setLoading(true);
+      setError(null);
+
+      if (onSave) {
+        await onSave(product);
+        return;
+      }
+
+      await saveNewProduct(product);
+
+      navigate("/admin/products");
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Failed to save product."
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleImageChange = (
@@ -111,7 +192,7 @@ const ProductForm = ({
   return (
     <div
       className={classes.overlay}
-      onClick={onCancel}
+      onClick={handleCancel}
     >
       <form
         className={classes.form}
@@ -154,7 +235,7 @@ const ProductForm = ({
           <button
             type="button"
             className={classes.closeBtn}
-            onClick={onCancel}
+            onClick={handleCancel}
             aria-label="Close"
           >
             <FaXmark />
@@ -378,6 +459,10 @@ const ProductForm = ({
               )}
             </div>
           </div>
+
+          {error && (
+            <p>{error}</p>
+          )}
         </div>
 
         {/* FOOTER */}
@@ -388,7 +473,8 @@ const ProductForm = ({
             className={
               classes.cancelBtn
             }
-            onClick={onCancel}
+            onClick={handleCancel}
+            disabled={loading}
           >
             Cancel
           </button>
@@ -398,13 +484,16 @@ const ProductForm = ({
             className={
               classes.saveBtn
             }
+            disabled={loading}
           >
             <FaFloppyDisk />
 
             <span>
-              {initialData
-                ? "Save Changes"
-                : "Add Product"}
+              {loading
+                ? "Saving..."
+                : initialData
+                  ? "Save Changes"
+                  : "Add Product"}
             </span>
           </button>
         </div>
@@ -413,4 +502,4 @@ const ProductForm = ({
   );
 };
 
-export default ProductForm;
+export default ProductEditor;

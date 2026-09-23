@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import ProductsTable from "./ProductsList";
 import ProductForm from "./ProductEditor";
@@ -7,15 +8,13 @@ const API_URL =
   import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 const Products = () => {
+  const navigate = useNavigate();
+
   const [products, setProducts] = useState<any[]>([]);
-
   const [showModal, setShowModal] = useState(false);
-
   const [editingProduct, setEditingProduct] =
     useState<any | null>(null);
-
   const [loading, setLoading] = useState(true);
-
   const [error, setError] =
     useState<string | null>(null);
 
@@ -80,7 +79,6 @@ const Products = () => {
         `${API_URL}/api/admin/products/${id}`,
         {
           method: "DELETE",
-
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -165,18 +163,13 @@ const Products = () => {
       const token =
         localStorage.getItem("adminToken");
 
-      const res = await fetch(
-        url,
-        {
-          method,
-
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-
-          body: formData,
-        }
-      );
+      const res = await fetch(url, {
+        method,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      });
 
       const data =
         await res.json();
@@ -212,9 +205,7 @@ const Products = () => {
   // ================= ADD =================
 
   const handleAdd = () => {
-    setEditingProduct(null);
-
-    setShowModal(true);
+    navigate("/admin/products/new");
   };
 
   // ================= EDIT =================
@@ -223,7 +214,6 @@ const Products = () => {
     product: any
   ) => {
     setEditingProduct(product);
-
     setShowModal(true);
   };
 
@@ -231,7 +221,6 @@ const Products = () => {
 
   const handleCloseModal = () => {
     setShowModal(false);
-
     setEditingProduct(null);
   };
 
@@ -268,26 +257,14 @@ const Products = () => {
             right: "24px",
             bottom: "24px",
             zIndex: 9999,
-
             maxWidth: "360px",
-
-            padding:
-              "14px 18px",
-
-            border:
-              "1px solid #ffd1d5",
-
+            padding: "14px 18px",
+            border: "1px solid #ffd1d5",
             borderRadius: "10px",
-
-            background:
-              "#fff3f4",
-
-            color:
-              "#d5454e",
-
+            background: "#fff3f4",
+            color: "#d5454e",
             boxShadow:
               "0 10px 30px rgba(0, 0, 0, 0.08)",
-
             fontSize: "13px",
           }}
         >
@@ -297,17 +274,10 @@ const Products = () => {
 
       {showModal && (
         <ProductForm
-          initialData={
-            editingProduct
-          }
-          onCancel={
-            handleCloseModal
-          }
+          initialData={editingProduct}
+          onCancel={handleCloseModal}
           onSave={async (product) => {
-            await saveProduct(
-              product
-            );
-
+            await saveProduct(product);
             handleCloseModal();
           }}
         />

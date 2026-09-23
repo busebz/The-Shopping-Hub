@@ -1,46 +1,35 @@
 .header {
   width: 100%;
   height: 75px;
-
   background: white;
-
   position: sticky;
   top: 0;
   z-index: 1000;
-
   border-bottom: 1px solid #eef2f7;
 }
 
 .container {
   width: 100%;
   height: 100%;
-
   padding: 0 4%;
-
   display: flex;
   align-items: center;
   justify-content: space-between;
-
   box-sizing: border-box;
 }
 
 .logo {
   display: flex;
   align-items: center;
-
   gap: 12px;
-
   cursor: pointer;
-
   font-size: 1.5rem;
   font-weight: 700;
-
   flex-shrink: 0;
 }
 
 .logo svg {
   color: #4c1d95;
-
   font-size: 1.75rem;
 }
 

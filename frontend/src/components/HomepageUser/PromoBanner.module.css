@@ -1,29 +1,26 @@
 .container {
-    width: 91%;
-    margin: 50px auto;
-
-    display: flex;
-    gap: 20px;
+  width: 91%;
+  margin: 50px auto;
+  display: flex;
+  gap: 20px;
 }
 
 .banner {
-    flex: 1;
-    height: 260px;
-    overflow: hidden;
-
-    border-radius: 20px;
-    transition: transform 0.3s ease;
+  flex: 1;
+  height: 260px;
+  overflow: hidden;
+  border-radius: 20px;
+  transition: transform 0.3s ease;
 }
 
 .banner:hover {
-    transform: translateY(-4px);
+  transform: translateY(-4px);
 }
 
 .banner img {
-    width: 100%;
-    height: 100%;
-    display: block;
-
-    object-fit: cover;
-    object-position: center;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center;
 }

@@ -1,6 +1,6 @@
 .productsSection {
   width: 91%;
-  margin: 0px auto;
+  margin: 0 auto;
   scroll-margin-top: 95px;
 }
 
@@ -14,13 +14,13 @@
 .header h2 {
   margin: 0;
   font-size: 25px;
-  color: #25103D;
+  color: #25103d;
 }
 
 .header button {
   border: none;
   background: none;
-  color: #EC4899;
+  color: #ec4899;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -32,13 +32,9 @@
   gap: 20px;
 }
 
-
-/* =========================
-   ZOOM OUT / GENİŞ EKRAN
-   ========================= */
+/* LARGE SCREENS / ZOOM OUT */
 
 @media (min-width: 1750px) {
-
   .header h2 {
     font-size: 30px;
   }
@@ -48,9 +44,7 @@
   }
 }
 
-
 @media (min-width: 2100px) {
-
   .header h2 {
     font-size: 35px;
   }

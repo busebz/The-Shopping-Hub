@@ -30,44 +30,32 @@
 .card {
   height: 80px;
   padding: 18px;
-
   background: #fdf2f8;
-
   border: 2px solid white;
   border-radius: 18px;
-
   display: flex;
   align-items: center;
   gap: 14px;
-
   cursor: pointer;
-
   font-family: inherit;
   text-align: left;
-
   transition: 0.3s;
-
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.04);
 }
 
 .card:hover {
   transform: translateY(-5px);
-
   box-shadow: 0 12px 25px rgba(236, 72, 153, 0.15);
 }
 
 .icon {
   width: 55px;
   height: 55px;
-
   border-radius: 50%;
-
   background: white;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   flex-shrink: 0;
 }
 
@@ -78,20 +66,14 @@
 
 .card h3 {
   margin: 0;
-
   font-size: 15px;
   font-weight: 600;
-
   color: #25103d;
 }
 
-
-/* =========================
-   ZOOM OUT / GENİŞ EKRAN
-   ========================= */
+/* LARGE SCREENS / ZOOM OUT */
 
 @media (min-width: 1750px) {
-
   .card {
     height: 88px;
     padding: 20px;
@@ -120,9 +102,7 @@
   }
 }
 
-
 @media (min-width: 2100px) {
-
   .card {
     height: 98px;
     padding: 22px;

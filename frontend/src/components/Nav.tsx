@@ -12,6 +12,12 @@ type SearchProduct = {
   name: string;
 };
 
+type ActiveSection =
+  | "home"
+  | "products"
+  | "categories"
+  | "about-us";
+
 const API_URL =
   import.meta.env.VITE_API_URL || "http://localhost:5000";
 
@@ -21,11 +27,10 @@ const Nav = ({ totalItems }: PropsType) => {
 
   const [searchTerm, setSearchTerm] = useState("");
   const [products, setProducts] = useState<SearchProduct[]>([]);
+  const [activeSection, setActiveSection] =
+    useState<ActiveSection>("home");
 
-  const {
-    isUserAuthenticated,
-    logoutUser,
-  } = useAuth();
+  const { isUserAuthenticated, logoutUser } = useAuth();
 
   useEffect(() => {
     const controller = new AbortController();
@@ -44,6 +49,30 @@ const Nav = ({ totalItems }: PropsType) => {
     return () => controller.abort();
   }, []);
 
+  useEffect(() => {
+    if (location.pathname !== "/") {
+      return;
+    }
+
+    switch (location.hash) {
+      case "#products":
+        setActiveSection("products");
+        break;
+
+      case "#categories":
+        setActiveSection("categories");
+        break;
+
+      case "#about-us":
+        setActiveSection("about-us");
+        break;
+
+      default:
+        setActiveSection("home");
+        break;
+    }
+  }, [location.pathname, location.hash]);
+
   const suggestions = useMemo(() => {
     const query = searchTerm
       .trim()
@@ -60,11 +89,18 @@ const Nav = ({ totalItems }: PropsType) => {
       .slice(0, 5);
   }, [products, searchTerm]);
 
-  const goToSection = (sectionId: string) => {
-    if (
-      location.pathname === "/" &&
-      !location.search
-    ) {
+  const goToSection = (
+    sectionId: Exclude<ActiveSection, "home">
+  ) => {
+    setActiveSection(sectionId);
+
+    if (location.pathname === "/") {
+      window.history.replaceState(
+        null,
+        "",
+        `/#${sectionId}`
+      );
+
       document
         .getElementById(sectionId)
         ?.scrollIntoView({
@@ -78,11 +114,15 @@ const Nav = ({ totalItems }: PropsType) => {
   };
 
   const goHome = () => {
-    if (
-      location.pathname === "/" &&
-      !location.search &&
-      !location.hash
-    ) {
+    setActiveSection("home");
+
+    if (location.pathname === "/") {
+      window.history.replaceState(
+        null,
+        "",
+        "/"
+      );
+
       window.scrollTo({
         top: 0,
         behavior: "smooth",
@@ -97,6 +137,8 @@ const Nav = ({ totalItems }: PropsType) => {
   const searchProducts = () => {
     const query = searchTerm.trim();
 
+    setActiveSection("products");
+
     navigate(
       query
         ? `/?search=${encodeURIComponent(
@@ -110,6 +152,7 @@ const Nav = ({ totalItems }: PropsType) => {
     productName: string
   ) => {
     setSearchTerm(productName);
+    setActiveSection("products");
 
     navigate(
       `/?search=${encodeURIComponent(
@@ -130,7 +173,7 @@ const Nav = ({ totalItems }: PropsType) => {
           onClick={goHome}
           className={
             location.pathname === "/" &&
-            !location.hash
+            activeSection === "home"
               ? classes.active
               : ""
           }
@@ -143,7 +186,8 @@ const Nav = ({ totalItems }: PropsType) => {
             goToSection("products")
           }
           className={
-            location.hash === "#products"
+            location.pathname === "/" &&
+            activeSection === "products"
               ? classes.active
               : ""
           }
@@ -156,7 +200,8 @@ const Nav = ({ totalItems }: PropsType) => {
             goToSection("categories")
           }
           className={
-            location.hash === "#categories"
+            location.pathname === "/" &&
+            activeSection === "categories"
               ? classes.active
               : ""
           }
@@ -169,7 +214,8 @@ const Nav = ({ totalItems }: PropsType) => {
             goToSection("about-us")
           }
           className={
-            location.hash === "#about-us"
+            location.pathname === "/" &&
+            activeSection === "about-us"
               ? classes.active
               : ""
           }
